@@ -1,9 +1,13 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
-const AppShell: React.FC = ({childer}) =>{
+interface AppShell {
+    children?: ReactNode
+}
+
+const AppShell: React.FC<AppShell> = ({children}) =>{
     return (
         <>
-        <section></section>
+        <section className='view'>{children}</section>
         </>
     );
 };
