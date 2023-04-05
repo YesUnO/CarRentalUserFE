@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import AppShell from "./AppShell/Appshell";
-import Trash from "./pages/trash/Trash";
+import Trash from "./Pages/trash/Trash";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { configureStore } from '@reduxjs/toolkit';
 import { Provider } from 'react-redux';
