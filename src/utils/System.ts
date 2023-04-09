@@ -1,5 +1,5 @@
 type Options = Record<string, string | number | boolean | Object | any[]> | null;
-type UrlEncodedOptions = string | Record<string, string>;
+export type UrlEncodedOptions = string | Record<string, string>;
 
 const apiUrl = process.env.API_URL;
 
