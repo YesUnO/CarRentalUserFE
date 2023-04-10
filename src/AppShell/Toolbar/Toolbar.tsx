@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { FormEvent, useState } from "react";
 import Modal from 'react-modal';
 import { useDispatch, useSelector } from "react-redux";
-import { getToken } from "../../features/auth/auth";
+import { getToken, PasswordCredentials } from "../../features/auth/auth";
 import { useAppDispatch } from '../../features/store';
 
 
@@ -15,21 +15,22 @@ const Toolbar: React.FC = () => {
     });
 
     //TODO: dunno, dony use any
-    const dispatch = useDispatch<any>();
+    const dispatch = useDispatch();
     const error = useSelector(()=>"yo");
 
-    const handleSubmit = async (event:any) => {
+    const handleSubmit = async (event:FormEvent) => {
         event.preventDefault();
-        const username = formData.username;
-        const password = formData.password;
+        const {username, password } = formData;
+        const passwordCredentials: PasswordCredentials = {username, password }; 
 
-        await dispatch(getToken({username,password}));
+        // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
+        await dispatch(getToken(passwordCredentials));
     };
 
     return (
         <div>
-            {/* <button onClick={() => setModalIsOpen(true)}>Login</button>
-            <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}> */}
+            <button onClick={() => setModalIsOpen(true)}>Login</button>
+            <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
                 <form onSubmit={handleSubmit}>
                     <input
                         type="text"
@@ -46,7 +47,7 @@ const Toolbar: React.FC = () => {
                     <button type="submit">Login</button>
                     {error && <div>{error}</div>}
                 </form>
-            {/* </Modal> */}
+            </Modal>
         </div>
     );
 };

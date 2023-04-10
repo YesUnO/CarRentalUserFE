@@ -11,8 +11,18 @@ const initialState: IAuthState = {
     loading: false
 }
 
+interface TokenResponse {
+    token: string;
+  }
+
+export type PasswordCredentials = {
+    username: string,
+     password: string
+}
+
 //TODO: figure out types, figure out how to create request obj
-export const getToken = createAsyncThunk<any, { username: string, password: string }>('loginPw', async (credentials) => {
+export const getToken = createAsyncThunk('loginPw',
+ async (credentials: PasswordCredentials) => {
     const { username, password } = credentials;
     const payload: UrlEncodedOptions = {
         client_Id: 'local-dev',
@@ -33,7 +43,6 @@ const authSLice = createSlice({
     name: 'authentification',
     reducers: {
         logout: () => { initialState },
-        yo: () => { }
     },
     extraReducers(builder) {
         builder.addCase(getToken.pending, (state) => {
