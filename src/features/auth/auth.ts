@@ -21,9 +21,11 @@ export const getToken = createAsyncThunk<any, { username: string, password: stri
         password: password,
     }
     const [error, response] = await api.postUrlEncoded('/connect/token', payload);
-    if (error) return false;
-    console.log(response);
-    return response.data;
+    if (error) {
+        console.log(error);
+        return false;
+    }
+    return response;
 })
 
 const authSLice = createSlice({
@@ -37,12 +39,16 @@ const authSLice = createSlice({
         builder.addCase(getToken.pending, (state) => {
             state.loading = true;
         })
-        builder.addCase(getToken.fulfilled, (state, action) => {
+        builder.addCase(getToken.fulfilled, (state, {payload}) => {
             state.loading = false;
+            if(payload){
+                state.token = payload.token;
+            }
             //TODO: sdomething?
         })
         builder.addCase(getToken.rejected, (state, action) => {
             state.loading = false;
+            console.log(action);
             //TODO: sdomething?
         })
     },

@@ -18,7 +18,8 @@ const Toolbar: React.FC = () => {
     const dispatch = useDispatch<any>();
     const error = useSelector(()=>"yo");
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (event:any) => {
+        event.preventDefault();
         const username = formData.username;
         const password = formData.password;
 
@@ -27,8 +28,8 @@ const Toolbar: React.FC = () => {
 
     return (
         <div>
-            <button onClick={() => setModalIsOpen(true)}>Login</button>
-            <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
+            {/* <button onClick={() => setModalIsOpen(true)}>Login</button>
+            <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}> */}
                 <form onSubmit={handleSubmit}>
                     <input
                         type="text"
@@ -45,7 +46,7 @@ const Toolbar: React.FC = () => {
                     <button type="submit">Login</button>
                     {error && <div>{error}</div>}
                 </form>
-            </Modal>
+            {/* </Modal> */}
         </div>
     );
 };

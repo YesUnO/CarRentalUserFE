@@ -12,7 +12,11 @@ async function respond(
   const url = external ? endpoint : `${apiUrl}${endpoint}`;
   try {
     const response = await fetch(url, options);
-    const data = await response.json();
+    let data;
+    if(response.ok) {
+      // TODO: fix reponses wiuthout a body
+      data = await response.json();
+    }
     return [null, data];
   } catch (error) {
     return [error];
