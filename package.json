@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite --mode development",
+    "mock": "vite --mode devMock",
     "build": "tsc && vite build",
     "preview": "vite preview"
   },
