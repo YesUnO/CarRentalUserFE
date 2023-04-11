@@ -12,6 +12,7 @@ const LoginModal: React.FC = () => {
 
     //TODO: dunno
     const dispatch = useDispatch();
+    
     //TODO: errors in form
     const error = useSelector(() => "yo");
 

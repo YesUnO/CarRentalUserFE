@@ -46,6 +46,23 @@ export const getToken = createAsyncThunk<TokenResponse, PasswordCredentials>(
   }
 );
 
+export const register = createAsyncThunk("register", async () => {
+  console.log("!");
+  const payload = {
+    userName: "ho",
+    password: "Jakozecoze-1",
+    confirmPassword: "Jakozecoze-1",
+    email: "user@example.com",
+    phoneNumber: "string",
+  };
+  const [error, response] = await api.post("/api/auth", payload);
+  if (error) {
+    console.log(error);
+    return false;
+  }
+  return response;
+});
+
 const authSLice = createSlice({
   initialState,
   name: "authentification",
@@ -61,11 +78,24 @@ const authSLice = createSlice({
     builder.addCase(getToken.fulfilled, (state, { payload }) => {
       state.loading = false;
       if (payload) {
-        state.token = payload.token_type + ' ' + payload.access_token;
+        state.token = payload.token_type + " " + payload.access_token;
       }
       //TODO: sdomething?
     });
     builder.addCase(getToken.rejected, (state, action) => {
+      state.loading = false;
+      console.log(action);
+      //TODO: sdomething?
+    });
+
+    builder.addCase(register.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(register.fulfilled, (state, { payload }) => {
+      state.loading = false;
+      //TODO: sdomething?
+    });
+    builder.addCase(register.rejected, (state, action) => {
       state.loading = false;
       console.log(action);
       //TODO: sdomething?

@@ -10,10 +10,8 @@ const Toolbar: React.FC = () => {
 
     const dispatch = useDispatch();
     const isAuthenticated = useSelector((state: RootState) => state.auth.token != null);
-    const token = useSelector((state: RootState) => state.auth.token);
 
     const handleLogout =  () => {
-        console.log("yo");
         dispatch(logout());
     }
 
