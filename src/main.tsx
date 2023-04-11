@@ -5,7 +5,7 @@ import AppShell from "./AppShell/Appshell";
 import Trash from "./pages/trash/Trash";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Provider } from 'react-redux';
-import store from './features/store';
+import store from './infrastructure/store';
 
 
 

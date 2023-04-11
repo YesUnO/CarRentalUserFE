@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { api, UrlEncodedOptions } from "../../utils/System";
+import { api, UrlEncodedOptions } from "../../infrastructure/utils/System";
 
 interface IAuthState {
     token: null | string;

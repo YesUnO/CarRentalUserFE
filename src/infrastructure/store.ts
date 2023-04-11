@@ -1,5 +1,5 @@
 import {configureStore} from '@reduxjs/toolkit';
-import authReducer from './auth/auth';
+import authReducer from '../features/Auth/authReducer';
 import { useDispatch } from 'react-redux';
 
 const store = configureStore({reducer:{ auth: authReducer}});
