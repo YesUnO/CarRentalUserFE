@@ -54,15 +54,15 @@ export const getToken = createAsyncThunk<TokenResponse, PasswordCredentialsReque
   }
 );
 
-export const register = createAsyncThunk<TokenResponse>("register", async () => {
-  const payload = {
-    userName: "ho",
-    password: "Jakozecoze-1",
-    confirmPassword: "Jakozecoze-1",
-    email: "user@example.com",
-    phoneNumber: "string",
-  };
-  const [error, response] = await api.post("/api/auth", payload);
+export const register = createAsyncThunk<TokenResponse,RegisterRequest>("register", async (registration:RegisterRequest) => {
+  // const payload = {
+  //   userName: "ho",
+  //   password: "Jakozecoze-1",
+  //   confirmPassword: "Jakozecoze-1",
+  //   email: "user@example.com",
+  //   phoneNumber: "string",
+  // };
+  const [error, response] = await api.post("/api/auth", registration);
   if (error) {
     return false;
   }

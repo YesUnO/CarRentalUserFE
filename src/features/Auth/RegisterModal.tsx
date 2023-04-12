@@ -1,7 +1,8 @@
 import { useDispatch } from "react-redux";
 import GenericForm, { IFormField, IGenericForm } from "../../components/GenericForm";
 import ModalWithBtn from "../../components/ModalWithBtn";
-import { register } from "./authReducer";
+import { RegisterRequest, register } from "./authReducer";
+import _ from 'lodash'
 
 
 const RegisterModal: React.FC = () => {
@@ -11,34 +12,43 @@ const RegisterModal: React.FC = () => {
         {
             fieldName:"username",
             fieldValue:"",
-            fieldPlaceholder:"Username"
+            fieldPlaceholder:"Username",
+            key:"username"
         },
         {
             fieldName:"password",
             fieldValue:"",
-            fieldPlaceholder:"Password"
+            fieldPlaceholder:"Password",
+            key:"password"
         },
         {
             fieldName:"confirmPassword",
             fieldValue:"",
-            fieldPlaceholder:"Confirm password"
+            fieldPlaceholder:"Confirm password",
+            key:"confirmPassword"
         },
         {
             fieldName:"email",
             fieldValue:"",
-            fieldPlaceholder:"Email"
+            fieldPlaceholder:"Email",
+            key:"email"
         },
         {
             fieldName:"phoneNumber",
             fieldValue:"",
-            fieldPlaceholder:"Phone number"
+            fieldPlaceholder:"Phone number",
+            key:"phoneNumber"
         },
     ]
 
     const registerCallback = async (fields: IFormField[]) => {
-        console.log("?")
+        const registerRequest = _.chain(fields)
+            .keyBy('fieldName')
+            .mapValues('fieldValue')
+            .value();
+
         // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
-        await dispatch(register())
+        await dispatch(register(registerRequest));
     };
 
     const registerForm: IGenericForm = {

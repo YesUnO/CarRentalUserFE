@@ -5,6 +5,7 @@ export interface IFormField {
     fieldValue: string | number,
     fieldType?: string,
     fieldPlaceholder?: string,
+    key: string
 };
 
 export interface IGenericForm {
@@ -19,7 +20,6 @@ export type GenericFormProps = {
 
 
 const GenericForm: React.FC<GenericFormProps> = ({props}: GenericFormProps) => {
-
     const [formData, setFormData] = useState<IFormField[]>(
         props.fields
     );
@@ -42,8 +42,9 @@ const GenericForm: React.FC<GenericFormProps> = ({props}: GenericFormProps) => {
             <form onSubmit={handleSubmit}>
                 {props.fields.map((item, index) => (
                     <input
+                        key={item.key}
                         type={item.fieldType ?? "text"}
-                        value={item.fieldValue}
+                        value={formData[index].fieldValue}
                         onChange={(e) => updateValue(index, e.target.value)}
                         placeholder={item.fieldPlaceholder ?? ""}
                     />
