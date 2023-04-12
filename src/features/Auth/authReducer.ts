@@ -48,23 +48,18 @@ export const getToken = createAsyncThunk<TokenResponse, PasswordCredentialsReque
     );
     if (error) {
       console.log(error);
-      return false;
+      return error;
     }
     return response;
   }
 );
 
-export const register = createAsyncThunk<TokenResponse,RegisterRequest>("register", async (registration:RegisterRequest) => {
-  // const payload = {
-  //   userName: "ho",
-  //   password: "Jakozecoze-1",
-  //   confirmPassword: "Jakozecoze-1",
-  //   email: "user@example.com",
-  //   phoneNumber: "string",
-  // };
+export const register = createAsyncThunk<TokenResponse,RegisterRequest>(
+  "register", async (registration:RegisterRequest) => {
   const [error, response] = await api.post("/api/auth", registration);
   if (error) {
-    return false;
+    console.log(error);
+    return error;
   }
   return response;
 });

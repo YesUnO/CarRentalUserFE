@@ -39,7 +39,6 @@ const LoginModal: React.FC = () => {
         callback: loginCallback
     };
 
-
     return (
         <>
             <ModalWithBtn name={"Login"} content=

@@ -56,13 +56,13 @@ const RegisterModal: React.FC = () => {
         submitBtnName: "Register",
         callback: registerCallback
     };
+    
     return (
         <>
             <ModalWithBtn name="Register" content=
                 {
                     <GenericForm props={registerForm} />
                 }
-
             />
         </>
     );

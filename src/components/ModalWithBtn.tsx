@@ -1,5 +1,6 @@
 import {  ReactNode, useState } from "react";
 import Modal from 'react-modal';
+import { MdClose} from 'react-icons/md'
 
 
 export interface ModalWithBtnProps {
@@ -14,6 +15,7 @@ const ModalWithBtn: React.FC<ModalWithBtnProps> = ({name, content}) => {
         <>
         <button onClick={() => setModalIsOpen(true)}>{name}</button>
             <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
+                <MdClose onClick={()=>setModalIsOpen(false)}/>
                 <section>{content}</section>
             </Modal>
         </>
