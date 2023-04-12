@@ -18,15 +18,23 @@ interface TokenResponse {
   token_type: string;
 }
 
-export type PasswordCredentials = {
+export type PasswordCredentialsRequest = {
   username: string;
   password: string;
 };
 
+export type RegisterRequest = {
+  username: string;
+  password: string;
+  email: string;
+  confimrPassword: string;
+  phonenumber: string;
+};
+
 //TODO: figure out types, figure out how to create request obj
-export const getToken = createAsyncThunk<TokenResponse, PasswordCredentials>(
+export const getToken = createAsyncThunk<TokenResponse, PasswordCredentialsRequest>(
   "loginPw",
-  async (credentials: PasswordCredentials) => {
+  async (credentials: PasswordCredentialsRequest) => {
     const { username, password } = credentials;
     const payload: UrlEncodedOptions = {
       client_Id: "local-dev",
@@ -46,8 +54,7 @@ export const getToken = createAsyncThunk<TokenResponse, PasswordCredentials>(
   }
 );
 
-export const register = createAsyncThunk("register", async () => {
-  console.log("!");
+export const register = createAsyncThunk<TokenResponse>("register", async () => {
   const payload = {
     userName: "ho",
     password: "Jakozecoze-1",
@@ -57,7 +64,6 @@ export const register = createAsyncThunk("register", async () => {
   };
   const [error, response] = await api.post("/api/auth", payload);
   if (error) {
-    console.log(error);
     return false;
   }
   return response;
@@ -84,7 +90,6 @@ const authSLice = createSlice({
     });
     builder.addCase(getToken.rejected, (state, action) => {
       state.loading = false;
-      console.log(action);
       //TODO: sdomething?
     });
 
@@ -93,11 +98,13 @@ const authSLice = createSlice({
     });
     builder.addCase(register.fulfilled, (state, { payload }) => {
       state.loading = false;
+      if (payload) {
+        state.token = payload.token_type + " " + payload.access_token;
+      }
       //TODO: sdomething?
     });
     builder.addCase(register.rejected, (state, action) => {
       state.loading = false;
-      console.log(action);
       //TODO: sdomething?
     });
   },

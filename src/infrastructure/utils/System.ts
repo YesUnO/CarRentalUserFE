@@ -3,12 +3,7 @@ export type UrlEncodedOptions = string | Record<string, string>;
 
 const apiUrl = process.env.API_URL;
 
-async function respond(
-  method: string,
-  endpoint: string,
-  options: RequestInit,
-  external?: boolean
-) {
+async function respond(endpoint: string, options: RequestInit, external?: boolean) {
   const url = external ? endpoint : `${apiUrl}${endpoint}`;
   try {
     const response = await fetch(url, options);
@@ -26,28 +21,28 @@ async function respond(
 export const api = {
   baseURL: apiUrl,
   get: (endpoint: string, external = false) =>
-    respond("get", endpoint, {}, external),
+    respond(endpoint, {}, external),
   post: (endpoint: string, options: Options) =>
-    respond("post", endpoint, {
+    respond(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(options),
     }),
   put: (endpoint: string, options: Options) =>
-    respond("put", endpoint, {
+    respond(endpoint, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(options),
     }),
   patch: (endpoint: string, options: Options) =>
-    respond("patch", endpoint, {
+    respond(endpoint, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(options),
     }),
-  delete: (endpoint: string) => respond("delete", endpoint, { method: "DELETE" }),
+  delete: (endpoint: string) => respond(endpoint, { method: "DELETE" }),
   postUrlEncoded: (endpoint: string, options: UrlEncodedOptions) =>
-    respond("post", endpoint, {
+    respond(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams(

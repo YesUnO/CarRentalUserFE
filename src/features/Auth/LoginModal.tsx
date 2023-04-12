@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { PasswordCredentials, getToken } from "./authReducer";
+import { PasswordCredentialsRequest, getToken } from "./authReducer";
 import ModalWithBtn from "../../components/ModalWithBtn";
 import { RootState } from "../../infrastructure/store";
 
