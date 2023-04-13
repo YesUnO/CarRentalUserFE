@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../../infrastructure/utils/System";
+import { request } from "../../infrastructure/utils/SimpleFetch";
 
 const productId = process.env.STRIPE_PRODUCT_ID;
 
@@ -11,10 +12,12 @@ const initialState: IStripeState = {
 
 };
 
-export const createCheckoutSession = createAsyncThunk<any>(
-    "",
+export const createCheckoutSession = createAsyncThunk(
+    "stripeCheckoutSession",
     async()=>{
-        const [error, response] = await api.post("/api/stripe/checkout",{productId: productId as string});
+        request();
+        // const [error, response] = await api.post("/api/stripe/CheckOutApi");
+        // console.log(response);
     }
 );
 

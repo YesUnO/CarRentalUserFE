@@ -1,3 +1,5 @@
+import { forEach } from "lodash";
+
 type Options = Record<string, string | number | boolean | Object | any[]> | null;
 export type UrlEncodedOptions = string | Record<string, string>;
 
@@ -7,8 +9,15 @@ async function respond(endpoint: string, options: RequestInit, external?: boolea
   const url = external ? endpoint : `${apiUrl}${endpoint}`;
   try {
     const response = await fetch(url, options);
-    let data;
-    if(response.ok) {
+    let data = true;
+    for(var pair of response.headers.entries()) {
+      console.log(pair);
+    }
+    console.log(response);
+    // if (response.redirected) {
+    //   window.location.href = response.url;
+    // }
+    if(response.ok && !response.redirected) {
       // TODO: fix reponses wiuthout a body
       data = await response.json();
     }
@@ -21,12 +30,14 @@ async function respond(endpoint: string, options: RequestInit, external?: boolea
 export const api = {
   baseURL: apiUrl,
   get: (endpoint: string, external = false) =>
-    respond(endpoint, {}, external),
-  post: (endpoint: string, options: Options) =>
+    respond(endpoint, {
+      headers: {"Access-Control-Expose-Headers": "location"}
+    }, external),
+  post: (endpoint: string, options?: Options) =>
     respond(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(options),
+      body: options && JSON.stringify(options),
     }),
   put: (endpoint: string, options: Options) =>
     respond(endpoint, {
