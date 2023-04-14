@@ -9,18 +9,7 @@ async function respond(endpoint: string, options: RequestInit, external?: boolea
   const url = external ? endpoint : `${apiUrl}${endpoint}`;
   try {
     const response = await fetch(url, options);
-    let data = true;
-    for(var pair of response.headers.entries()) {
-      console.log(pair);
-    }
-    console.log(response);
-    // if (response.redirected) {
-    //   window.location.href = response.url;
-    // }
-    if(response.ok && !response.redirected) {
-      // TODO: fix reponses wiuthout a body
-      data = await response.json();
-    }
+    const data = await response.json()
     return [null, data];
   } catch (error) {
     return [error];
