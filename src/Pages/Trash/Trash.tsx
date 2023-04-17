@@ -20,16 +20,24 @@ function Trash() {
     dispatch(clearOnLeavingPage());    
   },[]);  
 
-  const handleGetSession = async () => {
+  const handleGetCheckoutSession = async () => {
     console.log(checkoutSessionUrl);
     // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
     await dispatch(createCheckoutSession());
   };
 
+  const handlePayInvoice = async () => {
+    console.log(checkoutSessionUrl);
+    // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
+    await dispatch(createAndPayInvoice());
+  };
+
+
 
   return (
     <div className="App">
-      <button onClick={handleGetSession}>Save card</button>
+      <button onClick={handleGetCheckoutSession}>Save card</button>
+      <button onClick={handlePayInvoice}>Pay</button>
     </div>
   )
 }

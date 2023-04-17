@@ -25,6 +25,18 @@ export const createCheckoutSession = createAsyncThunk(
   }
 );
 
+export const createAndPayInvoice = createAsyncThunk(
+  "stripeCheckoutSession",
+  async () => {
+    // request();
+    const [error, response] = await api.get("/api/stripe/CheckOutApi");
+    if (error) {
+      return error;
+    }
+    return response;
+  }
+);
+
 export const stripeSlice = createSlice({
   initialState,
   name: "stripe",
