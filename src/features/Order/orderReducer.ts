@@ -20,7 +20,7 @@ export const payOrder = createAsyncThunk<any, any, { state: RootState }>(
 
 export const orderSlice = createSlice({
   initialState,
-  name: "orderState",
+  name: "carState",
   reducers: {},
 });
 

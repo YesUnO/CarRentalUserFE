@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
-import { getToken } from "./authReducer";
-import ModalWithBtn from "../../components/ModalWithBtn";
-import GenericForm, { IFormField, IGenericForm } from "../../components/GenericForm";
+import { getToken } from "../authReducer";
+import ModalWithBtn from "../../../components/ModalWithBtn";
+import GenericForm, { IFormField, IGenericForm } from "../../../components/GenericForm";
 import _ from "lodash";
 
 const LoginModal: React.FC = () => {

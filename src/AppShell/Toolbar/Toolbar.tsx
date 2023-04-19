@@ -1,6 +1,6 @@
 import React from "react";
-import LoginModal from "../../features/Auth/LoginModal";
-import RegisterModal from "../../features/Auth/RegisterModal";
+import LoginModal from "../../features/Auth/components/LoginModal";
+import RegisterModal from "../../features/Auth/components/RegisterModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../infrastructure/store";
 import { logout } from "../../features/Auth/authReducer";

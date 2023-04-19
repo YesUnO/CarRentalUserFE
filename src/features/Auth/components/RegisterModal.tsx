@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
-import GenericForm, { IFormField, IGenericForm } from "../../components/GenericForm";
-import ModalWithBtn from "../../components/ModalWithBtn";
-import { RegisterRequest, register } from "./authReducer";
+import GenericForm, { IFormField, IGenericForm } from "../../../components/GenericForm";
+import ModalWithBtn from "../../../components/ModalWithBtn";
+import { RegisterRequest, register } from "../authReducer";
 import _ from 'lodash'
 
 

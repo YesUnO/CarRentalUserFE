@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import './Trash.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../infrastructure/store'
 import { clearOnLeavingPage, createCheckoutSession } from '../../features/Stripe/stripeReducer'
 import { payOrder } from '../../features/Order/orderReducer'
+import PickCarPage from '../../features/Car/PickCarPage'
 
 function Trash() {
   const dispatch = useDispatch();
@@ -44,6 +44,7 @@ function Trash() {
       ) : (
         <></>
       )}
+      <PickCarPage></PickCarPage>
     </div>
   )
 }
