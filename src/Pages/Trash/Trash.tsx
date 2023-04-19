@@ -3,6 +3,7 @@ import './Trash.css'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../infrastructure/store'
 import { clearOnLeavingPage, createCheckoutSession } from '../../features/Stripe/stripeReducer'
+import { payOrder } from '../../features/Order/orderReducer'
 
 function Trash() {
   const dispatch = useDispatch();
@@ -16,28 +17,33 @@ function Trash() {
     }
   }, [checkoutSessionUrl]);
 
-  useEffect(()=>{
-    dispatch(clearOnLeavingPage());    
-  },[]);  
+  useEffect(() => {
+    dispatch(clearOnLeavingPage());
+  }, []);
 
   const handleGetCheckoutSession = async () => {
-    console.log(checkoutSessionUrl);
     // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
     await dispatch(createCheckoutSession());
   };
 
   const handlePayInvoice = async () => {
-    console.log(checkoutSessionUrl);
     // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
-    await dispatch(createAndPayInvoice());
+    await dispatch(payOrder(2));
   };
 
 
 
   return (
-    <div className="App">
-      <button onClick={handleGetCheckoutSession}>Save card</button>
-      <button onClick={handlePayInvoice}>Pay</button>
+    <div>
+      {isAuthenticated ? (
+        <>
+          <button onClick={handleGetCheckoutSession}>Save card</button>
+          <button onClick={handlePayInvoice}>Pay</button>
+        </>
+
+      ) : (
+        <></>
+      )}
     </div>
   )
 }

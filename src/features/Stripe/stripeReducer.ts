@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../../infrastructure/utils/System";
+import { RootState } from "../../infrastructure/store";
 
 interface IStripeState {
   checkoutSessionUrl: string | null;
@@ -13,29 +14,18 @@ export type CheckoutSessionResponse = {
   checkoutSessionUrl: string;
 };
 
-export const createCheckoutSession = createAsyncThunk(
-  "stripeCheckoutSession",
-  async () => {
-    // request();
-    const [error, response] = await api.get("/api/stripe/CheckOutApi");
-    if (error) {
-      return error;
-    }
-    return response;
+export const createCheckoutSession = createAsyncThunk<
+  any,
+  any,
+  { state: RootState }
+>("stripeCheckoutSession", async ({},{ getState }) => {
+  const token = getState().auth.token;
+  const [error, response] = await api.get("/api/stripe/CheckOutApi", token);
+  if (error) {
+    return error;
   }
-);
-
-export const createAndPayInvoice = createAsyncThunk(
-  "stripeCheckoutSession",
-  async () => {
-    // request();
-    const [error, response] = await api.get("/api/stripe/CheckOutApi");
-    if (error) {
-      return error;
-    }
-    return response;
-  }
-);
+  return response;
+});
 
 export const stripeSlice = createSlice({
   initialState,

@@ -2,9 +2,10 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "../features/Auth/authReducer";
 import { useDispatch } from "react-redux";
 import stripeReducer from "../features/Stripe/stripeReducer";
+import orderReducer from "../features/Order/orderReducer";
 
 const store = configureStore({
-  reducer: { auth: authReducer, stripe: stripeReducer },
+  reducer: { auth: authReducer, stripe: stripeReducer, order: orderReducer },
 });
 export const useAppDispatch = () => useDispatch<typeof store.dispatch>;
 export type RootState = ReturnType<typeof store.getState>;

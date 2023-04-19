@@ -2,12 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { api, UrlEncodedOptions } from "../../infrastructure/utils/System";
 
 interface IAuthState {
-  token: null | string;
+  token: undefined | string;
   loading: boolean;
 }
 
 const initialState: IAuthState = {
-  token: null,
+  token: undefined,
   loading: false,
 };
 
