@@ -1,16 +1,45 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../../infrastructure/utils/System";
 import { RootState } from "../../infrastructure/store";
+import { Car } from "../Car/carReducer";
 
-interface IOrderState {};
+interface IOrderState {
+  orders: Order[];
+  newOrder: Order;
+}
 
-const initialState: IOrderState = {};
+const initialState: IOrderState = {
+  orders: [],
+  newOrder: {
+    id: undefined,
+    isOneDay: true,
+    startDate: new Date(),
+    endDate: null,
+    created: new Date(),
+    paid: false,
+    car: null,
+  },
+};
+
+export type Order = {
+  id: number | undefined;
+  isOneDay: boolean;
+  startDate: Date;
+  endDate: Date | null;
+  created: Date | null;
+  car: Car | null;
+  paid: boolean;
+};
 
 export const payOrder = createAsyncThunk<any, any, { state: RootState }>(
-  "stripeCheckoutSession",
+  "payOrder",
   async (orderId: string, { getState }) => {
     const token = getState().auth.token;
-    const [error, response] = await api.post(`/api/order/${orderId}`, {}, token);
+    const [error, response] = await api.post(
+      `/api/order/${orderId}`,
+      {},
+      token
+    );
     if (error) {
       return error;
     }
@@ -20,9 +49,17 @@ export const payOrder = createAsyncThunk<any, any, { state: RootState }>(
 
 export const orderSlice = createSlice({
   initialState,
-  name: "carState",
-  reducers: {},
+  name: "orderState",
+  reducers: {
+    setNewOrder(state, { payload }: PayloadAction<Order>) {
+      if (payload == null || payload == undefined) {
+        state.newOrder = initialState.newOrder;
+      } else {
+        state.newOrder = payload;
+      }
+    },
+  },
 });
 
 export default orderSlice.reducer;
-export const {} = orderSlice.actions;
+export const { setNewOrder } = orderSlice.actions;
