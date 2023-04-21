@@ -4,12 +4,16 @@ import { RootState } from "../../infrastructure/store";
 import { Car } from "../Car/carReducer";
 
 interface IOrderState {
-  orders: Order[];
+  finishedOrders: Order[];
+  unpaidOrders: Order[];
+  futureOrders: Order[];
   newOrder: Order;
 }
 
 const initialState: IOrderState = {
-  orders: [],
+  finishedOrders: [],
+  unpaidOrders: [],
+  futureOrders: [],
   newOrder: {
     id: undefined,
     startDate: new Date(),
@@ -17,6 +21,7 @@ const initialState: IOrderState = {
     created: new Date(),
     paid: false,
     car: null,
+    price: null,
   },
 };
 
@@ -27,6 +32,13 @@ export type Order = {
   created: Date | null;
   car: Car | null;
   paid: boolean;
+  price: number | null;
+};
+
+export type CreateOrderRequest = {
+  startDate: Date;
+  endDate: Date;
+  carId: number;
 };
 
 export const payOrder = createAsyncThunk<any, any, { state: RootState }>(
@@ -45,6 +57,18 @@ export const payOrder = createAsyncThunk<any, any, { state: RootState }>(
   }
 );
 
+export const createOrder = createAsyncThunk<Order, CreateOrderRequest, { state: RootState }>(
+  "createOrder",
+  async (order: CreateOrderRequest, { getState }) => {
+    const token = getState().auth.token;
+    const [error, response] = await api.post(`/api/order`, order, token);
+    if (error) {
+      return error;
+    }
+    return response;
+  }
+);
+
 export const orderSlice = createSlice({
   initialState,
   name: "orderState",
@@ -56,6 +80,11 @@ export const orderSlice = createSlice({
         state.newOrder = payload;
       }
     },
+  },
+  extraReducers(builder) {
+    builder.addCase(createOrder.fulfilled, (state, action)=> {
+      state.finishedOrders.push(action.payload);
+    })
   },
 });
 

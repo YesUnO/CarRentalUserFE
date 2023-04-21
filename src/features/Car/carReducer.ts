@@ -11,12 +11,32 @@ const initialState: ICarState = {
 };
 
 export type Car = {
+  id: number;
   name: string;
   unavailable: Date[];
   isPicked: boolean;
 };
 
-export const getCars = createAsyncThunk<any, any, any>("getCars", async () => {
+export type CreateCarRequest = {
+  name: string;
+  mileageAtPurchase: number;
+  purchasePrice: number;
+};
+
+export const createCar = createAsyncThunk<
+  Car,
+  CreateCarRequest,
+  { state: RootState }
+>("createCar", async (createCarRequest: CreateCarRequest, { getState }) => {
+  const token = getState().auth.token;
+  const [error, response] = await api.post(`/api/car`, createCarRequest, token);
+  if (error) {
+    return error;
+  }
+  return response;
+});
+
+export const getCars = createAsyncThunk<Car[]>("getCars", async () => {
   const [error, response] = await api.get(`/api/car`);
   if (error) {
     return error;
