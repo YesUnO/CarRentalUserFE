@@ -12,9 +12,8 @@ const initialState: IOrderState = {
   orders: [],
   newOrder: {
     id: undefined,
-    isOneDay: true,
     startDate: new Date(),
-    endDate: null,
+    endDate: new Date(),
     created: new Date(),
     paid: false,
     car: null,
@@ -23,8 +22,7 @@ const initialState: IOrderState = {
 
 export type Order = {
   id: number | undefined;
-  isOneDay: boolean;
-  startDate: Date;
+  startDate: Date | null;
   endDate: Date | null;
   created: Date | null;
   car: Car | null;

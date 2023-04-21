@@ -6,6 +6,10 @@ import orderReducer from "../features/Order/orderReducer";
 import carReducer from "../features/Car/carReducer";
 
 const store = configureStore({
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
   reducer: {
     auth: authReducer,
     stripe: stripeReducer,
