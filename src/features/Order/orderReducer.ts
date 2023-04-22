@@ -80,6 +80,13 @@ export const orderSlice = createSlice({
         state.newOrder = payload;
       }
     },
+    unsettCarFromNewOrder(state) {
+      state.newOrder.car = null;
+    },
+    unsettDatesFromNewOrder(state) {
+      state.newOrder.endDate = null;
+      state.newOrder.startDate = null;
+    }
   },
   extraReducers(builder) {
     builder.addCase(createOrder.fulfilled, (state, action)=> {
@@ -89,4 +96,4 @@ export const orderSlice = createSlice({
 });
 
 export default orderSlice.reducer;
-export const { setNewOrder } = orderSlice.actions;
+export const { setNewOrder, unsettDatesFromNewOrder, unsettCarFromNewOrder } = orderSlice.actions;

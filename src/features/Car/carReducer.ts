@@ -53,6 +53,11 @@ export const carSlice = createSlice({
         return { ...value, isPicked: index == payload.payload };
       });
     },
+    clearPickedCar(state) {
+      state.cars = state.cars.map((val) => {
+        return { ...val, isPicked: false };
+      });
+    },
   },
   extraReducers(builder) {
     builder.addCase(getCars.fulfilled, (state, action) => {
@@ -64,4 +69,4 @@ export const carSlice = createSlice({
 });
 
 export default carSlice.reducer;
-export const { pickCar } = carSlice.actions;
+export const { pickCar, clearPickedCar } = carSlice.actions;

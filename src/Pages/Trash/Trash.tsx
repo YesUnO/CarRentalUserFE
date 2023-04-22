@@ -22,6 +22,7 @@ function Trash() {
   }, []);
 
   const handleGetCheckoutSession = async () => {
+    console.log("yo");
     // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
     await dispatch(createCheckoutSession());
   };
@@ -42,7 +43,9 @@ function Trash() {
         </>
 
       ) : (
-        <></>
+        <>
+          <button onClick={handleGetCheckoutSession}>Save card</button>
+        </>
       )}
       <PickCarPage></PickCarPage>
     </div>

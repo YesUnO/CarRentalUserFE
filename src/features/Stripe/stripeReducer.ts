@@ -19,8 +19,9 @@ export const createCheckoutSession = createAsyncThunk<
   any,
   { state: RootState }
 >("stripeCheckoutSession", async ({},{ getState }) => {
+  console.log("ho");
   const token = getState().auth.token;
-  const [error, response] = await api.get("/api/stripe/CheckOutApi", token);
+  const [error, response] = await api.get("/api/stripe", token);
   if (error) {
     return error;
   }
