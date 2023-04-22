@@ -41,13 +41,13 @@ export type CreateOrderRequest = {
   carId: number;
 };
 
-export const payOrder = createAsyncThunk<any, any, { state: RootState }>(
+export const payOrder = createAsyncThunk<any, string, { state: RootState }>(
   "payOrder",
   async (orderId: string, { getState }) => {
     const token = getState().auth.token;
     const [error, response] = await api.post(
       `/api/order/${orderId}`,
-      {},
+      null,
       token
     );
     if (error) {
