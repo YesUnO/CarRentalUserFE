@@ -80,8 +80,8 @@ export const orderSlice = createSlice({
         state.newOrder = payload;
       }
     },
-    unsettCarFromNewOrder(state) {
-      state.newOrder.car = null;
+    settNewOrderCar(state, {payload}: PayloadAction<Car|null>) {
+      state.newOrder.car = payload;
     },
     unsettDatesFromNewOrder(state) {
       state.newOrder.endDate = null;
@@ -96,4 +96,4 @@ export const orderSlice = createSlice({
 });
 
 export default orderSlice.reducer;
-export const { setNewOrder, unsettDatesFromNewOrder, unsettCarFromNewOrder } = orderSlice.actions;
+export const { setNewOrder, unsettDatesFromNewOrder, settNewOrderCar } = orderSlice.actions;

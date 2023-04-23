@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { getCars, pickCar } from "./carReducer";
 import CarThumb from "./components/CarThumb";
 import OrderPicker from "../Order/components/orderPicker";
+import { settNewOrderCar } from "../Order/orderReducer";
 
 const PickCarPage: React.FC = () => {
     const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const PickCarPage: React.FC = () => {
 
     const handleCarSelect = (index: number) => {
         dispatch(pickCar(index));
+        dispatch(settNewOrderCar(cars[index]));
     };
 
 

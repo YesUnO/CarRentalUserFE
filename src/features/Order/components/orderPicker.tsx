@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../infrastructure/store";
-import { Order, createOrder, setNewOrder, unsettCarFromNewOrder, unsettDatesFromNewOrder } from "../orderReducer";
+import { Order, createOrder, setNewOrder, settNewOrderCar, unsettDatesFromNewOrder } from "../orderReducer";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -27,19 +27,18 @@ const OrderPicker: React.FC = () => {
   };
 
   const handleCreateOrder = () => {
-    console.log(newOrder.startDate != null, newOrder.endDate != null, newOrder.car != null, isOrderReady);
     const request: CreateOrderRequest = {
       carId: newOrder.car?.id as number,
       startDate: newOrder.startDate as Date,
       endDate: newOrder.endDate as Date,
     };
-    // // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
-    // dispatch(createOrder(request));
+    // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
+    dispatch(createOrder(request));
   };
 
   const handleClearPickedCar = () => {
     dispatch(clearPickedCar());
-    dispatch(unsettCarFromNewOrder());
+    dispatch(settNewOrderCar(null));
   };
 
   const getExcludeDaysInterval = (): { start: Date; end: Date }[] => {
@@ -61,7 +60,7 @@ const OrderPicker: React.FC = () => {
       newOrder.car != null;
 
   let isCreateOrderBtnDisabled =  
-    !isAuthenticated && !isOrderReady;
+    !isAuthenticated || !isOrderReady;
 
 
   return (
@@ -79,8 +78,9 @@ const OrderPicker: React.FC = () => {
       />
       <div>
         <button disabled={isCreateOrderBtnDisabled} onClick={() => handleCreateOrder()}>Make order</button>
-        <button onClick={()=>handleClearPickedCar()}>Clear picked car</button>
+        {/* <button onClick={()=>handleClearPickedCar()}>Clear picked car</button>
         <button onClick={()=>dispatch(unsettDatesFromNewOrder())}>Clear dates</button>
+        <button onClick={()=>console.log(newOrder)}>Check state</button> */}
       </div>
     </>
   );
