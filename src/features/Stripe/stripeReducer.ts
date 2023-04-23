@@ -19,7 +19,7 @@ CheckoutSessionResponse,
   void,
   { state: RootState }
 >("stripeCheckoutSession", async (_,{ getState }) => {
-  const token = getState().auth.token;
+  const token = getState().authService.token;
   const [error, response] = await api.get("/api/stripe", token);
   if (error) {
     return error;

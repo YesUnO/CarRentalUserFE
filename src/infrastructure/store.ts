@@ -11,10 +11,10 @@ const store = configureStore({
       serializableCheck: false,
     }),
   reducer: {
-    auth: authReducer,
-    stripe: stripeReducer,
-    order: orderReducer,
-    car: carReducer,
+    authService: authReducer,
+    stripeService: stripeReducer,
+    ordersService: orderReducer,
+    carsService: carReducer,
   },
 });
 export const useAppDispatch = () => useDispatch<typeof store.dispatch>;

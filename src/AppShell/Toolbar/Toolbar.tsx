@@ -9,7 +9,7 @@ import { logout } from "../../features/Auth/authReducer";
 const Toolbar: React.FC = () => {
 
     const dispatch = useDispatch();
-    const isAuthenticated = useSelector((state: RootState) => state.auth.token != null);
+    const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
 
     const handleLogout =  () => {
         dispatch(logout());

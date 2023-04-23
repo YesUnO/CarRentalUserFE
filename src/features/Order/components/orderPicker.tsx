@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../infrastructure/store";
-import { Order, createOrder, setNewOrder, settNewOrderCar, unsettDatesFromNewOrder } from "../orderReducer";
+import { Order, createOrder, setNewOrder,  } from "../orderReducer";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -11,9 +11,9 @@ import { clearPickedCar } from "../../Car/carReducer";
 const OrderPicker: React.FC = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(
-    (state: RootState) => state.auth.token != null
+    (state: RootState) => state.authService.token != null
   );
-  const newOrder = useSelector((state: RootState) => state.order.newOrder);
+  const newOrder = useSelector((state: RootState) => state.ordersService.newOrder);
 
   const handleDateChanges = (dateRange: [Date | null, Date | null]) => {
     const [startDate, endDate] = dateRange;
@@ -38,7 +38,7 @@ const OrderPicker: React.FC = () => {
 
   const handleClearPickedCar = () => {
     dispatch(clearPickedCar());
-    dispatch(settNewOrderCar(null));
+    dispatch(setNewOrder({...newOrder, car:null}));
   };
 
   const getExcludeDaysInterval = (): { start: Date; end: Date }[] => {
@@ -79,7 +79,7 @@ const OrderPicker: React.FC = () => {
       <div>
         <button disabled={isCreateOrderBtnDisabled} onClick={() => handleCreateOrder()}>Make order</button>
         {/* <button onClick={()=>handleClearPickedCar()}>Clear picked car</button>
-        <button onClick={()=>dispatch(unsettDatesFromNewOrder())}>Clear dates</button>
+        <button onClick={()=>dispatch(setNewOrder({ ...newOrder, startDate: null, endDate: null }))}>Clear dates</button>
         <button onClick={()=>console.log(newOrder)}>Check state</button> */}
       </div>
     </>

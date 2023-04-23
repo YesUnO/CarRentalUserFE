@@ -7,6 +7,7 @@ interface IOrderState {
   finishedOrders: Order[];
   unpaidOrders: Order[];
   futureOrders: Order[];
+  orderDetail: Order | null;
   newOrder: Order;
 }
 
@@ -14,6 +15,7 @@ const initialState: IOrderState = {
   finishedOrders: [],
   unpaidOrders: [],
   futureOrders: [],
+  orderDetail: null,
   newOrder: {
     id: undefined,
     startDate: new Date(),
@@ -44,7 +46,7 @@ export type CreateOrderRequest = {
 export const payOrder = createAsyncThunk<any, number, { state: RootState }>(
   "payOrder",
   async (orderId: number, { getState }) => {
-    const token = getState().auth.token;
+    const token = getState().authService.token;
     const [error, response] = await api.post(
       `/api/order/${orderId}`,
       null,
@@ -57,17 +59,18 @@ export const payOrder = createAsyncThunk<any, number, { state: RootState }>(
   }
 );
 
-export const createOrder = createAsyncThunk<Order, CreateOrderRequest, { state: RootState }>(
-  "createOrder",
-  async (order: CreateOrderRequest, { getState }) => {
-    const token = getState().auth.token;
-    const [error, response] = await api.post(`/api/order`, order, token);
-    if (error) {
-      return error;
-    }
-    return response;
+export const createOrder = createAsyncThunk<
+  Order,
+  CreateOrderRequest,
+  { state: RootState }
+>("createOrder", async (order: CreateOrderRequest, { getState }) => {
+  const token = getState().authService.token;
+  const [error, response] = await api.post(`/api/order`, order, token);
+  if (error) {
+    return error;
   }
-);
+  return response;
+});
 
 export const orderSlice = createSlice({
   initialState,
@@ -80,20 +83,24 @@ export const orderSlice = createSlice({
         state.newOrder = payload;
       }
     },
-    settNewOrderCar(state, {payload}: PayloadAction<Car|null>) {
+    setOrderDetail(state, { payload }: PayloadAction<Order>) {
+      if (payload == null || payload == undefined) {
+        state.orderDetail = initialState.orderDetail;
+      } else {
+        state.orderDetail = payload;
+      }
+    },
+    setNewOrderCar(state, { payload }: PayloadAction<Car>) {
       state.newOrder.car = payload;
     },
-    unsettDatesFromNewOrder(state) {
-      state.newOrder.endDate = null;
-      state.newOrder.startDate = null;
-    }
   },
   extraReducers(builder) {
-    builder.addCase(createOrder.fulfilled, (state, action)=> {
+    builder.addCase(createOrder.fulfilled, (state, action) => {
       state.finishedOrders.push(action.payload);
-    })
+    });
   },
 });
 
 export default orderSlice.reducer;
-export const { setNewOrder, unsettDatesFromNewOrder, settNewOrderCar } = orderSlice.actions;
+export const { setNewOrder, setNewOrderCar, setOrderDetail } =
+  orderSlice.actions;
