@@ -11,15 +11,14 @@ const initialState: IStripeState = {
 };
 
 export type CheckoutSessionResponse = {
-  checkoutSessionUrl: string;
+  url: string;
 };
 
 export const createCheckoutSession = createAsyncThunk<
-  any,
-  any,
+CheckoutSessionResponse,
+  void,
   { state: RootState }
->("stripeCheckoutSession", async ({},{ getState }) => {
-  console.log("ho");
+>("stripeCheckoutSession", async (_,{ getState }) => {
   const token = getState().auth.token;
   const [error, response] = await api.get("/api/stripe", token);
   if (error) {

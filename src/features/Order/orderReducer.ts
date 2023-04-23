@@ -41,9 +41,9 @@ export type CreateOrderRequest = {
   carId: number;
 };
 
-export const payOrder = createAsyncThunk<any, string, { state: RootState }>(
+export const payOrder = createAsyncThunk<any, number, { state: RootState }>(
   "payOrder",
-  async (orderId: string, { getState }) => {
+  async (orderId: number, { getState }) => {
     const token = getState().auth.token;
     const [error, response] = await api.post(
       `/api/order/${orderId}`,
