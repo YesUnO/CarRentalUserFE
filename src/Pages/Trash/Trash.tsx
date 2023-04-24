@@ -1,10 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../infrastructure/store";
 import { payOrder } from "../../features/Order/orderReducer";
-import PickCarPage from "../../features/Car/PickCarPage";
-import AddCardBtn from "../../features/Stripe/components/addCardBtn";
-import OrderDetailPicker from "../../features/Order/components/orderDetailPicker/orderDetailPicker";
-import OrderDetail from "../../features/Order/components/orderDetail/orderDetail";
 
 function Trash() {
   const dispatch = useDispatch();
