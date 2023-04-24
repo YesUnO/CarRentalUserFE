@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import Toolbar from './Toolbar/Toolbar';
+import AppToolbar from './AppToolbar/AppToolbar';
 
 interface AppShell {
     children?: ReactNode
@@ -8,7 +8,7 @@ interface AppShell {
 const AppShell: React.FC<AppShell> = ({children}) =>{
     return (
         <>
-        <Toolbar/>
+        <AppToolbar/>
         <section className='view'>{children}</section>
         </>
     );
