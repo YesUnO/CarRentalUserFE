@@ -21,13 +21,13 @@ function Trash() {
     <div>
       {isAuthenticated ? (
         <>
-          <AddCardBtn></AddCardBtn>
+          <AddCardBtn />
           <button onClick={handlePayInvoice}>Pay</button>
+          <OrderDetailPicker />
         </>
       ) : (
         <></>
       )}
-      <OrderDetailPicker/>
     </div>
   );
 }

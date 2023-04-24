@@ -1,10 +1,16 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../infrastructure/store";
-import { useState } from "react";
-import { Order } from "../../orderReducer";
+import { useEffect, useState } from "react";
+import { Order, getOrders } from "../../orderReducer";
 
 const OrderDetailPicker: React.FC = () => {
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
+    dispatch(getOrders());
+  }, []);
+  
   const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
   const orderService = useSelector((state: RootState) => state.ordersService);
   const [orderSelect, setOrderSelect] = useState<Order[]>([]);

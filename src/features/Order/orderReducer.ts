@@ -59,6 +59,21 @@ export const payOrder = createAsyncThunk<any, number, { state: RootState }>(
   }
 );
 
+export const getOrders = createAsyncThunk<Order[], void, { state: RootState }>(
+  "getOrders",
+  async (_, { getState }) => {
+    const token = getState().authService.token;
+    const [error, response] = await api.get(
+      `/api/order`,
+      token
+    );
+    if (error) {
+      return error;
+    }
+    return response;
+  }
+);
+
 export const createOrder = createAsyncThunk<
   Order,
   CreateOrderRequest,
@@ -97,6 +112,12 @@ export const orderSlice = createSlice({
   extraReducers(builder) {
     builder.addCase(createOrder.fulfilled, (state, action) => {
       state.finishedOrders.push(action.payload);
+    });
+    //TODO: parse paid, unfifnished, unpaid
+    builder.addCase(getOrders.fulfilled, (state,action)=>{
+      state.futureOrders = action.payload;
+      state.finishedOrders = action.payload;
+      state.unpaidOrders = action.payload;
     });
   },
 });
