@@ -9,6 +9,8 @@ const OrderDetailPage: React.FC = () => {
 
     return (
         <>
+            <h3>Order detail</h3>
+
             <OrderDetailPicker />
             <OrderDetail />
         </>

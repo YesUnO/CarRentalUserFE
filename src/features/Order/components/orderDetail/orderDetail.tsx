@@ -12,7 +12,6 @@ const OrderDetail: React.FC = () => {
 
     return (
         <>
-            <h2>Order detail</h2>
             {orderDetail?.paid?
                 (
                     <>

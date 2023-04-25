@@ -18,7 +18,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       <BrowserRouter>
         <AppShell>
           <Routes>
-            <Route path="/" element={<UserPage />}></Route>
+            <Route path="/" element={<PickCarPage />}></Route>
             <Route path="/orderDetail" element={<OrderDetailPage />}></Route>
             <Route path="/user" element={<UserPage />}></Route>
             <Route path="/admin" element={<AdminPage />}></Route>

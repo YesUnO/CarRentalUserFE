@@ -1,19 +1,29 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../infrastructure/store";
-import { Order, createOrder, setNewOrder,  } from "../orderReducer";
+import { Order, createOrder, setNewOrder, } from "../orderReducer";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import { addDays, subDays } from "date-fns";
 import { CreateOrderRequest } from "../orderReducer";
 import { clearPickedCar } from "../../Car/carReducer";
+import { useNavigate } from "react-router-dom";
 
 const OrderPicker: React.FC = () => {
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.authService.token != null
-  );
+  const navigate = useNavigate();
+
+  const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
   const newOrder = useSelector((state: RootState) => state.ordersService.newOrder);
+  const user = useSelector((state: RootState) => state.userService.user);
+
+  const missingRegistrationSteps = !user.hasActivePaymentCard
+    || !user.hasDrivingLicense
+    || !user.hasIdCard
+    || user.email == null
+    || user.email == "";
+
+  const hasnBeenVerifiedYet = !user.HasIdCardVerified || !user.hasDrivingLicenseVerified || !user.isApprooved;
 
   const handleDateChanges = (dateRange: [Date | null, Date | null]) => {
     const [startDate, endDate] = dateRange;
@@ -27,18 +37,31 @@ const OrderPicker: React.FC = () => {
   };
 
   const handleCreateOrder = () => {
-    const request: CreateOrderRequest = {
-      carId: newOrder.car?.id as number,
-      startDate: newOrder.startDate as Date,
-      endDate: newOrder.endDate as Date,
-    };
-    // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
-    dispatch(createOrder(request));
+    if (!isAuthenticated) {
+      return;
+
+    }
+    else if (missingRegistrationSteps) {
+      navigate("/user");
+      return;
+    }
+    else if (hasnBeenVerifiedYet) {
+      
+    }
+    else {
+      const request: CreateOrderRequest = {
+        carId: newOrder.car?.id as number,
+        startDate: newOrder.startDate as Date,
+        endDate: newOrder.endDate as Date,
+      };
+      // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
+      dispatch(createOrder(request));
+    }
   };
 
   const handleClearPickedCar = () => {
     dispatch(clearPickedCar());
-    dispatch(setNewOrder({...newOrder, car:null}));
+    dispatch(setNewOrder({ ...newOrder, car: null }));
   };
 
   const getExcludeDaysInterval = (): { start: Date; end: Date }[] => {
@@ -54,12 +77,12 @@ const OrderPicker: React.FC = () => {
     ];
   };
 
-  let isOrderReady =  
-      newOrder.startDate != null &&
-      newOrder.endDate != null &&
-      newOrder.car != null;
+  let isOrderReady =
+    newOrder.startDate != null &&
+    newOrder.endDate != null &&
+    newOrder.car != null;
 
-  let isCreateOrderBtnDisabled =  
+  let isCreateOrderBtnDisabled =
     !isAuthenticated || !isOrderReady;
 
 

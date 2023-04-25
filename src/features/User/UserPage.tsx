@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../infrastructure/store";
 import { StepProps, Steps } from "antd";
-import LoginOrRegisterPage from "../Auth/LoginOrRegisterPage";
+import RegisterPage from "../Auth/LoginOrRegisterPage";
 import { useState } from "react";
 import UploadDocumentPhoto from "./components/UploadDocumentPhoto";
 import AddCardBtn from "../Stripe/components/addCardBtn";
@@ -55,10 +55,11 @@ const UserPage: React.FC = () => {
 
     return (
         <>
+        <h3>Profile</h3>
             {(() => {
                 switch (current) {
                     case 0:
-                        return <LoginOrRegisterPage />
+                        return <RegisterPage />
                     case 1:
                         return null;
                     case 2:
