@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import stripeReducer from "../features/Stripe/stripeReducer";
 import orderReducer from "../features/Order/orderReducer";
 import carReducer from "../features/Car/carReducer";
+import userReducer from "../features/User/userReducer";
 
 const store = configureStore({
   middleware: getDefaultMiddleware =>
@@ -11,6 +12,7 @@ const store = configureStore({
       serializableCheck: false,
     }),
   reducer: {
+    userService: userReducer,
     authService: authReducer,
     stripeService: stripeReducer,
     ordersService: orderReducer,

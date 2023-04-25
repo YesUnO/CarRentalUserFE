@@ -4,7 +4,6 @@ import RegisterModal from "../../features/Auth/components/RegisterModal";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../infrastructure/store";
 import { logout } from "../../features/Auth/authReducer";
-import { AppBar, Box, Toolbar } from "@mui/material";
 
 
 const AppToolbar: React.FC = () => {
@@ -18,24 +17,7 @@ const AppToolbar: React.FC = () => {
 
     return (
         <>
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static">
-                    <Toolbar>
-                        {isAuthenticated ? (
-                            <>
-                                <button onClick={handleLogout}>Log out</button>
-                            </>
-                        ) : (
-                            <>
-                                <LoginModal />
-                                <RegisterModal />
-                            </>
-
-                        )}
-                    </Toolbar>
-                </AppBar>
-            </Box>
-
+            
         </>
     );
 };

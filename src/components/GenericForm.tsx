@@ -11,15 +11,15 @@ export interface IFormField {
 export interface IGenericForm {
     submitBtnName: string,
     fields: IFormField[]
-    callback: (fields: IFormField[])=> Promise<void>
+    callback: (fields: IFormField[]) => Promise<void>
 };
 
 export type GenericFormProps = {
-    props : IGenericForm
+    props: IGenericForm
 };
 
 
-const GenericForm: React.FC<GenericFormProps> = ({props}: GenericFormProps) => {
+const GenericForm: React.FC<GenericFormProps> = ({ props }: GenericFormProps) => {
     const [formData, setFormData] = useState<IFormField[]>(
         props.fields
     );
@@ -41,13 +41,16 @@ const GenericForm: React.FC<GenericFormProps> = ({props}: GenericFormProps) => {
         <>
             <form onSubmit={handleSubmit}>
                 {formData.map((item, index) => (
-                    <input
-                        key={item.key}
-                        type={item.fieldType ?? "text"}
-                        value={item.fieldValue}
-                        onChange={(e) => updateValue(index, e.target.value)}
-                        placeholder={item.fieldPlaceholder ?? ""}
-                    />
+                    <div>
+                        <div>{item.fieldName}</div>
+                        <input
+                            key={item.key}
+                            type={item.fieldType ?? "text"}
+                            value={item.fieldValue}
+                            onChange={(e) => updateValue(index, e.target.value)}
+                            placeholder={item.fieldPlaceholder ?? ""}
+                        />
+                    </div>
                 ))}
                 <button type="submit">{props.submitBtnName}</button>
             </form>
