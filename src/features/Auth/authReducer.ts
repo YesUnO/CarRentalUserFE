@@ -1,5 +1,7 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, ThunkDispatch, ThunkAction } from "@reduxjs/toolkit";
 import { api, UrlEncodedOptions } from "../../infrastructure/utils/System";
+import { getUser } from "../User/userReducer";
+import { RootState } from "../../infrastructure/store";
 
 interface IAuthState {
   token: undefined | string;
@@ -32,20 +34,29 @@ export type RegisterRequest = {
 };
 
 //TODO: figure out types, figure out how to create request obj
-export const getToken = createAsyncThunk<TokenResponse, PasswordCredentialsRequest>(
-  "loginPw",
-  async (credentials: PasswordCredentialsRequest) => {
-    const { username, password } = credentials;
-    const payload: UrlEncodedOptions = {
-      client_Id: "local-dev",
-      grant_type: "password",
-      username: username,
-      password: password,
-    };
-    const [error, response] = await api.postUrlEncoded(
-      "/connect/token",
-      payload
-    );
+export const getToken = createAsyncThunk<
+  TokenResponse,
+  PasswordCredentialsRequest
+>("loginPw", async (credentials: PasswordCredentialsRequest) => {
+  const { username, password } = credentials;
+  const payload: UrlEncodedOptions = {
+    client_Id: "local-dev",
+    grant_type: "password",
+    username: username,
+    password: password,
+  };
+  const [error, response] = await api.postUrlEncoded("/connect/token", payload);
+  if (error) {
+    console.log(error);
+    return error;
+  }
+  return response;
+});
+
+export const register = createAsyncThunk<TokenResponse, RegisterRequest>(
+  "register",
+  async (registration: RegisterRequest) => {
+    const [error, response] = await api.post("/api/auth", registration);
     if (error) {
       console.log(error);
       return error;
@@ -54,15 +65,18 @@ export const getToken = createAsyncThunk<TokenResponse, PasswordCredentialsReque
   }
 );
 
-export const register = createAsyncThunk<TokenResponse,RegisterRequest>(
-  "register", async (registration:RegisterRequest) => {
-  const [error, response] = await api.post("/api/auth", registration);
-  if (error) {
-    console.log(error);
-    return error;
-  }
-  return response;
-});
+export const getTokenAndGetUser =
+  (
+    credentials: PasswordCredentialsRequest
+  ): ThunkAction<void, RootState, unknown, any> =>
+  (dispatch) => {
+    dispatch(getToken(credentials)).then((result) => {
+      console.log(result);
+      if (result.payload) {
+        dispatch(getUser());
+      }
+    });
+  };
 
 const authSLice = createSlice({
   initialState,
@@ -77,7 +91,7 @@ const authSLice = createSlice({
       state.loading = true;
     });
     builder.addCase(getToken.fulfilled, (state, { payload }) => {
-      state.loading = false;
+    state.loading = false;
       if (payload) {
         state.token = payload.token_type + " " + payload.access_token;
       }

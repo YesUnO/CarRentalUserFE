@@ -48,7 +48,7 @@ const UserPage: React.FC = () => {
         },
         {
             title: 'Save payment card',
-            status: setStatus(4, !user.hasPaymentCard),
+            status: setStatus(4, !user.hasActivePaymentCard),
         },
     ];
 

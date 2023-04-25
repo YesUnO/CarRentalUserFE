@@ -8,44 +8,51 @@ interface IUserState {
 
 const initialState: IUserState = {
   user: {
-    hasDrivingLicense: true,
+    hasDrivingLicense: false,
+    hasDrivingLicenseVerified: false,
     hasIdCard: false,
-    hasPaymentCard: false,
+    HasIdCardVerified: false,
+    hasActivePaymentCard: false,
     email: null,
+    hasEmailVerified: false,
+    isApprooved: false,
   },
 };
 
 export type User = {
   hasDrivingLicense: boolean;
+  hasDrivingLicenseVerified: boolean;
   hasIdCard: boolean;
-  hasPaymentCard: boolean;
+  HasIdCardVerified: boolean;
+  hasActivePaymentCard: boolean;
   email: string | null;
+  hasEmailVerified: boolean;
+  isApprooved: boolean;
 };
 
-export const userRequest = createAsyncThunk<
-  void,
-  void,
-  { state: RootState }
->("userRequest", async (_, { getState }) => {
-  const token = getState().authService.token;
-  const [error, response] = await api.get("/api/stripe", token);
-  if (error) {
-    return error;
+export const getUser = createAsyncThunk<User, void, { state: RootState }>(
+  "userRequest",
+  async (_, { getState }) => {
+    const token = getState().authService.token;
+    const [error, response] = await api.get("/api/user", token);
+    if (error) {
+      return error;
+    }
+    return response;
   }
-  return response;
-});
+);
 
 export const userSlice = createSlice({
   initialState,
-  name: "stripe",
+  name: "userService",
   reducers: {
     setUser: (state, { payload }: PayloadAction<User>) => {
       state.user = payload;
     },
   },
   extraReducers(builder) {
-    builder.addCase(userRequest.fulfilled, (state, { payload }) => {
-      
+    builder.addCase(getUser.fulfilled, (state, { payload }) => {
+        state.user = payload;
     });
   },
 });
