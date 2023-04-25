@@ -5,6 +5,7 @@ import RegisterPage from "../Auth/LoginOrRegisterPage";
 import { useState } from "react";
 import UploadDocumentPhoto from "./components/UploadDocumentPhoto";
 import AddCardBtn from "../Stripe/components/addCardBtn";
+import ConfirmMail from "./components/confirmEmail";
 
 type StepsItemStatus = "wait" | "process" | "finish" | "error" | undefined;
 
@@ -61,7 +62,7 @@ const UserPage: React.FC = () => {
                     case 0:
                         return <RegisterPage />
                     case 1:
-                        return null;
+                        return <ConfirmMail/>;
                     case 2:
                         return <UploadDocumentPhoto />
                     case 3:
