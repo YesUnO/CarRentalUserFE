@@ -14,7 +14,7 @@ export const somemethod = createAsyncThunk<
   { state: RootState }
 >("somemethod", async (_, { getState }) => {
   const token = getState().authService.token;
-  const [error, response] = await api.get("/api/stripe", token);
+  const [error, response] = await api.post("/api/car",null, token);
   if (error) {
     return error;
   }
