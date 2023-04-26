@@ -14,6 +14,7 @@ export type Car = {
   id: number;
   name: string;
   unavailable: Date[];
+  profilePic: string;
   isPicked: boolean;
 };
 
