@@ -9,6 +9,8 @@ export type UploadComponentPropsWrapper = {
 
 export type UploadComponentProps = {
   endpoint: string;
+  queryId?: number;
+  additionalRequestParam?: Record<string,string>
 };
 
 const UploadPhoto: React.FC<UploadComponentPropsWrapper> = ({componentProps}) => {
@@ -19,7 +21,8 @@ const UploadPhoto: React.FC<UploadComponentPropsWrapper> = ({componentProps}) =>
 
   const props: UploadProps = {
     name: "file",
-    action: `${apiUrl}/api/car/1`,
+    action: `${apiUrl}/${componentProps.endpoint}/${componentProps.queryId}`,
+    data: componentProps.additionalRequestParam,
     headers: {
       authorization: token as string,
     },
