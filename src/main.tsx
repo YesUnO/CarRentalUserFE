@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import store from './infrastructure/store';
 import UserPage from "./features/User/UserPage";
 import AdminPage from "./features/Admin/AdminPage";
-import PickCarPage from "./features/Car/PickCarPage";
+import PickCarPage from "./features/Car/PickCarPage/PickCarPage";
 import OrderDetailPage from "./features/Order/OrderDetailPage";
 
 

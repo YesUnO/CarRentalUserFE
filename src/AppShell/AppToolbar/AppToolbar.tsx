@@ -20,6 +20,11 @@ const AppToolbar: React.FC = () => {
 
     const items: MenuProps['items'] = [
         {
+            label: 'Admin',
+            key: 'admin',
+            onClick:() =>navigate("/admin"),
+        },
+        {
             label: 'Price list',
             key: 'prices'
         },
@@ -59,7 +64,6 @@ const AppToolbar: React.FC = () => {
     ]
 
     const handleMenuClick: MenuProps['onClick'] = (e) => {
-        console.log(e);
         setCurrent(e.key);
     };
     const handleLogout = () => {

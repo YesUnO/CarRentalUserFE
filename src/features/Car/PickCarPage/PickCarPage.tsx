@@ -1,10 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../infrastructure/store";
+import { RootState } from "../../../infrastructure/store";
 import { useEffect } from "react";
-import { getCars, pickCar } from "./carReducer";
-import OrderPicker from "../Order/components/orderPicker";
-import { setNewOrderCar } from "../Order/orderReducer";
-import CarThumb from "./components/CarThumb/CarThumb";
+import { getCars, pickCar } from "../carReducer";
+import OrderPicker from "../../Order/components/orderPicker";
+import { setNewOrderCar } from "../../Order/orderReducer";
+import CarThumb from "../components/CarThumb/CarThumb";
+import "./pickCarPage.css"
 
 const PickCarPage: React.FC = () => {
     const dispatch = useDispatch();
@@ -26,11 +27,14 @@ const PickCarPage: React.FC = () => {
         <>
             <h3>Cars</h3>
             <OrderPicker />
+            <div className="grid-container">
             {cars.map((item, index) => (
                 <div key={index} onClick={() => handleCarSelect(index)}>
                     <CarThumb props={item} />
                 </div>
             ))}
+            </div>
+            
         </>
     );
 };
