@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../infrastructure/store";
-import UploadPhoto from "../../File/components/uploadPhoto";
+import UploadPhoto, { UploadComponentProps } from "../../File/components/uploadPhoto";
 
 const UploadDocumentPhoto: React.FC = () => {
   const dispatch = useDispatch();
@@ -8,9 +8,13 @@ const UploadDocumentPhoto: React.FC = () => {
     (state: RootState) => state.authService.token != null
   );
 
+const componentProps:UploadComponentProps = {
+  endpoint: ""
+};
+
   return (
     <>
-      <UploadPhoto />
+      <UploadPhoto componentProps={componentProps} />
     </>
   );
 };

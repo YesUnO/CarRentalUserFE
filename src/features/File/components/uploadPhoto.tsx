@@ -1,18 +1,21 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../infrastructure/store";
 import { Button, Upload, UploadProps, message } from "antd";
-import { UploadOutlined } from '@ant-design/icons';
+import { UploadOutlined } from "@ant-design/icons";
 
-const UploadPhoto: React.FC = () => {
+export type UploadComponentPropsWrapper = {
+  componentProps: UploadComponentProps;
+};
+
+export type UploadComponentProps = {
+  endpoint: string;
+};
+
+const UploadPhoto: React.FC<UploadComponentPropsWrapper> = ({componentProps}) => {
   const dispatch = useDispatch();
-  const token = useSelector(
-    (state: RootState) => state.authService.token
-  );
-
-  const formData = new FormData();
+  const token = useSelector((state: RootState) => state.authService.token);
 
   const apiUrl = process.env.API_URL;
-
 
   const props: UploadProps = {
     name: "file",
