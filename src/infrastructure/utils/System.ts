@@ -19,6 +19,9 @@ async function respond(endpoint: string, options: RequestInit, token?: string) {
   try {
     const response = await fetch(url, options);
     const data = await response.json();
+    if (!response.ok) {
+      return [data];
+    }
     return [null, data];
   } catch (error) {
     return [error];

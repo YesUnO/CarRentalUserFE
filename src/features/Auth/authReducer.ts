@@ -2,14 +2,23 @@ import { createSlice, createAsyncThunk, ThunkDispatch, ThunkAction } from "@redu
 import { api, UrlEncodedOptions } from "../../infrastructure/utils/System";
 import { getUser } from "../User/userReducer";
 import { RootState } from "../../infrastructure/store";
+import JWT, {} from "jwt-decode";
 
 interface IAuthState {
   token: undefined | string;
+  role: TokenRoleClaim
   loading: boolean;
+}
+
+type TokenRoleClaim = "Admin" | "Customer" | undefined;
+
+type Token = {
+  role: TokenRoleClaim;
 }
 
 const initialState: IAuthState = {
   token: undefined,
+  role: undefined,
   loading: false,
 };
 
@@ -37,7 +46,7 @@ export type RegisterRequest = {
 export const getToken = createAsyncThunk<
   TokenResponse,
   PasswordCredentialsRequest
->("loginPw", async (credentials: PasswordCredentialsRequest) => {
+>("loginPw", async (credentials: PasswordCredentialsRequest, thunkApi) => {
   const { username, password } = credentials;
   const payload: UrlEncodedOptions = {
     client_Id: "local-dev",
@@ -47,8 +56,7 @@ export const getToken = createAsyncThunk<
   };
   const [error, response] = await api.postUrlEncoded("/connect/token", payload);
   if (error) {
-    console.log(error);
-    return error;
+    return thunkApi.rejectWithValue(error);
   }
   return response;
 });
@@ -65,16 +73,14 @@ export const register = createAsyncThunk<TokenResponse, RegisterRequest>(
   }
 );
 
-export const getTokenAndGetUser =
-  (
-    credentials: PasswordCredentialsRequest
-  ): ThunkAction<void, RootState, unknown, any> =>
-  (dispatch) => {
+export const login =
+  (credentials: PasswordCredentialsRequest): ThunkAction<void, RootState, unknown, any> => (dispatch) => {
     dispatch(getToken(credentials)).then((result) => {
-      console.log(result);
-      if (result.payload) {
-        dispatch(getUser());
+      if (result.type == "loginPw/rejected") {
+        return;
       }
+      dispatch(parseToken());
+      dispatch(getUser());
     });
   };
 
@@ -82,9 +88,13 @@ const authSLice = createSlice({
   initialState,
   name: "authentification",
   reducers: {
-    logout: () => {
+    logout() {
       return initialState;
     },
+    parseToken(state) {
+      const decoded: Token = JWT(state.token as string);
+      state.role = decoded.role;
+    }
   },
   extraReducers(builder) {
     builder.addCase(getToken.pending, (state) => {
@@ -120,4 +130,5 @@ const authSLice = createSlice({
 });
 
 export default authSLice.reducer;
-export const { logout } = authSLice.actions;
+export const { logout, parseToken } = authSLice.actions;
+

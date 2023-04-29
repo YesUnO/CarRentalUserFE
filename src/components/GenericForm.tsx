@@ -41,10 +41,9 @@ const GenericForm: React.FC<GenericFormProps> = ({ props }: GenericFormProps) =>
         <>
             <form onSubmit={handleSubmit}>
                 {formData.map((item, index) => (
-                    <div>
+                    <div key={item.key}>
                         <div>{item.fieldName}</div>
                         <input
-                            key={item.key}
                             type={item.fieldType ?? "text"}
                             value={item.fieldValue}
                             onChange={(e) => updateValue(index, e.target.value)}

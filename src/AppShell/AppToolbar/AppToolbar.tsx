@@ -76,7 +76,9 @@ const AppToolbar: React.FC = () => {
             <Menu mode="horizontal" items={items} selectedKeys={[current]} onClick={handleMenuClick} />
             <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
                 <MdClose onClick={()=>setModalIsOpen(false)}/>
-                <section><LoginForm/></section>
+                    <section>
+                        <LoginForm/>
+                    </section>
             </Modal>
         </>
     );

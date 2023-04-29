@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import _ from "lodash";
 import GenericForm, { IFormField, IGenericForm } from "../../../components/GenericForm";
-import {  getTokenAndGetUser } from "../authReducer";
+import {  login } from "../authReducer";
 
 const LoginModal: React.FC = () => {
     const fields: IFormField[] = [
@@ -29,7 +29,7 @@ const LoginModal: React.FC = () => {
             .value();
 
         // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
-        await dispatch(getTokenAndGetUser(loginRequest));
+        await dispatch(login(loginRequest));
     };
 
     const loginForm: IGenericForm = {
