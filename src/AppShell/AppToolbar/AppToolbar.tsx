@@ -18,7 +18,7 @@ const AppToolbar: React.FC = () => {
     const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
     const [current, setCurrent] = useState("");
 
-    const items: MenuProps['items'] = [
+    const customerItems: MenuProps['items'] = [
         {
             label: 'Admin',
             key: 'admin',
@@ -73,7 +73,7 @@ const AppToolbar: React.FC = () => {
 
     return (
         <>
-            <Menu mode="horizontal" items={items} selectedKeys={[current]} onClick={handleMenuClick} />
+            <Menu mode="horizontal" items={customerItems} selectedKeys={[current]} onClick={handleMenuClick} />
             <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
                 <MdClose onClick={()=>setModalIsOpen(false)}/>
                     <section>

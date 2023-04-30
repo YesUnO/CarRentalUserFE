@@ -9,7 +9,7 @@ import UserPage from "./features/User/UserPage";
 import AdminPage from "./features/Admin/AdminPage";
 import PickCarPage from "./features/Car/PickCarPage/PickCarPage";
 import OrderDetailPage from "./features/Order/OrderDetailPage";
-
+import AdminUserManagmentPage from "./features/Admin/User/AdminUserManagmentPage/AdminUserManagmentPage";
 
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
@@ -22,6 +22,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
             <Route path="/orderDetail" element={<OrderDetailPage />}></Route>
             <Route path="/user" element={<UserPage />}></Route>
             <Route path="/admin" element={<AdminPage />}></Route>
+            <Route path="/admin/user" element={<AdminUserManagmentPage />}></Route>
           </Routes>
         </AppShell>
       </BrowserRouter>
