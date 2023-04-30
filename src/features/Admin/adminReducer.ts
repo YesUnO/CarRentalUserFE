@@ -1,20 +1,23 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../../infrastructure/utils/System";
 import { RootState } from "../../infrastructure/store";
+import { User } from "../User/userReducer";
 
 interface IAdminState {
-}
-
-const initialState: IAdminState = {
+  customers: User[],
 };
 
-export const somemethod = createAsyncThunk<
-  void,
+const initialState: IAdminState = {
+  customers:[],
+};
+
+export const getCustomerList = createAsyncThunk<
+  User[],
   void,
   { state: RootState }
->("somemethod", async (_, { getState }) => {
+>("getCustomerList", async (_, { getState }) => {
   const token = getState().authService.token;
-  const [error, response] = await api.post("/api/car",null, token);
+  const [error, response] = await api.get("/api/user/list", token);
   if (error) {
     return error;
   }
@@ -30,8 +33,8 @@ export const adminSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(somemethod.fulfilled, (state, { payload }) => {
-      
+    builder.addCase(getCustomerList.fulfilled, (state, { payload }) => {
+      state.customers = payload;
     });
   },
 });
