@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../infrastructure/store";
 import { logout } from "../../features/Auth/authReducer";
@@ -17,6 +17,13 @@ const AppToolbar: React.FC = () => {
   const isAuthenticated = useSelector(
     (state: RootState) => state.authService.token != null
   );
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      setModalIsOpen(false);
+    }
+  }, [isAuthenticated]);
+
   const role = useSelector((state: RootState) => state.authService.role);
   const [current, setCurrent] = useState("");
 
@@ -27,6 +34,11 @@ const AppToolbar: React.FC = () => {
             label: "Customers",
             key: "customer",
             onClick: () => navigate("/admin/user"),
+          },
+          {
+            label: "Log out",
+            key: "logout",
+            onClick: () => handleLogout(),
           },
         ]
       : [

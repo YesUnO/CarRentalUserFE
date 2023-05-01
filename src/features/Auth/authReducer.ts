@@ -1,12 +1,18 @@
-import { createSlice, createAsyncThunk, ThunkDispatch, ThunkAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  ThunkDispatch,
+  ThunkAction,
+} from "@reduxjs/toolkit";
 import { api, UrlEncodedOptions } from "../../infrastructure/utils/System";
 import { getUser } from "../User/userReducer";
 import { RootState } from "../../infrastructure/store";
-import JWT, {} from "jwt-decode";
+import JWT from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 interface IAuthState {
   token: undefined | string;
-  role: TokenRoleClaim
+  role: TokenRoleClaim;
   loading: boolean;
 }
 
@@ -14,7 +20,7 @@ type TokenRoleClaim = "Admin" | "Customer" | undefined;
 
 type Token = {
   role: TokenRoleClaim;
-}
+};
 
 const initialState: IAuthState = {
   token: undefined,
@@ -74,13 +80,18 @@ export const register = createAsyncThunk<TokenResponse, RegisterRequest>(
 );
 
 export const login =
-  (credentials: PasswordCredentialsRequest): ThunkAction<void, RootState, unknown, any> => (dispatch) => {
+  (
+    credentials: PasswordCredentialsRequest
+  ): ThunkAction<void, RootState, unknown, any> =>
+  (dispatch, getState) => {
     dispatch(getToken(credentials)).then((result) => {
       if (result.type == "loginPw/rejected") {
         return;
       }
       dispatch(parseToken());
-      dispatch(getUser());
+      if (getState().authService.role == "Customer") {
+        dispatch(getUser());
+      }
     });
   };
 
@@ -94,14 +105,14 @@ const authSLice = createSlice({
     parseToken(state) {
       const decoded: Token = JWT(state.token as string);
       state.role = decoded.role;
-    }
+    },
   },
   extraReducers(builder) {
     builder.addCase(getToken.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(getToken.fulfilled, (state, { payload }) => {
-    state.loading = false;
+      state.loading = false;
       if (payload) {
         state.token = payload.token_type + " " + payload.access_token;
       }
@@ -131,4 +142,3 @@ const authSLice = createSlice({
 
 export default authSLice.reducer;
 export const { logout, parseToken } = authSLice.actions;
-
