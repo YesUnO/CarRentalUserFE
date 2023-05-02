@@ -100,7 +100,7 @@ const OrderPicker: React.FC = () => {
         inline
       />
       <div>
-        <button disabled={isCreateOrderBtnDisabled} onClick={() => handleCreateOrder()}>Make order</button>
+        {/* <button disabled={isCreateOrderBtnDisabled} onClick={() => handleCreateOrder()}>Make order</button> */}
         {/* <button onClick={()=>handleClearPickedCar()}>Clear picked car</button>
         <button onClick={()=>dispatch(setNewOrder({ ...newOrder, startDate: null, endDate: null }))}>Clear dates</button>
         <button onClick={()=>console.log(newOrder)}>Check state</button> */}

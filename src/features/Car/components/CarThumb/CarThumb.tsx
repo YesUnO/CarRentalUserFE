@@ -25,14 +25,17 @@ const CarThumb: React.FC<CarComponentProps> = ({ props: car }) => {
 
   return (
     <>
-        <Card className={conditionalStyles} style={{ width: 300 }} cover={<img src={car.pictureUrl}></img>}>
+        <Card 
+        className={conditionalStyles} 
+        style={{ width: 300 }} 
+        cover={<img src={car.pictureUrl}/>}
+        actions={[<button key={"yo"}>yo</button>]}
+        >
           <Meta
             title={car.name}
             description={"yo yo yo yo yo yo yo yo yo yo yo"}
           />
         </Card>
-        {/* <Title>{car.name}</Title>
-        <Image preview={false} src={car.pictureUrl} width={200}></Image> */}
     </>
   );
 };

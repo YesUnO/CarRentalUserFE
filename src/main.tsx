@@ -14,17 +14,19 @@ import AdminUserManagmentPage from "./features/Admin/User/AdminUserManagmentPage
 
 const Root: React.FC = () => {
   const isAdmin = useSelector((state: RootState) => state.authService.role == "Admin");
-  return (<BrowserRouter>
-    <AppShell>
-      <Routes>
-        <Route path="/" element={<PickCarPage />} />
-        <Route path="/orderDetail" element={<OrderDetailPage />} />
-        <Route path="/user" element={<UserPage />} />
-        <Route path="/admin" element={isAdmin ? <AdminPage /> : <Navigate to={"/"} />} />
-        <Route path="/admin/user" element={isAdmin ? <AdminUserManagmentPage /> : <Navigate to={"/"} />} />
-      </Routes>
-    </AppShell>
-  </BrowserRouter>)
+  return (
+    <BrowserRouter>
+      <AppShell>
+        <Routes>
+          <Route path="/" element={<PickCarPage />} />
+          <Route path="/orderDetail" element={<OrderDetailPage />} />
+          <Route path="/user" element={<UserPage />} />
+          <Route path="/admin" element={isAdmin ? <AdminPage /> : <Navigate to={"/"} />} />
+          <Route path="/admin/user" element={isAdmin ? <AdminUserManagmentPage /> : <Navigate to={"/"} />} />
+        </Routes>
+      </AppShell>
+    </BrowserRouter>
+  );
 }
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(

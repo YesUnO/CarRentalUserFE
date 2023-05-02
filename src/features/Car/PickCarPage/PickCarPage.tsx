@@ -28,13 +28,12 @@ const PickCarPage: React.FC = () => {
             <h3>Cars</h3>
             <OrderPicker />
             <div className="grid-container">
-            {cars.map((item, index) => (
-                <div key={index} onClick={() => handleCarSelect(index)}>
-                    <CarThumb props={item} />
-                </div>
-            ))}
+                {cars.map((item, index) => (
+                    <div key={index} onClick={() => handleCarSelect(index)}>
+                        <CarThumb props={item} />
+                    </div>
+                ))}
             </div>
-            
         </>
     );
 };
