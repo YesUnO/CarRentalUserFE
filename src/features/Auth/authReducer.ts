@@ -69,15 +69,27 @@ export const getToken = createAsyncThunk<
 
 export const register = createAsyncThunk<TokenResponse, RegisterRequest>(
   "register",
-  async (registration: RegisterRequest) => {
+  async (registration: RegisterRequest, thunkApi) => {
     const [error, response] = await api.post("/api/auth", registration);
     if (error) {
-      console.log(error);
-      return error;
+      return thunkApi.rejectWithValue(error);
     }
     return response;
   }
 );
+
+export const registerAndLogin = (registration: RegisterRequest) : ThunkAction<void,RootState,unknown,any> => (dispatch, getState) => {
+  dispatch(register(registration)).then((result)=>{
+    if (result.type == "register/rejected") {
+      return;
+    }
+    const credentials: PasswordCredentialsRequest = {
+      password: registration.password,
+      username: registration.username
+    };
+    dispatch(getToken(credentials));
+  })
+}
 
 export const login =
   (
