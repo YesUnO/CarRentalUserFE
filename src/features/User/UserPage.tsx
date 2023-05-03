@@ -8,7 +8,6 @@ import UploadDocumentPhoto, {
 } from "./components/UploadDocumentPhoto";
 import AddCardBtn from "../Stripe/components/addCardBtn";
 import ConfirmMail from "./components/confirmEmail";
-import { UploadComponentProps } from "../File/components/uploadPhoto";
 
 type StepsItemStatus = "wait" | "process" | "finish" | "error" | undefined;
 

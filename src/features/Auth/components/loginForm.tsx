@@ -4,18 +4,21 @@ import GenericForm, {
   IFormField,
   IGenericForm,
 } from "../../../components/GenericForm";
-import { login } from "../authReducer";
+import { login, setLoginModal } from "../authReducer";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../infrastructure/store";
 import { useEffect } from "react";
+import { Button } from "antd";
 
 const LoginModal: React.FC = () => {
   const role = useSelector((state: RootState) => state.authService.role);
   const navigate = useNavigate();
   useEffect(() => {
-    console.log(role);
     if (role == "Admin") {
       navigate("/admin/user");
+    }
+    else if (role == "Customer") {
+      navigate("/");
     }
   }, [role]);
 
@@ -37,6 +40,11 @@ const LoginModal: React.FC = () => {
   //TODO: dunno
   const dispatch = useDispatch();
 
+  const handleRedirectToRegister = () => {
+    dispatch(setLoginModal(false));
+    navigate("/user");
+  }
+
   const loginCallback = async (fields: IFormField[]) => {
     const loginRequest = _.chain(fields)
       .keyBy("fieldName")
@@ -45,6 +53,7 @@ const LoginModal: React.FC = () => {
 
     // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
     await dispatch(login(loginRequest));
+    dispatch(setLoginModal(false));
   };
 
   const loginForm: IGenericForm = {
@@ -56,6 +65,7 @@ const LoginModal: React.FC = () => {
   return (
     <>
       <GenericForm props={loginForm} />
+      <Button type="link" onClick={handleRedirectToRegister}>Register</Button>
     </>
   );
 };

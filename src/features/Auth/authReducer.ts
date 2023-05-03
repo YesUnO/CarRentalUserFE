@@ -3,6 +3,7 @@ import {
   createAsyncThunk,
   ThunkDispatch,
   ThunkAction,
+  PayloadAction,
 } from "@reduxjs/toolkit";
 import { api, UrlEncodedOptions } from "../../infrastructure/utils/System";
 import { getUser } from "../User/userReducer";
@@ -14,6 +15,7 @@ interface IAuthState {
   token: undefined | string;
   role: TokenRoleClaim;
   loading: boolean;
+  loginModalIsOpened: boolean;
 }
 
 type TokenRoleClaim = "Admin" | "Customer" | undefined;
@@ -26,6 +28,7 @@ const initialState: IAuthState = {
   token: undefined,
   role: undefined,
   loading: false,
+  loginModalIsOpened: false,
 };
 
 interface TokenResponse {
@@ -118,6 +121,9 @@ const authSLice = createSlice({
       const decoded: Token = JWT(state.token as string);
       state.role = decoded.role;
     },
+    setLoginModal(state, payload:PayloadAction<boolean>) {
+      state.loginModalIsOpened = payload.payload;
+    }
   },
   extraReducers(builder) {
     builder.addCase(getToken.pending, (state) => {
@@ -140,9 +146,6 @@ const authSLice = createSlice({
     });
     builder.addCase(register.fulfilled, (state, { payload }) => {
       state.loading = false;
-      if (payload) {
-        state.token = payload.token_type + " " + payload.access_token;
-      }
       //TODO: sdomething?
     });
     builder.addCase(register.rejected, (state, action) => {
@@ -153,4 +156,4 @@ const authSLice = createSlice({
 });
 
 export default authSLice.reducer;
-export const { logout, parseToken } = authSLice.actions;
+export const { logout, parseToken, setLoginModal } = authSLice.actions;

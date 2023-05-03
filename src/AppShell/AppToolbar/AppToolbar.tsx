@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../infrastructure/store";
-import { logout } from "../../features/Auth/authReducer";
+import { logout, setLoginModal } from "../../features/Auth/authReducer";
 import { Menu, MenuProps } from "antd";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
@@ -10,7 +10,8 @@ import LoginForm from "../../features/Auth/components/loginForm";
 
 const AppToolbar: React.FC = () => {
   Modal.setAppElement(document.getElementById("root") as HTMLElement);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+const modalIsOpen = useSelector((state: RootState) => state.authService.loginModalIsOpened);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -18,11 +19,6 @@ const AppToolbar: React.FC = () => {
     (state: RootState) => state.authService.token != null
   );
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      setModalIsOpen(false);
-    }
-  }, [isAuthenticated]);
 
   const role = useSelector((state: RootState) => state.authService.role);
   const [current, setCurrent] = useState("");
@@ -76,7 +72,7 @@ const AppToolbar: React.FC = () => {
                   {
                     label: "Sign in",
                     key: "signin",
-                    onClick: () => setModalIsOpen(true),
+                    onClick: () => dispatch(setLoginModal(true)),
                   },
                 ],
           },
@@ -98,8 +94,8 @@ const AppToolbar: React.FC = () => {
         selectedKeys={[current]}
         onClick={handleMenuClick}
       />
-      <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)}>
-        <MdClose onClick={() => setModalIsOpen(false)} />
+      <Modal isOpen={modalIsOpen} onRequestClose={() => dispatch(setLoginModal(false))}>
+        <MdClose onClick={() => dispatch(setLoginModal(false))} />
         <section>
           <LoginForm />
         </section>
