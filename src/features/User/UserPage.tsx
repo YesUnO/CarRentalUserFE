@@ -39,7 +39,7 @@ const UserPage: React.FC = () => {
     },
     {
       title: "Confirm email",
-      status: setStatus(1, user.email == "" || user.email == null),
+      status: setStatus(1, !user.hasEmailVerified),
     },
     {
       title: "Upload Id",

@@ -81,6 +81,21 @@ export const register = createAsyncThunk<TokenResponse, RegisterRequest>(
   }
 );
 
+export const sendConfirmMail = createAsyncThunk<void, void,{ state: RootState }>(
+  "sendConfirmMail",
+  async (_, thunkApi) => {
+    const token = thunkApi.getState().authService.token;
+    const [error, response] = await api.get(
+      `/api/auth/ResendConfirmationEmail`,
+      token
+    );
+    if (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+    return response;
+  }
+);
+
 export const registerAndLogin = (registration: RegisterRequest) : ThunkAction<void,RootState,unknown,any> => (dispatch, getState) => {
   dispatch(register(registration)).then((result)=>{
     if (result.type == "register/rejected") {
@@ -134,23 +149,31 @@ const authSLice = createSlice({
       if (payload) {
         state.token = payload.token_type + " " + payload.access_token;
       }
-      //TODO: sdomething?
     });
     builder.addCase(getToken.rejected, (state, action) => {
       state.loading = false;
-      //TODO: sdomething?
     });
+
 
     builder.addCase(register.pending, (state) => {
       state.loading = true;
     });
     builder.addCase(register.fulfilled, (state, { payload }) => {
       state.loading = false;
-      //TODO: sdomething?
     });
     builder.addCase(register.rejected, (state, action) => {
       state.loading = false;
-      //TODO: sdomething?
+    });
+
+
+    builder.addCase(sendConfirmMail.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(sendConfirmMail.fulfilled, (state, { payload }) => {
+      state.loading = false;
+    });
+    builder.addCase(sendConfirmMail.rejected, (state, action) => {
+      state.loading = false;
     });
   },
 });
