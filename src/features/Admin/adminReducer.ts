@@ -4,15 +4,29 @@ import { RootState } from "../../infrastructure/store";
 import { User } from "../User/userReducer";
 
 interface IAdminState {
-  customers: User[];
+  customers: UserForAdmin[];
 }
 
 const initialState: IAdminState = {
   customers: [],
 };
 
+export type UserForAdmin = {
+  drivingLicenseImgBack: string;
+  DrivingLicenseImgFront: string;
+  IdCardImgBack: string;
+  IdCardImgFront: string;
+  hasDrivingLicenseVerified: boolean;
+  hasIdCard: boolean;
+  HasIdCardVerified: boolean;
+  hasActivePaymentCard: boolean;
+  email: string | null;
+  hasEmailVerified: boolean;
+  isApprooved: boolean;
+};
+
 export const getCustomerList = createAsyncThunk<
-  User[],
+UserForAdmin[],
   void,
   { state: RootState }
 >("getCustomerList", async (_, thunkApi) => {
