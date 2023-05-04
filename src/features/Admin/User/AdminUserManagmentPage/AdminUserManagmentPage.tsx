@@ -73,12 +73,12 @@ const AdminUserManagmentPage: React.FC = () => {
   const expandedRowRender = (row: TableData, index: number) => {
     const columns: TableColumnsType<TableData> = [
       {
-        title: "Id card license back Img",
+        title: "Id card back Img",
         dataIndex: "idCardImgBack",
         key: "idCardImgBack",
       },
       {
-        title: "Id card license front Img",
+        title: "Id card front Img",
         dataIndex: "idCardImgFront",
         key: "idCardImgFront",
       },
@@ -86,7 +86,7 @@ const AdminUserManagmentPage: React.FC = () => {
         title: "Verify id card",
         dataIndex: "email",
         key: "idVerify",
-        render: (email: string) => renderVerifyIdBtn(email, index),
+        render: (email: string) => renderVerifyIdEl(email, index),
       },
       {
         title: "Driving license back Img",
@@ -102,7 +102,7 @@ const AdminUserManagmentPage: React.FC = () => {
         title: "Verify driving license",
         dataIndex: "email",
         key: "drivingLicenseVerify",
-        render: (email: string) => renderVerifyDrivingLicenseBtn(email, index),
+        render: (email: string) => renderVerifyDrivingLicenseEl(email, index),
       },
     ];
 
@@ -170,7 +170,7 @@ const AdminUserManagmentPage: React.FC = () => {
     handleVerificationFieldsChange(name, index, value);
   };
 
-  const renderVerifyIdBtn = (email: string, index: number) => {
+  const renderVerifyIdEl = (email: string, index: number) => {
     return (
       <>
         <Input
@@ -202,11 +202,32 @@ const AdminUserManagmentPage: React.FC = () => {
     );
   };
 
-  const renderVerifyDrivingLicenseBtn = (email: string, index: number) => {
+  const renderVerifyDrivingLicenseEl = (email: string, index: number) => {
     return (
-      <Button type="link" disabled={!isVerifyDrivingLicenseBtnEnabled(index)}>
+      <>
+      <Input
+          key={"verDr" + index + "n"}
+          name="licenseNr"
+          value={verificationFieldsState[index].licenseNr}
+          onChange={(e) => handleInputChange(e, index)}
+        ></Input>
+        <DatePicker
+          name="licenseDate"
+          key={"verDr" + index + "d"}
+          onChange={(e) => handleDatePickerChange(e, index, "licenseDate")}
+        />
+      <Button type="link" disabled={!isVerifyDrivingLicenseBtnEnabled(index)} 
+      onClick={() =>
+        handleVerifyDoc(
+          email,
+          verificationFields[index].licenseNr,
+          verificationFields[index].licenseDate,
+          DocType.DriversLicense
+        )
+      }>
         Verify driving license
       </Button>
+      </>
     );
   };
 
