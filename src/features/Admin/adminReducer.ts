@@ -10,14 +10,14 @@ const initialState: IAdminState = {
   customers: [],
 };
 
-enum DocumentType {
+export enum DocType {
   DriversLicense = 0,
   IdentityCard = 1,
 }
 
 export type VerifyDocumentRequest = {
   docNr: string;
-  userDocumentType: DocumentType;
+  userDocumentType: DocType;
   validTill: Date;
   customerMail: string;
 };
@@ -78,12 +78,12 @@ export const verifyDocument = createAsyncThunk<
   return response;
 });
 
-export const registerAndLogin =
+export const verifyAndReload =
   (
-    registration: VerifyDocumentRequest
-  ): ThunkAction<void, RootState, unknown, any> =>
+    request: VerifyDocumentRequest
+  ): ThunkAction<void, RootState, VerifyDocumentRequest, any> =>
   (dispatch, getState) => {
-    dispatch(verifyDocument(registration)).then((result) => {
+    dispatch(verifyDocument(request)).then((result) => {
       if (result.type == "register/rejected") {
         return;
       }
