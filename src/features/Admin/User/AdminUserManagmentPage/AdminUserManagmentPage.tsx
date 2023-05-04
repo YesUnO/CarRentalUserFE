@@ -31,7 +31,7 @@ const AdminUserManagmentPage: React.FC = () => {
         title: "Verify id card",
         dataIndex: "email",
         key: "idVerify",
-        render: (email: string) => renderVerifyIdBtn(email)
+        render: (email: string,record, index) => renderVerifyIdBtn(email, index)
       },
       { title: "Driving license back Img", dataIndex: "drivingLicenseImgBack", key: "drivingLicenseImgBack" },
       { title: "Driving license front Img", dataIndex: "drivingLicenseImgFront", key: "drivingLicenseImgFront" },
@@ -68,8 +68,8 @@ const AdminUserManagmentPage: React.FC = () => {
     },
   ]
 
-  const renderVerifyIdBtn = (email: string) => {
-
+  const renderVerifyIdBtn = (email: string, index: number) => {
+console.log(index);
     return (
       <Button type="link">Verify Id card</Button>
     );

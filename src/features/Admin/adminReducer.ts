@@ -1,7 +1,6 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { ThunkAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../../infrastructure/utils/System";
 import { RootState } from "../../infrastructure/store";
-import { User } from "../User/userReducer";
 
 interface IAdminState {
   customers: UserForAdmin[];
@@ -9,6 +8,18 @@ interface IAdminState {
 
 const initialState: IAdminState = {
   customers: [],
+};
+
+enum DocumentType {
+  DriversLicense = 0,
+  IdentityCard = 1,
+}
+
+export type VerifyDocumentRequest = {
+  docNr: string;
+  userDocumentType: DocumentType;
+  validTill: Date;
+  customerMail: string;
 };
 
 export type UserForAdmin = {
@@ -26,7 +37,7 @@ export type UserForAdmin = {
 };
 
 export const getCustomerList = createAsyncThunk<
-UserForAdmin[],
+  UserForAdmin[],
   void,
   { state: RootState }
 >("getCustomerList", async (_, thunkApi) => {
@@ -42,17 +53,43 @@ export const deleteUser = createAsyncThunk<void, string, { state: RootState }>(
   "deleteUser",
   async (name: string, thunkApi) => {
     const token = thunkApi.getState().authService.token;
-    const [error, response] = await api.delete(
-      "/api/user",
-      { name },
-      token
-    );
+    const [error, response] = await api.delete("/api/user", { name }, token);
     if (error) {
       return thunkApi.rejectWithValue(error);
     }
     return response;
   }
 );
+
+export const verifyDocument = createAsyncThunk<
+  void,
+  VerifyDocumentRequest,
+  { state: RootState }
+>("verifyDocument", async (request: VerifyDocumentRequest, thunkApi) => {
+  const token = thunkApi.getState().authService.token;
+  const [error, response] = await api.post(
+    "/api/user/VerifyDocument",
+    request,
+    token
+  );
+  if (error) {
+    return thunkApi.rejectWithValue(error);
+  }
+  return response;
+});
+
+export const registerAndLogin =
+  (
+    registration: VerifyDocumentRequest
+  ): ThunkAction<void, RootState, unknown, any> =>
+  (dispatch, getState) => {
+    dispatch(verifyDocument(registration)).then((result) => {
+      if (result.type == "register/rejected") {
+        return;
+      }
+      dispatch(getCustomerList());
+    });
+  };
 
 export const adminSlice = createSlice({
   initialState,
