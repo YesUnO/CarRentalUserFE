@@ -247,16 +247,16 @@ const AdminUserManagmentPage: React.FC = () => {
 
   const isVerifyDrivingLicenseBtnEnabled = (index: number) => {
     const result =
-      !!customersList[index].drivingLicenseImgBack &&
-      !!customersList[index].drivingLicenseImgFront &&
-      !customersList[index].hasDrivingLicenseVerified;
+    (!!customersList[index].drivingLicenseImgBack || customersList[index].drivingLicenseImgBack != "empty") &&
+    (!!customersList[index].drivingLicenseImgFront || customersList[index].drivingLicenseImgFront != "empty") &&
+    !customersList[index].hasDrivingLicenseVerified;
     return result;
   };
 
   const isVerifyIdBtnEnabled = (index: number) => {
     const result =
-      !!customersList[index].idCardImgBack &&
-      !!customersList[index].idCardImgFront &&
+      (!!customersList[index].idCardImgBack || customersList[index].idCardImgBack != "empty") &&
+      (!!customersList[index].idCardImgFront || customersList[index].idCardImgFront != "empty") &&
       !customersList[index].HasIdCardVerified;
     return result;
   };

@@ -11,6 +11,7 @@ export type UploadComponentProps = {
   endpoint: string;
   queryId: number | string;
   additionalRequestParam?: Record<string,string>
+  fileIsUploaded: boolean,
 };
 
 const UploadPhoto: React.FC<UploadComponentPropsWrapper> = ({componentProps}) => {

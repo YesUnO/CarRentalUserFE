@@ -17,8 +17,8 @@ const UploadDocumentPhoto: React.FC<UploadDocumentPropsWrapper> = ({
   props,
 }) => {
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.authService.token != null
+  const user = useSelector(
+    (state: RootState) => state.userService.user
   );
 
   const uploadPropsBack: UploadComponentProps = {

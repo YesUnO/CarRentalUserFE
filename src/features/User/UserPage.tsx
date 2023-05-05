@@ -32,6 +32,7 @@ const UserPage: React.FC = () => {
     }
     return "wait";
   };
+  
   let items: StepProps[] = [
     {
       title: "Sign in",
