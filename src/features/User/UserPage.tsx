@@ -59,6 +59,7 @@ const UserPage: React.FC = () => {
     uploadComponentProps: {
       endpoint: "api/file",
       additionalRequestParam: { UserDocumentImageType: "DriverseLicense" },
+      queryId: ""
     },
   };
 
@@ -66,6 +67,7 @@ const UserPage: React.FC = () => {
     uploadComponentProps: {
       endpoint: "api/file",
       additionalRequestParam: { UserDocumentImageType: "IdentificationCard" },
+      queryId: ""
     },
   };
 

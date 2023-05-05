@@ -9,7 +9,7 @@ export type UploadComponentPropsWrapper = {
 
 export type UploadComponentProps = {
   endpoint: string;
-  queryId?: number;
+  queryId: number | string;
   additionalRequestParam?: Record<string,string>
 };
 
