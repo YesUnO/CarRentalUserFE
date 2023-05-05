@@ -24,9 +24,9 @@ export type VerifyDocumentRequest = {
 
 export type UserForAdmin = {
   drivingLicenseImgBack: string;
-  DrivingLicenseImgFront: string;
-  IdCardImgBack: string;
-  IdCardImgFront: string;
+  drivingLicenseImgFront: string;
+  idCardImgBack: string;
+  idCardImgFront: string;
   hasDrivingLicenseVerified: boolean;
   hasIdCard: boolean;
   HasIdCardVerified: boolean;

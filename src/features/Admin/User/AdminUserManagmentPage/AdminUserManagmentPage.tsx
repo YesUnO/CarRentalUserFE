@@ -12,6 +12,7 @@ import {
   Checkbox,
   DatePicker,
   Input,
+  Space,
   Table,
   TableColumnsType,
 } from "antd";
@@ -138,25 +139,6 @@ const AdminUserManagmentPage: React.FC = () => {
     },
   ];
 
-  const handleVerificationFieldsChange = (
-    name: string,
-    index: number,
-    value: string | Date
-  ) => {
-    setVerificationFieldsState((prevState) => {
-      const updatedFields = [...prevState];
-      updatedFields[index] = { ...updatedFields[index], [name]: value };
-      return updatedFields;
-    });
-  };
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    const { name, value } = e.target;
-    handleVerificationFieldsChange(name, index, value);
-  };
 
   const handleDatePickerChange = (
     e: dayjs.Dayjs | null,
@@ -169,6 +151,28 @@ const AdminUserManagmentPage: React.FC = () => {
     }
     handleVerificationFieldsChange(name, index, value);
   };
+  
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const { name, value } = e.target;
+    handleVerificationFieldsChange(name, index, value);
+  };
+
+
+  const handleVerificationFieldsChange = (
+    name: string,
+    index: number,
+    value: string | Date
+  ) => {
+    
+    const updatedFields = [...verificationFieldsState];
+    updatedFields[index] = { ...verificationFieldsState[index], [name]: value };
+
+    setVerificationFieldsState(updatedFields);
+  };
+
 
   const renderVerifyIdEl = (email: string, index: number) => {
     return (
@@ -190,8 +194,8 @@ const AdminUserManagmentPage: React.FC = () => {
           onClick={() =>
             handleVerifyDoc(
               email,
-              verificationFields[index].idNr,
-              verificationFields[index].idDate,
+              verificationFieldsState[index].idNr,
+              verificationFieldsState[index].idDate,
               DocType.IdentityCard
             )
           }
@@ -205,28 +209,28 @@ const AdminUserManagmentPage: React.FC = () => {
   const renderVerifyDrivingLicenseEl = (email: string, index: number) => {
     return (
       <>
-      <Input
+        <Input
           key={"verDr" + index + "n"}
           name="licenseNr"
           value={verificationFieldsState[index].licenseNr}
           onChange={(e) => handleInputChange(e, index)}
-        ></Input>
+        />
         <DatePicker
           name="licenseDate"
           key={"verDr" + index + "d"}
           onChange={(e) => handleDatePickerChange(e, index, "licenseDate")}
         />
-      <Button type="link" disabled={!isVerifyDrivingLicenseBtnEnabled(index)} 
-      onClick={() =>
-        handleVerifyDoc(
-          email,
-          verificationFields[index].licenseNr,
-          verificationFields[index].licenseDate,
-          DocType.DriversLicense
-        )
-      }>
-        Verify driving license
-      </Button>
+        <Button type="link" disabled={!isVerifyDrivingLicenseBtnEnabled(index)}
+          onClick={() =>
+            handleVerifyDoc(
+              email,
+              verificationFieldsState[index].licenseNr,
+              verificationFieldsState[index].licenseDate,
+              DocType.DriversLicense
+            )
+          }>
+          Verify driving license
+        </Button>
       </>
     );
   };
@@ -241,18 +245,18 @@ const AdminUserManagmentPage: React.FC = () => {
     dispatch(verifyAndReload({ userDocumentType, docNr, customerMail, validTill }));
   };
 
-  const isVerifyIdBtnEnabled = (index: number) => {
+  const isVerifyDrivingLicenseBtnEnabled = (index: number) => {
     const result =
       !!customersList[index].drivingLicenseImgBack &&
-      !!customersList[index].DrivingLicenseImgFront &&
+      !!customersList[index].drivingLicenseImgFront &&
       !customersList[index].hasDrivingLicenseVerified;
     return result;
   };
 
-  const isVerifyDrivingLicenseBtnEnabled = (index: number) => {
+  const isVerifyIdBtnEnabled = (index: number) => {
     const result =
-      !!customersList[index].IdCardImgBack &&
-      !!customersList[index].IdCardImgFront &&
+      !!customersList[index].idCardImgBack &&
+      !!customersList[index].idCardImgFront &&
       !customersList[index].HasIdCardVerified;
     return result;
   };
