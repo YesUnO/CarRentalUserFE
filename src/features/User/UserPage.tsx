@@ -32,7 +32,7 @@ const UserPage: React.FC = () => {
     }
     return "wait";
   };
-  
+
   let items: StepProps[] = [
     {
       title: "Sign in",
@@ -56,19 +56,19 @@ const UserPage: React.FC = () => {
     },
   ];
 
-  const uploadDrtiverseLicenseProps: UploadDocumentProps = {
+  const uploadDriverseLicenseProps: UploadDocumentProps = {
     uploadComponentProps: {
-      endpoint: "api/file",
-      additionalRequestParam: { UserDocumentImageType: "DriverseLicense" },
-      queryId: ""
+      hasFrontPhoto: user.hasDrivingLicenseFrontImg,
+      baseRequestParam: "DriverseLicense" ,
+      hasBackPhoto: user.hasDrivingLicenseBackImg,
     },
   };
 
   const uploadIdProps: UploadDocumentProps = {
     uploadComponentProps: {
-      endpoint: "api/file",
-      additionalRequestParam: { UserDocumentImageType: "IdentificationCard" },
-      queryId: ""
+      hasFrontPhoto: user.hasIdFrontImg,
+      baseRequestParam: "IdentificationCard" ,
+      hasBackPhoto: user.hasIdBackImg
     },
   };
 
@@ -82,9 +82,9 @@ const UserPage: React.FC = () => {
           case 1:
             return <ConfirmMail />;
           case 2:
-            return <UploadDocumentPhoto props={uploadDrtiverseLicenseProps} />;
-          case 3:
             return <UploadDocumentPhoto props={uploadIdProps} />;
+          case 3:
+            return <UploadDocumentPhoto props={uploadDriverseLicenseProps} />;
           case 4:
             return <AddCardBtn />;
 

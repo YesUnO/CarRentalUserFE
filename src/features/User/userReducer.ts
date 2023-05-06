@@ -16,10 +16,18 @@ const initialState: IUserState = {
     email: null,
     hasEmailVerified: false,
     isApprooved: false,
+    hasIdFrontImg: false,
+    hasIdBackImg: false,
+    hasDrivingLicenseFrontImg: false,
+    hasDrivingLicenseBackImg: false,
   },
 };
 
 export type User = {
+  hasIdFrontImg: boolean;
+  hasIdBackImg: boolean;
+  hasDrivingLicenseFrontImg: boolean;
+  hasDrivingLicenseBackImg: boolean;
   hasDrivingLicense: boolean;
   hasDrivingLicenseVerified: boolean;
   hasIdCard: boolean;
@@ -52,7 +60,7 @@ export const userSlice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(getUser.fulfilled, (state, { payload }) => {
-        state.user = payload;
+      state.user = payload;
     });
   },
 });

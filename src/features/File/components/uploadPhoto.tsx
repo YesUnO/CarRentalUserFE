@@ -12,6 +12,7 @@ export type UploadComponentProps = {
   queryId: number | string;
   additionalRequestParam?: Record<string,string>
   fileIsUploaded: boolean,
+  callback: ()=>void
 };
 
 const UploadPhoto: React.FC<UploadComponentPropsWrapper> = ({componentProps}) => {
@@ -32,6 +33,7 @@ const UploadPhoto: React.FC<UploadComponentPropsWrapper> = ({componentProps}) =>
         console.log(info.file, info.fileList);
       }
       if (info.file.status === "done") {
+        componentProps.callback();
         message.success(`${info.file.name} file uploaded successfully`);
       } else if (info.file.status === "error") {
         message.error(`${info.file.name} file upload failed.`);
