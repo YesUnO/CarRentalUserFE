@@ -7,20 +7,10 @@ import GenericForm, {
 import { login, setLoginModal } from "../authReducer";
 import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../infrastructure/store";
-import { useEffect } from "react";
 import { Button } from "antd";
 
 const LoginModal: React.FC = () => {
-  const role = useSelector((state: RootState) => state.authService.role);
   const navigate = useNavigate();
-  useEffect(() => {
-    if (role == "Admin") {
-      navigate("/admin/user");
-    }
-    else if (role == "Customer") {
-      navigate("/");
-    }
-  }, [role]);
 
   const fields: IFormField[] = [
     {

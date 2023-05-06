@@ -6,6 +6,7 @@ import orderReducer from "../features/Order/orderReducer";
 import carReducer from "../features/Car/carReducer";
 import userReducer from "../features/User/userReducer";
 import adminReducer from "../features/Admin/adminReducer";
+import navigationReducer from "./navigation/navigationReducer";
 
 const store = configureStore({
   middleware: getDefaultMiddleware =>
@@ -18,7 +19,8 @@ const store = configureStore({
     stripeService: stripeReducer,
     ordersService: orderReducer,
     carsService: carReducer,
-    adminService: adminReducer
+    adminService: adminReducer,
+    navigationService: navigationReducer
   },
 });
 export const useAppDispatch = () => useDispatch<typeof store.dispatch>;
