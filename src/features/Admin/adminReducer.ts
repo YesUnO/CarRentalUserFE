@@ -51,9 +51,9 @@ export const getCustomerList = createAsyncThunk<
 
 export const deleteUser = createAsyncThunk<void, string, { state: RootState }>(
   "deleteUser",
-  async (name: string, thunkApi) => {
+  async (email: string, thunkApi) => {
     const token = thunkApi.getState().authService.token;
-    const [error, response] = await api.delete("/api/user", { name }, token);
+    const [error, response] = await api.delete("/api/user", { email }, token);
     if (error) {
       return thunkApi.rejectWithValue(error);
     }
@@ -78,13 +78,52 @@ export const verifyDocument = createAsyncThunk<
   return response;
 });
 
+export const approoveCustomer = createAsyncThunk<
+  void,
+  string,
+  { state: RootState }
+>("approoveCustomer", async (mail: string, thunkApi) => {
+  const token = thunkApi.getState().authService.token;
+  const [error, response] = await api.post(
+    "/api/user/Approove",
+    { mail },
+    token
+  );
+  if (error) {
+    return thunkApi.rejectWithValue(error);
+  }
+  return response;
+});
+
 export const verifyAndReload =
   (
     request: VerifyDocumentRequest
   ): ThunkAction<void, RootState, VerifyDocumentRequest, any> =>
   (dispatch, getState) => {
     dispatch(verifyDocument(request)).then((result) => {
-      if (result.type == "register/rejected") {
+      if (result.type == "verifyDocument/rejected") {
+        return;
+      }
+      dispatch(getCustomerList());
+    });
+  };
+
+export const approoveAndReload =
+  (mail: string): ThunkAction<void, RootState, string, any> =>
+  (dispatch, getState) => {
+    dispatch(approoveCustomer(mail)).then((result) => {
+      if (result.type == "approoveCustomer/rejected") {
+        return;
+      }
+      dispatch(getCustomerList());
+    });
+  };
+
+  export const deleteAndReload =
+  (mail: string): ThunkAction<void, RootState, string, any> =>
+  (dispatch, getState) => {
+    dispatch(deleteUser(mail)).then((result) => {
+      if (result.type == "deleteUser/rejected") {
         return;
       }
       dispatch(getCustomerList());

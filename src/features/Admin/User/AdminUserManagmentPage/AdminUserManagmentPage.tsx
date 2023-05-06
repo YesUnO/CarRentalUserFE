@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../infrastructure/store";
 import {
+  approoveAndReload,
+  deleteAndReload,
   DocType,
   getCustomerList,
   UserForAdmin,
@@ -137,8 +139,33 @@ const AdminUserManagmentPage: React.FC = () => {
       key: "hasActivePaymentCard",
       render: (value: boolean) => renderBoolean(value),
     },
+    {
+      title: "Actions",
+      key: "actions",
+      dataIndex: "email",
+      render: (email: string) => renderActions(email),
+    }
   ];
 
+  const renderActions = (email: string) => {
+    return (
+      <>
+        <Button onClick={()=>deleteAndReload(email)}>Delete</Button>
+        <Button onClick={()=>handleApproove(email)}>Approve</Button>
+        {/* <Button></Button> */}
+      </>
+    )
+  }
+
+  const handleApproove = (mail:string) => {
+    // @ts-expect-error
+    dispatch(approoveAndReload(mail));
+  }
+
+  const handleDelete = (mail:string) => {
+    // @ts-expect-error
+    dispatch(deleteAndReload(mail));
+  }
 
   const handleDatePickerChange = (
     e: dayjs.Dayjs | null,
@@ -151,7 +178,7 @@ const AdminUserManagmentPage: React.FC = () => {
     }
     handleVerificationFieldsChange(name, index, value);
   };
-  
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number
@@ -166,7 +193,7 @@ const AdminUserManagmentPage: React.FC = () => {
     index: number,
     value: string | Date
   ) => {
-    
+
     const updatedFields = [...verificationFieldsState];
     updatedFields[index] = { ...verificationFieldsState[index], [name]: value };
 
@@ -247,9 +274,9 @@ const AdminUserManagmentPage: React.FC = () => {
 
   const isVerifyDrivingLicenseBtnEnabled = (index: number) => {
     const result =
-    (!!customersList[index].drivingLicenseImgBack || customersList[index].drivingLicenseImgBack != "empty") &&
-    (!!customersList[index].drivingLicenseImgFront || customersList[index].drivingLicenseImgFront != "empty") &&
-    !customersList[index].hasDrivingLicenseVerified;
+      (!!customersList[index].drivingLicenseImgBack || customersList[index].drivingLicenseImgBack != "empty") &&
+      (!!customersList[index].drivingLicenseImgFront || customersList[index].drivingLicenseImgFront != "empty") &&
+      !customersList[index].hasDrivingLicenseVerified;
     return result;
   };
 

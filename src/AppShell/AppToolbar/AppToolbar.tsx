@@ -26,7 +26,6 @@ const AppToolbar: React.FC = () => {
 
   useEffect(() => {
     if (role == "Admin") {
-      console.log("yo");
       navigate("/admin/user");
     }
     else if (role == "Customer") {
