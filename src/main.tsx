@@ -6,7 +6,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Provider, useSelector } from 'react-redux';
 import store, { RootState } from './infrastructure/store';
 import UserPage from "./features/User/UserPage";
-import AdminCarPage from "./features/Admin/Car/AdminPage";
+import AdminCarPage from "./features/Admin/Car/AdminCarPage";
 import PickCarPage from "./features/Car/PickCarPage/PickCarPage";
 import OrderDetailPage from "./features/Order/OrderDetailPage";
 import AdminUserManagmentPage from "./features/Admin/User/AdminUserManagmentPage/AdminUserManagmentPage";
