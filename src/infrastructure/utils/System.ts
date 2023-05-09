@@ -61,11 +61,9 @@ export const api = {
       },
       token
     ),
-  delete: (endpoint: string, options: Options, token?: string) =>
+  delete: (endpoint: string, token?: string) =>
     respond(endpoint, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(options),
+      method: "DELETE",
     }, token),
   postUrlEncoded: (endpoint: string, options: UrlEncodedOptions) =>
     respond(endpoint, {

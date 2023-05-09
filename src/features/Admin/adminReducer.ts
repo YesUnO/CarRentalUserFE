@@ -1,6 +1,7 @@
 import { ThunkAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { api } from "../../infrastructure/utils/System";
 import { RootState } from "../../infrastructure/store";
+import { getCars } from "../Car/carReducer";
 
 interface IAdminState {
   customers: UserForAdmin[];
@@ -53,7 +54,19 @@ export const deleteUser = createAsyncThunk<void, string, { state: RootState }>(
   "deleteUser",
   async (email: string, thunkApi) => {
     const token = thunkApi.getState().authService.token;
-    const [error, response] = await api.delete("/api/user", { email }, token);
+    const [error, response] = await api.delete(`/api/car/${email}`, token);
+    if (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+    return response;
+  }
+);
+
+export const deleteCarPic = createAsyncThunk<void, number, { state: RootState }>(
+  "deleteCarPic",
+  async (carId: number, thunkApi) => {
+    const token = thunkApi.getState().authService.token;
+    const [error, response] = await api.delete(`/api/car/${carId}`, token);
     if (error) {
       return thunkApi.rejectWithValue(error);
     }
@@ -127,6 +140,19 @@ export const approoveAndReload =
         return;
       }
       dispatch(getCustomerList());
+    });
+  };
+
+  export const deleteCarPicAndReload =
+  (carId: number): ThunkAction<void, RootState, number, any> =>
+  (dispatch, getState) => {
+    dispatch(deleteCarPic(carId)).then((result) => {
+      console.log(result);
+      if (result.type == "deleteCarPic/rejected") {
+        return;
+      }
+      console.log("?");
+      dispatch(getCars());
     });
   };
 

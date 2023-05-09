@@ -6,7 +6,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Provider, useSelector } from 'react-redux';
 import store, { RootState } from './infrastructure/store';
 import UserPage from "./features/User/UserPage";
-import AdminPage from "./features/Admin/AdminPage";
+import AdminCarPage from "./features/Admin/Car/AdminPage";
 import PickCarPage from "./features/Car/PickCarPage/PickCarPage";
 import OrderDetailPage from "./features/Order/OrderDetailPage";
 import AdminUserManagmentPage from "./features/Admin/User/AdminUserManagmentPage/AdminUserManagmentPage";
@@ -23,7 +23,7 @@ const Root: React.FC = () => {
           <Route path="/orderDetail" element={<OrderDetailPage />} />
           <Route path="/user" element={<UserPage />} />
           <Route path="/confirmEmail" element={<EmailConfirmationPage />} />
-          <Route path="/admin" element={isAdmin ? <AdminPage /> : <Navigate to={"/"} />} />
+          <Route path="/admin/car" element={isAdmin ? <AdminCarPage /> : <Navigate to={"/"} />} />
           <Route path="/admin/user" element={isAdmin ? <AdminUserManagmentPage /> : <Navigate to={"/"} />} />
         </Routes>
       </AppShell>

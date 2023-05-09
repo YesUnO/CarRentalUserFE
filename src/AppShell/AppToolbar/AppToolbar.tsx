@@ -49,13 +49,16 @@ const AppToolbar: React.FC = () => {
         currentTab = "user"
         break;
       case "/admin":
-        currentTab = ""
+        currentTab = "cars"
         break;
       case "/admin/user":
         currentTab = "customer"
         break;
       case "/prices":
         currentTab = "prices"
+        break;
+      case "/admin/car":
+        currentTab = "cars"
         break;
 
       default:
@@ -70,6 +73,11 @@ const AppToolbar: React.FC = () => {
   const customerItems: MenuProps["items"] =
     role != null && role == "Admin"
       ? [
+        {
+          label: "Cars",
+          key: "cars",
+          onClick: () => navigate("/admin/car"),
+        },
         {
           label: "Customers",
           key: "customer",

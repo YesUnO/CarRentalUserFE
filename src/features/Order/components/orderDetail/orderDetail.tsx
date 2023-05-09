@@ -6,10 +6,6 @@ const OrderDetail: React.FC = () => {
     const dispatch = useDispatch();
     const orderDetail = useSelector((state: RootState) => state.ordersService.orderDetail);
 
-    const log = () => {
-        console.log(orderDetail);
-    };
-
     return (
         <>
             {orderDetail?.paid?

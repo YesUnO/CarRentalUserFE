@@ -33,7 +33,7 @@ const CarThumb: React.FC<CarComponentProps> = ({ props: car }) => {
         >
           <Meta
             title={car.name}
-            description={"yo yo yo yo yo yo yo yo yo yo yo"}
+            description={"to be constinued..."}
           />
         </Card>
     </>
