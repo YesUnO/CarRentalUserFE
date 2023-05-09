@@ -19,6 +19,7 @@ import {
   TableColumnsType,
 } from "antd";
 import dayjs from "dayjs";
+import CopyToClipboard from "../../../../components/CopyToClipboard";
 
 type VerificationFields = {
   idDate: Date;
@@ -79,11 +80,15 @@ const AdminUserManagmentPage: React.FC = () => {
         title: "Id card back Img",
         dataIndex: "idCardImgBack",
         key: "idCardImgBack",
+        render: (value: string) => renderUrlEl(value),
+        ellipsis: true,
       },
       {
         title: "Id card front Img",
         dataIndex: "idCardImgFront",
         key: "idCardImgFront",
+        render: (value: string) => renderUrlEl(value),
+        ellipsis: true,
       },
       {
         title: "Verify id card",
@@ -95,11 +100,15 @@ const AdminUserManagmentPage: React.FC = () => {
         title: "Driving license back Img",
         dataIndex: "drivingLicenseImgBack",
         key: "drivingLicenseImgBack",
+        render: (value: string) => renderUrlEl(value),
+        ellipsis: true,
       },
       {
         title: "Driving license front Img",
         dataIndex: "drivingLicenseImgFront",
         key: "drivingLicenseImgFront",
+        render: (value: string) => renderUrlEl(value),
+        ellipsis: true,
       },
       {
         title: "Verify driving license",
@@ -200,6 +209,15 @@ const AdminUserManagmentPage: React.FC = () => {
     setVerificationFieldsState(updatedFields);
   };
 
+
+const renderUrlEl = (val:string) => {
+  return (
+    <>
+      <div style={{ maxWidth: 200, overflow:"hidden", textOverflow: "ellipsis" }}>{val}</div>
+      <CopyToClipboard text={val} />
+    </>
+  );
+}
 
   const renderVerifyIdEl = (email: string, index: number) => {
     return (
