@@ -159,19 +159,19 @@ const AdminUserManagmentPage: React.FC = () => {
   const renderActions = (email: string) => {
     return (
       <>
-        <Button onClick={()=>deleteAndReload(email)}>Delete</Button>
-        <Button onClick={()=>handleApproove(email)}>Approve</Button>
+        <Button onClick={() => handleDelete(email)}>Delete</Button>
+        <Button onClick={() => handleApproove(email)}>Approve</Button>
         {/* <Button></Button> */}
       </>
     )
   }
 
-  const handleApproove = (mail:string) => {
+  const handleApproove = (mail: string) => {
     // @ts-expect-error
     dispatch(approoveAndReload(mail));
   }
 
-  const handleDelete = (mail:string) => {
+  const handleDelete = (mail: string) => {
     // @ts-expect-error
     dispatch(deleteAndReload(mail));
   }
@@ -210,14 +210,20 @@ const AdminUserManagmentPage: React.FC = () => {
   };
 
 
-const renderUrlEl = (val:string) => {
-  return (
-    <>
-      <div style={{ maxWidth: 200, overflow:"hidden", textOverflow: "ellipsis" }}>{val}</div>
-      <CopyToClipboard text={val} />
-    </>
-  );
-}
+  const renderUrlEl = (val: string) => {
+    return (
+      <>
+        <div style={{ maxWidth: 200, overflow: "hidden", textOverflow: "ellipsis" }}>{val}</div>
+        {(val == "empty" || val == null) ? (
+          <></>
+        ) : (
+          <>
+            <CopyToClipboard text={val} />
+          </>
+        )}
+      </>
+    );
+  }
 
   const renderVerifyIdEl = (email: string, index: number) => {
     return (
