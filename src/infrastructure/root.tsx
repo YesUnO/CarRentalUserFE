@@ -1,5 +1,5 @@
-import { Provider, useSelector } from "react-redux";
-import store, { RootState } from "./store";
+import { useSelector } from "react-redux";
+import { RootState } from "./store";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AppShell from "../AppShell/Appshell";
 import PickCarPage from "../features/Car/PickCarPage/PickCarPage";
@@ -12,7 +12,6 @@ import AdminUserManagmentPage from "../features/Admin/User/AdminUserManagmentPag
 const Root: React.FC = () => {
     const isAdmin = useSelector((state: RootState) => state.authService.role == "Admin");
     return (
-      <Provider store={store}>
         <BrowserRouter>
           <AppShell>
             <Routes>
@@ -25,7 +24,6 @@ const Root: React.FC = () => {
             </Routes>
           </AppShell>
         </BrowserRouter>
-      </Provider>
   
     );
   };
