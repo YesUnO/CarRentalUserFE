@@ -6,9 +6,11 @@ import { Menu, MenuProps, Modal } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import LoginForm from "../../features/Auth/components/loginForm";
 import { setActiveTab } from "../../infrastructure/navigation/navigationReducer";
+import RegisterForm from "../../features/Auth/components/registerForm";
 
 const AppToolbar: React.FC = () => {
   const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
+  const registerOrLogin = useSelector((state: RootState) => state.authService.registerOrLogin);
   const activeTab = useSelector((state: RootState) => state.navigationService.activeTab);
   const modalIsOpen = useSelector((state: RootState) => state.authService.loginModalIsOpened);
   const role = useSelector((state: RootState) => state.authService.role);
@@ -139,7 +141,15 @@ const AppToolbar: React.FC = () => {
       />
 
       <Modal open={modalIsOpen} footer={null} onCancel={() => dispatch(setLoginModal(false))}>
-          <LoginForm />
+        {registerOrLogin ? (
+          <>
+            <RegisterForm />
+          </>
+        ) : (
+          <>
+            <LoginForm />
+          </>
+        )}
       </Modal>
     </>
   );

@@ -8,16 +8,14 @@ const LoginModal: React.FC = () => {
     const fields: IFormField[] = [
         {
             fieldName: "username",
-            fieldValue: "",
-            fieldPlaceholder: "Username",
-            key: "username"
-        },
-        {
+            label: "Username",
+            isPassword: false,
+          },
+          {
             fieldName: "password",
-            fieldValue: "",
-            fieldPlaceholder: "Password",
-            key: "password"
-        },
+            label: "Password",
+            isPassword: true,  
+          },
     ];
 
     //TODO: dunno

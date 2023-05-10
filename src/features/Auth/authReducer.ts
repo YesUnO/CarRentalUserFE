@@ -1,7 +1,6 @@
 import {
   createSlice,
   createAsyncThunk,
-  ThunkDispatch,
   ThunkAction,
   PayloadAction,
 } from "@reduxjs/toolkit";
@@ -9,13 +8,13 @@ import { api, UrlEncodedOptions } from "../../infrastructure/utils/System";
 import { getUser } from "../User/userReducer";
 import { RootState } from "../../infrastructure/store";
 import JWT from "jwt-decode";
-import { useNavigate } from "react-router-dom";
 
 interface IAuthState {
   token: undefined | string;
   role: TokenRoleClaim;
   loading: boolean;
   loginModalIsOpened: boolean;
+  registerOrLogin: boolean;
 }
 
 type TokenRoleClaim = "Admin" | "Customer" | undefined;
@@ -29,6 +28,7 @@ const initialState: IAuthState = {
   role: undefined,
   loading: false,
   loginModalIsOpened: false,
+  registerOrLogin: false,
 };
 
 interface TokenResponse {
@@ -81,33 +81,36 @@ export const register = createAsyncThunk<TokenResponse, RegisterRequest>(
   }
 );
 
-export const sendConfirmMail = createAsyncThunk<void, void,{ state: RootState }>(
-  "sendConfirmMail",
-  async (_, thunkApi) => {
-    const token = thunkApi.getState().authService.token;
-    const [error, response] = await api.get(
-      `/api/auth/ResendConfirmationEmail`,
-      token
-    );
-    if (error) {
-      return thunkApi.rejectWithValue(error);
-    }
-    return response;
+export const sendConfirmMail = createAsyncThunk<
+  void,
+  void,
+  { state: RootState }
+>("sendConfirmMail", async (_, thunkApi) => {
+  const token = thunkApi.getState().authService.token;
+  const [error, response] = await api.get(
+    `/api/auth/ResendConfirmationEmail`,
+    token
+  );
+  if (error) {
+    return thunkApi.rejectWithValue(error);
   }
-);
+  return response;
+});
 
-export const registerAndLogin = (registration: RegisterRequest) : ThunkAction<void,RootState,unknown,any> => (dispatch, getState) => {
-  dispatch(register(registration)).then((result)=>{
-    if (result.type == "register/rejected") {
-      return;
-    }
-    const credentials: PasswordCredentialsRequest = {
-      password: registration.password,
-      username: registration.username
-    };
-    dispatch(getToken(credentials));
-  })
-}
+export const registerAndLogin =
+  (registration: RegisterRequest): ThunkAction<void, RootState, unknown, any> =>
+  (dispatch, getState) => {
+    dispatch(register(registration)).then((result) => {
+      if (result.type == "register/rejected") {
+        return;
+      }
+      const credentials: PasswordCredentialsRequest = {
+        password: registration.password,
+        username: registration.username,
+      };
+      dispatch(getToken(credentials));
+    });
+  };
 
 export const login =
   (
@@ -136,9 +139,12 @@ const authSLice = createSlice({
       const decoded: Token = JWT(state.token as string);
       state.role = decoded.role;
     },
-    setLoginModal(state, payload:PayloadAction<boolean>) {
+    setLoginModal(state, payload: PayloadAction<boolean>) {
       state.loginModalIsOpened = payload.payload;
-    }
+    },
+    setRegisterOrLogin(state, payload: PayloadAction<boolean>) {
+      state.registerOrLogin = payload.payload;
+    },
   },
   extraReducers(builder) {
     builder.addCase(getToken.pending, (state) => {
@@ -154,7 +160,6 @@ const authSLice = createSlice({
       state.loading = false;
     });
 
-
     builder.addCase(register.pending, (state) => {
       state.loading = true;
     });
@@ -164,7 +169,6 @@ const authSLice = createSlice({
     builder.addCase(register.rejected, (state, action) => {
       state.loading = false;
     });
-
 
     builder.addCase(sendConfirmMail.pending, (state) => {
       state.loading = true;
@@ -179,4 +183,5 @@ const authSLice = createSlice({
 });
 
 export default authSLice.reducer;
-export const { logout, parseToken, setLoginModal } = authSLice.actions;
+export const { setRegisterOrLogin, logout, parseToken, setLoginModal } =
+  authSLice.actions;

@@ -1,48 +1,43 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import _ from "lodash";
 import GenericForm, {
+  CanClearForm,
   IFormField,
   IGenericForm,
 } from "../../../components/GenericForm";
-import { login, setLoginModal } from "../authReducer";
-import { useNavigate } from "react-router-dom";
-import { RootState } from "../../../infrastructure/store";
+import { login, setLoginModal, setRegisterOrLogin } from "../authReducer";
 import { Button } from "antd";
+import { useEffect, useRef } from "react";
 
 const LoginForm: React.FC = () => {
-  const navigate = useNavigate();
-
+  const formRef = useRef<CanClearForm>(null);
+  useEffect(()=>{
+      formRef.current?.clearForm();
+  },[]);
   const fields: IFormField[] = [
     {
       fieldName: "username",
-      fieldValue: "",
-      fieldPlaceholder: "Username",
-      key: "username",
+      label: "Username",
+      isPassword: false,
     },
     {
       fieldName: "password",
-      fieldValue: "",
-      fieldPlaceholder: "Password",
-      key: "password",
+      label: "Password",
+      isPassword: true,  
     },
   ];
 
   //TODO: dunno
   const dispatch = useDispatch();
 
-  const handleRedirectToRegister = () => {
-    dispatch(setLoginModal(false));
-    navigate("/user");
+  const switchToRegister = () => {
+    dispatch(setRegisterOrLogin(true));
   }
 
-  const loginCallback = async (fields: IFormField[]) => {
-    const loginRequest = _.chain(fields)
-      .keyBy("fieldName")
-      .mapValues("fieldValue")
-      .value();
-
+  const loginCallback = async (fields: []) => {
+    
     // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
-    await dispatch(login(loginRequest));
+    await dispatch(login(fields));
     dispatch(setLoginModal(false));
   };
 
@@ -54,8 +49,8 @@ const LoginForm: React.FC = () => {
 
   return (
     <>
-      <GenericForm props={loginForm} />
-      <Button type="link" onClick={handleRedirectToRegister}>Register</Button>
+      <GenericForm ref={formRef} props={loginForm} />
+      <Button type="link" onClick={switchToRegister}>Register</Button>
     </>
   );
 };

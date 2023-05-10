@@ -1,65 +1,70 @@
 import { Button, Form, Input } from "antd";
-import { FormEvent, useState } from "react";
+import { useState, forwardRef, useImperativeHandle } from "react";
 
 export interface IFormField {
     fieldName: string,
-    fieldValue: string | number,
-    fieldType?: string,
-    fieldPlaceholder?: string,
-    key: string
+    label: string,
+    isPassword: boolean,
 };
 
 export interface IGenericForm {
     submitBtnName: string,
     fields: IFormField[]
-    callback: (fields: IFormField[]) => Promise<void>
+    callback: (fields: []) => Promise<void>
 };
 
 export type GenericFormProps = {
     props: IGenericForm
 };
 
+export interface CanClearForm {
+    clearForm(): void
+}
 
-const GenericForm: React.FC<GenericFormProps> = ({ props }: GenericFormProps) => {
+const GenericForm = forwardRef<CanClearForm, GenericFormProps>(({ props }, ref) => {
+    useImperativeHandle(
+        ref,
+        () => ({
+            clearForm() {
+                console.log("cleaning");
+                setFormData(initalVal);
+            },
+        })
+    )
+    const initalVal = props.fields;
     const [formData, setFormData] = useState<IFormField[]>(
         props.fields
     );
 
-    const updateValue = (index: number, newValue: string) => {
-        const newFields = formData.map((item, i) => {
-            return i === index ? { ...item, fieldValue: newValue } : item;
-        })
-        setFormData(newFields);
-    }
-
-    const handleSubmit = async (values: any) => {
-
-        console.log(values);
-        // await props.callback(formData);
+    const handleSubmit = async (values: []) => {
+        await props.callback(values);
     };
 
     return (
         <>
             <Form
                 onFinish={handleSubmit}
+                labelCol={{ span: 8 }}
+                wrapperCol={{ span: 16 }}
+                style={{ maxWidth: 600 }}
             >
-                {formData.map((item, index) => (
+                {formData.map((item) => (
                     <>
                         <Form.Item
-                        label={item.fieldName}
-                        name= {item.fieldName}
+                            key={`${props.submitBtnName}${item.label}`}
+                            label={item.label}
+                            name={item.fieldName}
                         >
-                            <Input/>
+                            {item.isPassword ? (
+                                <>
+                                    <Input.Password />
+                                </>
+                            ) : (
+                                <>
+                                    <Input />
+                                </>
+                            )}
                         </Form.Item>
-                        {/* <div key={item.key}>
-                            <div>{item.fieldName}</div>
-                            <input
-                                type={item.fieldType ?? "text"}
-                                value={item.fieldValue}
-                                onChange={(e) => updateValue(index, e.target.value)}
-                                placeholder={item.fieldPlaceholder ?? ""}
-                            />
-                        </div> */}
                     </>
                 ))}
                 <Form.Item>
@@ -68,6 +73,6 @@ const GenericForm: React.FC<GenericFormProps> = ({ props }: GenericFormProps) =>
             </Form>
         </>
     );
-};
+});
 
 export default GenericForm;
