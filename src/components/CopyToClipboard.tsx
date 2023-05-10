@@ -12,7 +12,7 @@ const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ text }) => {
     const isSameAsLastCopied = lastCopied == text;
     return (
         <div
-            className="font-medium mr-4 text-green-700 cursor-pointer !important"
+            className="font-medium mr-4 text-green-700 cursor-pointer"
             onClick={() => {
                 navigator.clipboard.writeText(text);
                 dispatch(setLastCopied(text));
