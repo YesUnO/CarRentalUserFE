@@ -19,11 +19,13 @@ const LoginForm: React.FC = () => {
       fieldName: "username",
       label: "Username",
       isPassword: false,
+      rules:[{ required: true, message: 'Please input your username!' }],
     },
     {
       fieldName: "password",
       label: "Password",
-      isPassword: true,  
+      isPassword: true,
+      rules:[{ required: true, message: 'Please input your password!' }],
     },
   ];
 

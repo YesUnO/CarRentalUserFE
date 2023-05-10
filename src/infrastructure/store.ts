@@ -7,6 +7,7 @@ import carReducer from "../features/Car/carReducer";
 import userReducer from "../features/User/userReducer";
 import adminReducer from "../features/Admin/adminReducer";
 import navigationReducer from "./navigation/navigationReducer";
+import copyPasteReducer from "./copyPaste/copyPasteReducer";
 
 const store = configureStore({
   middleware: getDefaultMiddleware =>
@@ -20,7 +21,8 @@ const store = configureStore({
     ordersService: orderReducer,
     carsService: carReducer,
     adminService: adminReducer,
-    navigationService: navigationReducer
+    navigationService: navigationReducer,
+    copyPasteService: copyPasteReducer,
   },
 });
 export const useAppDispatch = () => useDispatch<typeof store.dispatch>;

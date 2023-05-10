@@ -1,10 +1,12 @@
 import { Button, Form, Input } from "antd";
+import { Rule } from "antd/es/form";
 import { useState, forwardRef, useImperativeHandle } from "react";
 
 export interface IFormField {
     fieldName: string,
     label: string,
     isPassword: boolean,
+    rules: Rule[],
 };
 
 export interface IGenericForm {
@@ -26,7 +28,6 @@ const GenericForm = forwardRef<CanClearForm, GenericFormProps>(({ props }, ref) 
         ref,
         () => ({
             clearForm() {
-                console.log("cleaning");
                 setFormData(initalVal);
             },
         })
@@ -54,6 +55,7 @@ const GenericForm = forwardRef<CanClearForm, GenericFormProps>(({ props }, ref) 
                             key={`${props.submitBtnName}${item.label}`}
                             label={item.label}
                             name={item.fieldName}
+                            rules={item.rules}
                         >
                             {item.isPassword ? (
                                 <>
@@ -67,8 +69,8 @@ const GenericForm = forwardRef<CanClearForm, GenericFormProps>(({ props }, ref) 
                         </Form.Item>
                     </>
                 ))}
-                <Form.Item>
-                    <Button htmlType="submit">{props.submitBtnName}</Button>
+                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                    <Button type="primary" htmlType="submit">{props.submitBtnName}</Button>
                 </Form.Item>
             </Form>
         </>

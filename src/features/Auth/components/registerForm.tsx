@@ -9,37 +9,48 @@ import { useEffect, useRef } from "react";
 
 const RegisterForm: React.FC = () => {
     const formRef = useRef<CanClearForm>(null);
-    useEffect(()=>{
+    useEffect(() => {
         formRef.current?.clearForm();
-    },[]);
+    }, []);
     const dispatch = useDispatch();
 
-    const loginModalIsOpened = useSelector((state: RootState)=> state.authService.loginModalIsOpened);
+    const loginModalIsOpened = useSelector((state: RootState) => state.authService.loginModalIsOpened);
     const fields: IFormField[] = [
         {
             fieldName: "username",
             label: "Username",
             isPassword: false,
+            rules: [{ required: true, message: 'Please input your usernames!' }],
         },
         {
             fieldName: "password",
             label: "Password",
             isPassword: true,
+            rules: [{ required: true, message: 'Please input your password!' }],
         },
         {
             fieldName: "confirmPassword",
             label: "Confirm password",
             isPassword: true,
+            rules: [{ required: true, message: 'Please confirm your password!' }],
         },
         {
             fieldName: "email",
             label: "Email",
             isPassword: false,
+            rules: [{
+                type: 'email',
+                message: 'The input is not valid email!',
+            },
+            {
+                required: true, message: 'Please input your email!'
+            }],
         },
         {
             fieldName: "phoneNumber",
             label: "Phone number",
             isPassword: false,
+            rules: [],
         },
     ]
 
@@ -55,7 +66,7 @@ const RegisterForm: React.FC = () => {
         if (!loginModalIsOpened) {
             dispatch(setLoginModal(true));
         }
-      }
+    }
 
     const registerForm: IGenericForm = {
         fields,

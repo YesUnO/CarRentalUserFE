@@ -10,11 +10,13 @@ const LoginModal: React.FC = () => {
             fieldName: "username",
             label: "Username",
             isPassword: false,
+            rules:[],
           },
           {
             fieldName: "password",
             label: "Password",
             isPassword: true,  
+            rules:[],
           },
     ];
 

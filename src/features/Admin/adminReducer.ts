@@ -147,11 +147,9 @@ export const approoveAndReload =
   (carId: number): ThunkAction<void, RootState, number, any> =>
   (dispatch, getState) => {
     dispatch(deleteCarPic(carId)).then((result) => {
-      console.log(result);
       if (result.type == "deleteCarPic/rejected") {
         return;
       }
-      console.log("?");
       dispatch(getCars());
     });
   };

@@ -1,20 +1,31 @@
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../infrastructure/store";
+import { setLastCopied } from "../infrastructure/copyPaste/copyPasteReducer";
 
 interface CopyToClipboardProps {
     text: string;
-} 
+}
 
-const CopyToClipboard: React.FC<CopyToClipboardProps> = ({text}) => {
-
-    const [copied, setCopied] = useState("copy");
+const CopyToClipboard: React.FC<CopyToClipboardProps> = ({ text }) => {
+    const dispatch = useDispatch();
+    const lastCopied = useSelector((state: RootState) => state.copyPasteService.lastCopied);
+    const isSameAsLastCopied = lastCopied == text;
     return (
         <div
-            className="font-medium mr-4 text-green-700 cursor-pointer"
+            className="font-medium mr-4 text-green-700 cursor-pointer !important"
             onClick={() => {
                 navigator.clipboard.writeText(text);
-                setCopied("copied");
+                dispatch(setLastCopied(text));
             }}>
-            {copied}
+            {isSameAsLastCopied ? (
+                <>
+                    <div>Copied</div>
+                </>
+            ) : (
+                <>
+                    <div>Copy</div>
+                </>
+            )}
         </div>
     );
 };

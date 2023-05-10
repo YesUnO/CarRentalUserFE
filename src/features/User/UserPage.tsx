@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../infrastructure/store";
 import { StepProps, Steps } from "antd";
-import RegisterPage from "../Auth/LoginOrRegisterPage";
+import RegisterPage from "../Auth/RegisterPage";
 import { useState } from "react";
 import UploadDocumentPhoto, {
   UploadDocumentProps,
