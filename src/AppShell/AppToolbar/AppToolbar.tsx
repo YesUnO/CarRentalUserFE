@@ -2,16 +2,12 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../infrastructure/store";
 import { logout, setLoginModal } from "../../features/Auth/authReducer";
-import { Menu, MenuProps } from "antd";
+import { Menu, MenuProps, Modal } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
-import Modal from "react-modal";
-import { MdClose } from "react-icons/md";
 import LoginForm from "../../features/Auth/components/loginForm";
 import { setActiveTab } from "../../infrastructure/navigation/navigationReducer";
 
 const AppToolbar: React.FC = () => {
-  Modal.setAppElement(document.getElementById("root") as HTMLElement);
-
   const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
   const activeTab = useSelector((state: RootState) => state.navigationService.activeTab);
   const modalIsOpen = useSelector((state: RootState) => state.authService.loginModalIsOpened);
@@ -22,7 +18,6 @@ const AppToolbar: React.FC = () => {
   const dispatch = useDispatch();
 
   const currentRoute = location.pathname;
-
 
   useEffect(() => {
     if (role == "Admin") {
@@ -142,11 +137,9 @@ const AppToolbar: React.FC = () => {
         items={customerItems}
         selectedKeys={[activeTab]}
       />
-      <Modal isOpen={modalIsOpen} onRequestClose={() => dispatch(setLoginModal(false))}>
-        <MdClose onClick={() => dispatch(setLoginModal(false))} />
-        <section>
+
+      <Modal open={modalIsOpen} footer={null} onCancel={() => dispatch(setLoginModal(false))}>
           <LoginForm />
-        </section>
       </Modal>
     </>
   );

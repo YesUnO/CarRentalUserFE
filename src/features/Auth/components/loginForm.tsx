@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { RootState } from "../../../infrastructure/store";
 import { Button } from "antd";
 
-const LoginModal: React.FC = () => {
+const LoginForm: React.FC = () => {
   const navigate = useNavigate();
 
   const fields: IFormField[] = [
@@ -60,4 +60,4 @@ const LoginModal: React.FC = () => {
   );
 };
 
-export default LoginModal;
+export default LoginForm;

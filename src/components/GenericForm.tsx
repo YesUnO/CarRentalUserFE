@@ -1,3 +1,4 @@
+import { Button, Form, Input } from "antd";
 import { FormEvent, useState } from "react";
 
 export interface IFormField {
@@ -31,28 +32,40 @@ const GenericForm: React.FC<GenericFormProps> = ({ props }: GenericFormProps) =>
         setFormData(newFields);
     }
 
-    const handleSubmit = async (event: FormEvent) => {
-        event.preventDefault();
+    const handleSubmit = async (values: any) => {
 
-        await props.callback(formData);
+        console.log(values);
+        // await props.callback(formData);
     };
 
     return (
         <>
-            <form onSubmit={handleSubmit}>
+            <Form
+                onFinish={handleSubmit}
+            >
                 {formData.map((item, index) => (
-                    <div key={item.key}>
-                        <div>{item.fieldName}</div>
-                        <input
-                            type={item.fieldType ?? "text"}
-                            value={item.fieldValue}
-                            onChange={(e) => updateValue(index, e.target.value)}
-                            placeholder={item.fieldPlaceholder ?? ""}
-                        />
-                    </div>
+                    <>
+                        <Form.Item
+                        label={item.fieldName}
+                        name= {item.fieldName}
+                        >
+                            <Input/>
+                        </Form.Item>
+                        {/* <div key={item.key}>
+                            <div>{item.fieldName}</div>
+                            <input
+                                type={item.fieldType ?? "text"}
+                                value={item.fieldValue}
+                                onChange={(e) => updateValue(index, e.target.value)}
+                                placeholder={item.fieldPlaceholder ?? ""}
+                            />
+                        </div> */}
+                    </>
                 ))}
-                <button type="submit">{props.submitBtnName}</button>
-            </form>
+                <Form.Item>
+                    <Button htmlType="submit">{props.submitBtnName}</Button>
+                </Form.Item>
+            </Form>
         </>
     );
 };
