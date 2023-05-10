@@ -139,7 +139,13 @@ const AppToolbar: React.FC = () => {
         items={customerItems}
         selectedKeys={[activeTab]}
       />
-      <Modal title={registerOrLogin ? "Register" : "Login"} open={modalIsOpen} footer={null} onCancel={() => dispatch(setLoginModal(false))}>
+      <Modal
+        destroyOnClose={true}
+        title={registerOrLogin ? "Register" : "Login"}
+        open={modalIsOpen}
+        footer={null}
+        onCancel={() => dispatch(setLoginModal(false))}
+      >
         <br />
         {registerOrLogin ? (
           <>
