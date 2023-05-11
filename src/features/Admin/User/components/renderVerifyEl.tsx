@@ -65,7 +65,7 @@ const RenderVerifyEl: React.FC<RenderVerifyElProps> = (props: {email: string, in
             customersList[index].idCardImgBack == "empty" ||
             !customersList[index].idCardImgFront ||
             customersList[index].idCardImgFront == "empty" ||
-            customersList[index].HasIdCardVerified;
+            customersList[index].hasIdCardVerified;
         return result;
     };
 
@@ -129,7 +129,7 @@ const RenderVerifyEl: React.FC<RenderVerifyElProps> = (props: {email: string, in
                         email,
                         nr as string,
                         date as Date,
-                        DocType.IdentityCard
+                        docType
                     )
                 }
             >

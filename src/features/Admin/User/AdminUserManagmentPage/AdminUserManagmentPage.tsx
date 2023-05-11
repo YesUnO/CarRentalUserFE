@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../infrastructure/store";
 import {
-  approoveAndReload,
+  approveAndReload,
   deleteAndReload,
   DocType,
   getCustomerList,
@@ -133,7 +133,7 @@ const AdminUserManagmentPage: React.FC = () => {
 
   const handleApproove = (mail: string) => {
     // @ts-expect-error
-    dispatch(approoveAndReload(mail));
+    dispatch(approveAndReload(mail));
   }
 
   const handleDelete = (mail: string) => {

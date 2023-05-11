@@ -30,7 +30,7 @@ export type UserForAdmin = {
   idCardImgFront: string;
   hasDrivingLicenseVerified: boolean;
   hasIdCard: boolean;
-  HasIdCardVerified: boolean;
+  hasIdCardVerified: boolean;
   hasActivePaymentCard: boolean;
   email: string | null;
   hasEmailVerified: boolean;
@@ -91,14 +91,14 @@ export const verifyDocument = createAsyncThunk<
   return response;
 });
 
-export const approoveCustomer = createAsyncThunk<
+export const approveCustomer = createAsyncThunk<
   void,
   string,
   { state: RootState }
->("approoveCustomer", async (mail: string, thunkApi) => {
+>("approveCustomer", async (mail: string, thunkApi) => {
   const token = thunkApi.getState().authService.token;
   const [error, response] = await api.post(
-    "/api/user/Approove",
+    "/api/user/Approve",
     { mail },
     token
   );
@@ -115,17 +115,18 @@ export const verifyAndReload =
   (dispatch, getState) => {
     dispatch(verifyDocument(request)).then((result) => {
       if (result.type == "verifyDocument/rejected") {
+        console.log("?")
         return;
       }
       dispatch(getCustomerList());
     });
   };
 
-export const approoveAndReload =
+export const approveAndReload =
   (mail: string): ThunkAction<void, RootState, string, any> =>
   (dispatch, getState) => {
-    dispatch(approoveCustomer(mail)).then((result) => {
-      if (result.type == "approoveCustomer/rejected") {
+    dispatch(approveCustomer(mail)).then((result) => {
+      if (result.type == "approveCustomer/rejected") {
         return;
       }
       dispatch(getCustomerList());

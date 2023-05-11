@@ -2,3 +2,8 @@
     outline-style: solid;
     outline-color: red;
 }
+
+.disabled {
+    opacity: .5;
+    pointer-events: none;
+}

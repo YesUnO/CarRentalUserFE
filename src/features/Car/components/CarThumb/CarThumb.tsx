@@ -22,19 +22,32 @@ const CarThumb: React.FC<CarComponentProps> = ({ props: car }) => {
     (state: RootState) => state.ordersService.newOrder
   );
 
+  const isAvailable =
+  // false; 
+  !isInDateRange(newOrder.startDate, newOrder.endDate, car.unavailable);
+
   const conditionalStyles = classNames({
-    highlighted: car.isPicked,
+    disabled: !isAvailable,
   });
 
-  const isAvailable = !isInDateRange(newOrder.startDate, newOrder.endDate, car.unavailable);
+
+  const getActions = () => {
+    if (isAvailable) {
+      return (
+        [<PayAndCreateOrderBtn />]
+      )
+    }
+    return ([
+      <div>Car is not available in this timeframe</div>
+    ])
+  }
 
   return (
     <>
         <Card 
         className={conditionalStyles} 
-        style={{ width: 300 }} 
         cover={<img src={car.pictureUrl}/>}
-        actions={[<PayAndCreateOrderBtn />]}
+        actions={getActions()}
         >
           <Meta
             title={car.name}
