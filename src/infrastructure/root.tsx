@@ -4,8 +4,8 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AppShell from "../AppShell/Appshell";
 import PickCarPage from "../features/Car/PickCarPage/PickCarPage";
 import OrderDetailPage from "../features/Order/OrderDetailPage";
-import UserPage from "../features/User/UserPage";
-import EmailConfirmationPage from "../features/User/components/EmailConfirmationPage";
+import UserPage from "../features/User/Pages/UserPage";
+import EmailConfirmationPage from "../features/User/Pages/EmailConfirmationPage";
 import AdminCarPage from "../features/Admin/Car/AdminCarPage";
 import AdminUserManagmentPage from "../features/Admin/User/AdminUserManagmentPage/AdminUserManagmentPage";
 

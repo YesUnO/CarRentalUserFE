@@ -3,7 +3,6 @@ import { RootState } from "../../../infrastructure/store";
 import { useEffect } from "react";
 import { getCars, pickCar } from "../carReducer";
 import OrderPicker from "../../Order/components/orderPicker";
-import { setNewOrderCar } from "../../Order/orderReducer";
 import CarThumb from "../components/CarThumb/CarThumb";
 import "./pickCarPage.css"
 
@@ -19,7 +18,6 @@ const PickCarPage: React.FC = () => {
 
     const handleCarSelect = (index: number) => {
         dispatch(pickCar(index));
-        dispatch(setNewOrderCar(cars[index]));
     };
 
 

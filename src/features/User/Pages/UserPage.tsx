@@ -1,13 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../infrastructure/store";
+import { RootState } from "../../../infrastructure/store";
 import { StepProps, Steps } from "antd";
-import RegisterPage from "../Auth/RegisterPage";
+import RegisterPage from "../../Auth/RegisterPage";
 import { useState } from "react";
 import UploadDocumentPhoto, {
   UploadDocumentProps,
-} from "./components/UploadDocumentPhoto";
-import AddCardBtn from "../Stripe/components/addCardBtn";
-import ConfirmMail from "./components/confirmEmail";
+} from "../components/UploadDocumentPhoto";
+import AddCardBtn from "../../Stripe/components/addCardBtn";
+import ConfirmMail from "../components/confirmEmail";
 
 type StepsItemStatus = "wait" | "process" | "finish" | "error" | undefined;
 

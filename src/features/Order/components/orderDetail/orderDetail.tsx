@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../infrastructure/store";
-import PayOrderBtn from "../payOrderBtn/PayOrderBtn";
+import PayAndCreateOrderBtn from "../payOrderBtn/PayAndCreateOrderBtn";
 
 const OrderDetail: React.FC = () => {
     const dispatch = useDispatch();
@@ -16,7 +16,7 @@ const OrderDetail: React.FC = () => {
                 :
                 (
                     <>
-                        <PayOrderBtn />
+                        <PayAndCreateOrderBtn />
                     </>
                 )}
         </>

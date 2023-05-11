@@ -1,12 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../infrastructure/store";
-import { Order, createOrder, setNewOrder, } from "../orderReducer";
+import { NewOrder, createOrder, setNewOrder, } from "../orderReducer";
 import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import { addDays, subDays } from "date-fns";
 import { CreateOrderRequest } from "../orderReducer";
-import { clearPickedCar } from "../../Car/carReducer";
 import { useNavigate } from "react-router-dom";
 
 const OrderPicker: React.FC = () => {
@@ -27,7 +26,7 @@ const OrderPicker: React.FC = () => {
 
   const handleDateChanges = (dateRange: [Date | null, Date | null]) => {
     const [startDate, endDate] = dateRange;
-    const order: Order = {
+    const order: NewOrder = {
       ...newOrder,
       startDate: startDate,
       endDate: endDate,
@@ -50,18 +49,13 @@ const OrderPicker: React.FC = () => {
     }
     else {
       const request: CreateOrderRequest = {
-        carId: newOrder.car?.id as number,
+        carId: newOrder.carId as number,
         startDate: newOrder.startDate as Date,
         endDate: newOrder.endDate as Date,
       };
       // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
       dispatch(createOrder(request));
     }
-  };
-
-  const handleClearPickedCar = () => {
-    dispatch(clearPickedCar());
-    dispatch(setNewOrder({ ...newOrder, car: null }));
   };
 
   const getExcludeDaysInterval = (): { start: Date; end: Date }[] => {
@@ -80,7 +74,7 @@ const OrderPicker: React.FC = () => {
   let isOrderReady =
     newOrder.startDate != null &&
     newOrder.endDate != null &&
-    newOrder.car != null;
+    newOrder.carId != null;
 
   let isCreateOrderBtnDisabled =
     !isAuthenticated || !isOrderReady;
@@ -99,12 +93,6 @@ const OrderPicker: React.FC = () => {
         // selectsDisabledDaysInRange
         inline
       />
-      <div>
-        {/* <button disabled={isCreateOrderBtnDisabled} onClick={() => handleCreateOrder()}>Make order</button> */}
-        {/* <button onClick={()=>handleClearPickedCar()}>Clear picked car</button>
-        <button onClick={()=>dispatch(setNewOrder({ ...newOrder, startDate: null, endDate: null }))}>Clear dates</button>
-        <button onClick={()=>console.log(newOrder)}>Check state</button> */}
-      </div>
     </>
   );
 };

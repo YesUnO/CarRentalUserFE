@@ -2,17 +2,14 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../infrastructure/store";
 import { logout, setLoginModal } from "../../features/Auth/authReducer";
-import { Menu, MenuProps, Modal } from "antd";
+import { Menu, MenuProps } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
-import LoginForm from "../../features/Auth/components/loginForm";
 import { setActiveTab } from "../../infrastructure/navigation/navigationReducer";
-import RegisterForm from "../../features/Auth/components/registerForm";
+import LoginOrRegisterModal from "../../features/Auth/components/loginOrRegisterModal";
 
 const AppToolbar: React.FC = () => {
   const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
-  const registerOrLogin = useSelector((state: RootState) => state.authService.registerOrLogin);
   const activeTab = useSelector((state: RootState) => state.navigationService.activeTab);
-  const modalIsOpen = useSelector((state: RootState) => state.authService.loginModalIsOpened);
   const role = useSelector((state: RootState) => state.authService.role);
 
   const navigate = useNavigate();
@@ -139,24 +136,7 @@ const AppToolbar: React.FC = () => {
         items={customerItems}
         selectedKeys={[activeTab]}
       />
-      <Modal
-        destroyOnClose={true}
-        title={registerOrLogin ? "Register" : "Login"}
-        open={modalIsOpen}
-        footer={null}
-        onCancel={() => dispatch(setLoginModal(false))}
-      >
-        <br />
-        {registerOrLogin ? (
-          <>
-            <RegisterForm />
-          </>
-        ) : (
-          <>
-            <LoginForm />
-          </>
-        )}
-      </Modal>
+      <LoginOrRegisterModal/>
     </>
   );
 };

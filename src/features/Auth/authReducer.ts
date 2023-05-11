@@ -15,6 +15,7 @@ interface IAuthState {
   loading: boolean;
   loginModalIsOpened: boolean;
   registerOrLogin: boolean;
+  loginModalMessage: string;
 }
 
 type TokenRoleClaim = "Admin" | "Customer" | undefined;
@@ -29,6 +30,7 @@ const initialState: IAuthState = {
   loading: false,
   loginModalIsOpened: false,
   registerOrLogin: false,
+  loginModalMessage: "",
 };
 
 interface TokenResponse {
@@ -139,8 +141,14 @@ const authSLice = createSlice({
       const decoded: Token = JWT(state.token as string);
       state.role = decoded.role;
     },
-    setLoginModal(state, payload: PayloadAction<boolean>) {
-      state.loginModalIsOpened = payload.payload;
+    setLoginModal(state, action: PayloadAction<boolean>) {
+      if (!action.payload) {
+        state.loginModalMessage = "";
+      }
+      state.loginModalIsOpened = action.payload;
+    },
+    setLoginModalMsg(state, payload: PayloadAction<string>) {
+      state.loginModalMessage = payload.payload;
     },
     setRegisterOrLogin(state, payload: PayloadAction<boolean>) {
       state.registerOrLogin = payload.payload;
@@ -183,5 +191,5 @@ const authSLice = createSlice({
 });
 
 export default authSLice.reducer;
-export const { setRegisterOrLogin, logout, parseToken, setLoginModal } =
+export const { setRegisterOrLogin, logout, parseToken, setLoginModal, setLoginModalMsg } =
   authSLice.actions;

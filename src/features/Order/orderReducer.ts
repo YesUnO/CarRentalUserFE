@@ -8,7 +8,7 @@ interface IOrderState {
   unpaidOrders: Order[];
   futureOrders: Order[];
   orderDetail: Order | null;
-  newOrder: Order;
+  newOrder: NewOrder;
 }
 
 const initialState: IOrderState = {
@@ -17,13 +17,9 @@ const initialState: IOrderState = {
   futureOrders: [],
   orderDetail: null,
   newOrder: {
-    id: undefined,
+    carId: undefined,
     startDate: new Date(),
     endDate: new Date(),
-    created: new Date(),
-    paid: false,
-    car: null,
-    price: null,
   },
 };
 
@@ -43,17 +39,23 @@ export type CreateOrderRequest = {
   carId: number;
 };
 
+export type NewOrder = {
+  startDate: Date | null;
+  endDate: Date | null;
+  carId: number | undefined;
+};
+
 export const payOrder = createAsyncThunk<any, number, { state: RootState }>(
   "payOrder",
-  async (orderId: number, { getState }) => {
-    const token = getState().authService.token;
+  async (orderId: number, thunkApi) => {
+    const token = thunkApi.getState().authService.token;
     const [error, response] = await api.post(
       `/api/order/${orderId}`,
       null,
       token
     );
     if (error) {
-      return error;
+      return thunkApi.rejectWithValue(error);
     }
     return response;
   }
@@ -61,14 +63,14 @@ export const payOrder = createAsyncThunk<any, number, { state: RootState }>(
 
 export const getOrders = createAsyncThunk<Order[], void, { state: RootState }>(
   "getOrders",
-  async (_, { getState }) => {
-    const token = getState().authService.token;
+  async (_, thunkApi) => {
+    const token = thunkApi.getState().authService.token;
     const [error, response] = await api.get(
       `/api/order`,
       token
     );
     if (error) {
-      return error;
+      return thunkApi.rejectWithValue(error);
     }
     return response;
   }
@@ -78,11 +80,11 @@ export const createOrder = createAsyncThunk<
   Order,
   CreateOrderRequest,
   { state: RootState }
->("createOrder", async (order: CreateOrderRequest, { getState }) => {
-  const token = getState().authService.token;
+>("createOrder", async (order: CreateOrderRequest, thunkApi) => {
+  const token = thunkApi.getState().authService.token;
   const [error, response] = await api.post(`/api/order`, order, token);
   if (error) {
-    return error;
+    return thunkApi.rejectWithValue(error);
   }
   return response;
 });
@@ -91,7 +93,7 @@ export const orderSlice = createSlice({
   initialState,
   name: "orderState",
   reducers: {
-    setNewOrder(state, { payload }: PayloadAction<Order>) {
+    setNewOrder(state, { payload }: PayloadAction<NewOrder>) {
       if (payload == null || payload == undefined) {
         state.newOrder = initialState.newOrder;
       } else {
@@ -104,9 +106,6 @@ export const orderSlice = createSlice({
       } else {
         state.orderDetail = payload;
       }
-    },
-    setNewOrderCar(state, { payload }: PayloadAction<Car>) {
-      state.newOrder.car = payload;
     },
   },
   extraReducers(builder) {
@@ -123,5 +122,5 @@ export const orderSlice = createSlice({
 });
 
 export default orderSlice.reducer;
-export const { setNewOrder, setNewOrderCar, setOrderDetail } =
+export const { setNewOrder, setOrderDetail } =
   orderSlice.actions;
