@@ -95,11 +95,11 @@ export const approveCustomer = createAsyncThunk<
   void,
   string,
   { state: RootState }
->("approveCustomer", async (mail: string, thunkApi) => {
+>("approveCustomer", async (email: string, thunkApi) => {
   const token = thunkApi.getState().authService.token;
   const [error, response] = await api.post(
     "/api/user/Approve",
-    { mail },
+    { email },
     token
   );
   if (error) {
@@ -115,7 +115,6 @@ export const verifyAndReload =
   (dispatch, getState) => {
     dispatch(verifyDocument(request)).then((result) => {
       if (result.type == "verifyDocument/rejected") {
-        console.log("?")
         return;
       }
       dispatch(getCustomerList());

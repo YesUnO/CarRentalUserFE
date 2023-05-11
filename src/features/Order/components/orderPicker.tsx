@@ -22,7 +22,7 @@ const OrderPicker: React.FC = () => {
     || user.email == null
     || user.email == "";
 
-  const hasnBeenVerifiedYet = !user.HasIdCardVerified || !user.hasDrivingLicenseVerified || !user.isApprooved;
+  const hasnBeenVerifiedYet = !user.hasIdCardVerified || !user.hasDrivingLicenseVerified || !user.isApprooved;
 
   const handleDateChanges = (dateRange: [Date | null, Date | null]) => {
     const [startDate, endDate] = dateRange;

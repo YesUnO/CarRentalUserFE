@@ -19,7 +19,7 @@ const PayAndCreateOrderBtn: React.FC = () => {
     || user.email == null
     || user.email == "";
 
-  const hasnBeenVerifiedYet = !user.HasIdCardVerified || !user.hasDrivingLicenseVerified || !user.isApprooved;
+  const hasnBeenVerifiedYet = !user.hasIdCardVerified || !user.hasDrivingLicenseVerified || !user.isApprooved;
 
   const handleCreateOrder = () => {
     if (!isAuthenticated) {
@@ -32,7 +32,6 @@ const PayAndCreateOrderBtn: React.FC = () => {
       return;
     }
     else if (hasnBeenVerifiedYet) {
-
     }
     else {
       const request: CreateOrderRequest = {

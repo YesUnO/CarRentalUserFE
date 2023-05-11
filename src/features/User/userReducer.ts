@@ -11,7 +11,7 @@ const initialState: IUserState = {
     hasDrivingLicense: false,
     hasDrivingLicenseVerified: false,
     hasIdCard: false,
-    HasIdCardVerified: false,
+    hasIdCardVerified: false,
     hasActivePaymentCard: false,
     email: null,
     hasEmailVerified: false,
@@ -31,7 +31,7 @@ export type User = {
   hasDrivingLicense: boolean;
   hasDrivingLicenseVerified: boolean;
   hasIdCard: boolean;
-  HasIdCardVerified: boolean;
+  hasIdCardVerified: boolean;
   hasActivePaymentCard: boolean;
   email: string | null;
   hasEmailVerified: boolean;

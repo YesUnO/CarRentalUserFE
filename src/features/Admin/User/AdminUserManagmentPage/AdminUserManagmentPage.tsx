@@ -114,6 +114,12 @@ const AdminUserManagmentPage: React.FC = () => {
       render: (value: boolean) => renderBoolean(value),
     },
     {
+      title: "Has been approved",
+      dataIndex: "isApprooved",
+      key: "hasBeenApproved",
+      render: (value: boolean) => renderBoolean(value),
+    },
+    {
       title: "Actions",
       key: "actions",
       dataIndex: "email",
