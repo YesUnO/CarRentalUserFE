@@ -53,6 +53,10 @@ export type RegisterRequest = {
   phonenumber: string;
 };
 
+export type LoginAndGetUserResult = {
+  error: string | undefined;
+};
+
 //TODO: figure out types, figure out how to create request obj
 export const getToken = createAsyncThunk<
   TokenResponse,
@@ -114,20 +118,27 @@ export const registerAndLogin =
     });
   };
 
-export const login =
+export const loginAndGetUser =
   (
     credentials: PasswordCredentialsRequest
-  ): ThunkAction<void, RootState, unknown, any> =>
-  (dispatch, getState) => {
-    dispatch(getToken(credentials)).then((result) => {
-      if (result.type == "loginPw/rejected") {
-        return;
+  ): ThunkAction<Promise<LoginAndGetUserResult>, RootState, unknown, any> =>
+  async (dispatch, getState) => {
+    try {
+      const result = await dispatch(getToken(credentials));
+      if (result.type === "loginPw/rejected") {
+        return { error: "Incorrect password or username." };
       }
       dispatch(parseToken());
-      if (getState().authService.role == "Customer") {
-        dispatch(getUser());
+      if (getState().authService.role === "Customer") {
+        const finalResult = await dispatch(getUser());
+        if (finalResult.type === "userRequest/rejected") {
+          return { error: "Incorrect password or username." };
+        }
       }
-    });
+      return { error: undefined };
+    } catch (error) {
+      return { error: "An error occurred." };
+    }
   };
 
 const authSLice = createSlice({
@@ -139,7 +150,10 @@ const authSLice = createSlice({
     },
     parseToken(state) {
       const decoded: Token = JWT(state.token as string);
-      state.role = decoded.role;
+      return {
+        ...state,
+        role: decoded.role,
+      };
     },
     setLoginModal(state, action: PayloadAction<boolean>) {
       if (!action.payload) {
@@ -191,5 +205,10 @@ const authSLice = createSlice({
 });
 
 export default authSLice.reducer;
-export const { setRegisterOrLogin, logout, parseToken, setLoginModal, setLoginModalMsg } =
-  authSLice.actions;
+export const {
+  setRegisterOrLogin,
+  logout,
+  parseToken,
+  setLoginModal,
+  setLoginModalMsg,
+} = authSLice.actions;

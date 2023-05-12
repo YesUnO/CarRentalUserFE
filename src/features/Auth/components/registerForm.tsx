@@ -20,24 +20,28 @@ const RegisterForm: React.FC = () => {
             fieldName: "username",
             label: "Username",
             isPassword: false,
+            error: "",
             rules: [{ required: true, message: 'Please input your usernames!' }],
         },
         {
             fieldName: "password",
             label: "Password",
             isPassword: true,
+            error: "",
             rules: [{ required: true, message: 'Please input your password!' }],
         },
         {
             fieldName: "confirmPassword",
             label: "Confirm password",
             isPassword: true,
+            error: "",
             rules: [{ required: true, message: 'Please confirm your password!' }],
         },
         {
             fieldName: "email",
             label: "Email",
             isPassword: false,
+            error: "",
             rules: [{
                 type: 'email',
                 message: 'The input is not valid email!',
@@ -50,11 +54,12 @@ const RegisterForm: React.FC = () => {
             fieldName: "phoneNumber",
             label: "Phone number",
             isPassword: false,
+            error: "",
             rules: [],
         },
     ]
 
-    const registerCallback = async (fields: []) => {
+    const registerCallback = async (fields: {}) => {
 
         // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
         await dispatch(registerAndLogin(fields));

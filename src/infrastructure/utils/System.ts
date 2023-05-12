@@ -74,3 +74,7 @@ export const api = {
       ).toString(),
     }),
 };
+
+export const timeout = (delay: number) => {
+  return new Promise(res => setTimeout(res,delay));
+}

@@ -6,13 +6,14 @@ export interface IFormField {
     fieldName: string,
     label: string,
     isPassword: boolean,
+    error: string;
     rules: Rule[],
 };
 
 export interface IGenericForm {
     submitBtnName: string,
     fields: IFormField[]
-    callback: (fields: []) => Promise<void>
+    callback: (fields: {}) => Promise<void>
 };
 
 export type GenericFormProps = {
@@ -20,7 +21,8 @@ export type GenericFormProps = {
 };
 
 export interface CanClearForm {
-    clearForm(): void
+    clearForm(): void;
+    pushErrors(fieldName: string, error: string): void;
 }
 
 const GenericForm = forwardRef<CanClearForm, GenericFormProps>(({ props }, ref) => {
@@ -28,16 +30,25 @@ const GenericForm = forwardRef<CanClearForm, GenericFormProps>(({ props }, ref) 
         ref,
         () => ({
             clearForm() {
-                setFormData(initalVal);
+                // setFormData(initalVal);
+            },
+            pushErrors(fieldName: string, error: string) {
+                // const updatedFormData = formData.map((value)=>{
+                //     if (value.fieldName == fieldName) {
+                //         value.rules.push()
+                //     }
+                // });
+                // setFormData(updatedFormData);
             },
         })
     )
+    
     const initalVal = props.fields;
     const [formData, setFormData] = useState<IFormField[]>(
         props.fields
     );
 
-    const handleSubmit = async (values: []) => {
+    const handleSubmit = async (values: {}) => {
         await props.callback(values);
     };
 
@@ -49,13 +60,15 @@ const GenericForm = forwardRef<CanClearForm, GenericFormProps>(({ props }, ref) 
                 wrapperCol={{ span: 16 }}
                 style={{ maxWidth: 600 }}
             >
-                {formData.map((item) => (
+                {props.fields.map((item) => (
                     <>
                         <Form.Item
                             key={`${props.submitBtnName}${item.label}`}
                             label={item.label}
                             name={item.fieldName}
                             rules={item.rules}
+                            help={item.error}
+                            validateStatus={item.error?"error":""}
                         >
                             {item.isPassword ? (
                                 <>
