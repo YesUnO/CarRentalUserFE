@@ -40,11 +40,11 @@ export type User = {
 
 export const getUser = createAsyncThunk<User, void, { state: RootState }>(
   "userRequest",
-  async (_, { getState }) => {
-    const token = getState().authService.token;
+  async (_, thunkApi) => {
+    const token = thunkApi.getState().authService.token;
     const [error, response] = await api.get("/api/user", token);
     if (error) {
-      return error;
+      return thunkApi.rejectWithValue(error);
     }
     return response;
   }

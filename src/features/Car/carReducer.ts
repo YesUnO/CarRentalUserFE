@@ -28,19 +28,19 @@ export const createCar = createAsyncThunk<
   Car,
   CreateCarRequest,
   { state: RootState }
->("createCar", async (createCarRequest: CreateCarRequest, { getState }) => {
-  const token = getState().authService.token;
+>("createCar", async (createCarRequest: CreateCarRequest, thunkApi) => {
+  const token = thunkApi.getState().authService.token;
   const [error, response] = await api.post(`/api/car`, createCarRequest, token);
   if (error) {
-    return error;
+    return thunkApi.rejectWithValue(error);
   }
   return response;
 });
 
-export const getCars = createAsyncThunk<Car[]>("getCars", async () => {
+export const getCars = createAsyncThunk<Car[]>("getCars", async (_,thunkApi) => {
   const [error, response] = await api.get(`/api/car`);
   if (error) {
-    return error;
+    return thunkApi.rejectWithValue(error);
   }
   return response;
 });

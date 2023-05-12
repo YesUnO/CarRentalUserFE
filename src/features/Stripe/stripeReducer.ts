@@ -18,11 +18,11 @@ export const createCheckoutSession = createAsyncThunk<
 CheckoutSessionResponse,
   void,
   { state: RootState }
->("stripeCheckoutSession", async (_,{ getState }) => {
-  const token = getState().authService.token;
+>("stripeCheckoutSession", async (_,thunkApi) => {
+  const token = thunkApi.getState().authService.token;
   const [error, response] = await api.get("/api/stripe", token);
   if (error) {
-    return error;
+    return thunkApi.rejectWithValue(error);
   }
   return response;
 });

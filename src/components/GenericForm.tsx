@@ -69,7 +69,7 @@ const GenericForm = forwardRef<CanClearForm, GenericFormProps>(({ props }, ref) 
                         </Form.Item>
                     </>
                 ))}
-                <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+                <Form.Item key={`${props.submitBtnName}btn`} wrapperCol={{ offset: 8, span: 16 }}>
                     <Button type="primary" htmlType="submit">{props.submitBtnName}</Button>
                 </Form.Item>
             </Form>
