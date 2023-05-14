@@ -4,7 +4,7 @@ import {
   ThunkAction,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import { api, UrlEncodedOptions } from "../../infrastructure/utils/System";
+import { api, ErrorResponse, ErrorsResponse, UrlEncodedOptions } from "../../infrastructure/utils/System";
 import { getUser } from "../User/userReducer";
 import { RootState } from "../../infrastructure/store";
 import JWT from "jwt-decode";
@@ -51,10 +51,6 @@ export type RegisterRequest = {
   email: string;
   confimrPassword: string;
   phonenumber: string;
-};
-
-export type LoginAndGetUserResult = {
-  error: string | undefined;
 };
 
 //TODO: figure out types, figure out how to create request obj
@@ -104,24 +100,25 @@ export const sendConfirmMail = createAsyncThunk<
 });
 
 export const registerAndLogin =
-  (registration: RegisterRequest): ThunkAction<void, RootState, unknown, any> =>
-  (dispatch, getState) => {
-    dispatch(register(registration)).then((result) => {
+  (registration: RegisterRequest): ThunkAction<Promise<ErrorsResponse>, RootState, unknown, any> =>
+  (dispatch) => {
+    return dispatch(register(registration)).then((result) => {
       if (result.type == "register/rejected") {
-        return;
+        return{errors:[""]};
       }
       const credentials: PasswordCredentialsRequest = {
         password: registration.password,
         username: registration.username,
       };
       dispatch(getToken(credentials));
+      return {errors:[]}
     });
   };
 
 export const loginAndGetUser =
   (
     credentials: PasswordCredentialsRequest
-  ): ThunkAction<Promise<LoginAndGetUserResult>, RootState, unknown, any> =>
+  ): ThunkAction<Promise<ErrorResponse>, RootState, unknown, any> =>
   async (dispatch, getState) => {
     try {
       const result = await dispatch(getToken(credentials));

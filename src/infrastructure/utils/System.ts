@@ -4,6 +4,12 @@ type Options = Record<
   string | number | boolean | Object | any[]
 > | null;
 export type UrlEncodedOptions = string | Record<string, string>;
+export type ErrorResponse = {
+  error: string | undefined;
+};
+export type ErrorsResponse = {
+  errors: string[] | undefined;
+};
 
 const apiUrl = process.env.API_URL;
 

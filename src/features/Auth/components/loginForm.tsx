@@ -1,25 +1,21 @@
 import { useDispatch } from "react-redux";
-import _, { values } from "lodash";
 import GenericForm, {
-  CanClearForm,
   IFormField,
   IGenericForm,
 } from "../../../components/GenericForm";
 import { PasswordCredentialsRequest, loginAndGetUser, setLoginModal, setRegisterOrLogin } from "../authReducer";
 import { Button } from "antd";
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { RootState } from "../../../infrastructure/store";
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 
 const LoginForm: React.FC = () => {
-  const formRef = useRef<CanClearForm>(null);
   useEffect(()=>{
-      formRef.current?.clearForm();
+      setFields(initialFields);
   },[]);
 
 
-
-  const fields: IFormField[] = [
+  const initialFields: IFormField[] = [
     {
       fieldName: "username",
       label: "Username",
@@ -36,6 +32,8 @@ const LoginForm: React.FC = () => {
     },
   ];
 
+  const [fields,setFields] = useState<IFormField[]>(initialFields);
+
   //TODO: dunno
   const dispatch = useDispatch();
 
@@ -46,11 +44,10 @@ const LoginForm: React.FC = () => {
   const loginCallback = async (fields: {}) => {
     const res = await (dispatch as ThunkDispatch<RootState, unknown, AnyAction>)(loginAndGetUser(fields as PasswordCredentialsRequest));
     if (res.error) {
-      loginForm.fields = loginForm.fields.map((value)=>{
+      const updateFields = loginForm.fields.map((value)=>{
         return value.fieldName == "password"? {...value, error: res.error as string} : value;
       })
-
-      console.log(loginForm);
+      setFields(updateFields)
     }
     else {
       dispatch(setLoginModal(false));
@@ -65,7 +62,7 @@ const LoginForm: React.FC = () => {
 
   return (
     <>
-      <GenericForm ref={formRef} props={loginForm} />
+      <GenericForm props={loginForm} />
       <Button type="link" onClick={switchToRegister}>Register</Button>
     </>
   );
