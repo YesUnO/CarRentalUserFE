@@ -34,7 +34,17 @@ const RegisterForm: React.FC = () => {
             label: "Confirm password",
             isPassword: true,
             error: "",
-            rules: [{ required: true, message: 'Please confirm your password!' }],
+            rules: [
+                { required: true, message: 'Please confirm your password!' },
+                // ({ getFieldValue }) => ({
+                //     validator(_, value) {
+                //         if (!value || getFieldValue("password") === value) {
+                //             return Promise.resolve();
+                //         }
+                //         return Promise.reject(new Error("Confirm password doesnt match"));
+                //     },
+                // }),
+            ],
         },
         {
             fieldName: "email",
@@ -58,7 +68,7 @@ const RegisterForm: React.FC = () => {
         },
     ]
 
-    const [fields,setFields] = useState<IFormField[]>(initialFields);
+    const [fields, setFields] = useState<IFormField[]>(initialFields);
     const registerCallback = async (fields: {}) => {
 
         // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
@@ -73,10 +83,18 @@ const RegisterForm: React.FC = () => {
         }
     }
 
+    const clearErrorCallback = async (fieldName: string) => {
+        const updateFields = registerForm.fields.map((value) => {
+            return value.fieldName == fieldName ? { ...value, error: "" } : value;
+        })
+        setFields(updateFields)
+    }
+
     const registerForm: IGenericForm = {
         fields,
         submitBtnName: "Register",
-        callback: registerCallback
+        submittCallback: registerCallback,
+        clearErrorCallback
     };
 
     return (
