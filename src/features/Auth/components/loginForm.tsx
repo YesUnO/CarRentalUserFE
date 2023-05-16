@@ -8,7 +8,6 @@ import { Button } from "antd";
 import { useEffect, useState } from "react";
 import { RootState } from "../../../infrastructure/store";
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { Rule } from "antd/es/form";
 
 const LoginForm: React.FC = () => {
   useEffect(()=>{
@@ -29,28 +28,12 @@ const LoginForm: React.FC = () => {
       label: "Password",
       isPassword: true,
       error:"",
-      rules:[{ required: true, message: 'Please input your password!' }, ],
+      rules:[{ required: true, message: 'Please input your password!' },],
     },
   ];
 
 
-  const extendedFields = initialFields.map((val) => {
-    const validator: Rule = { validator: () => validationFnc(val.error) };
-    val.rules.push(validator);
-    return { ...val };
-});
-
-const [fields,setFields] = useState<IFormField[]>(extendedFields);
-
-
-const validationFnc = (error: string) => {
-  console.log(self);
-    if (error != "") {
-        return Promise.reject(error);
-    }
-    return Promise.resolve();
-}
-
+const [fields,setFields] = useState<IFormField[]>(initialFields);
 
   //TODO: dunno
   const dispatch = useDispatch();
@@ -72,18 +55,10 @@ const validationFnc = (error: string) => {
     }
   };
 
-  const clearErrorCallback = async (fieldName: string)=>{
-    const updateFields = loginForm.fields.map((value)=>{
-      return value.fieldName == fieldName ? {...value, error: ""} : value;
-    })
-    setFields(updateFields)
-  }
-
   const loginForm: IGenericForm = {
     fields,
     submitBtnName: "Login",
     submittCallback: loginCallback,
-    clearErrorCallback
   };
 
   return (

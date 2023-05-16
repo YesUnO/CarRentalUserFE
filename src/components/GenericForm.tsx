@@ -1,6 +1,6 @@
 import { Button, Form, Input } from "antd";
 import { FormInstance, Rule } from "antd/es/form";
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 
 export interface IFormField {
     fieldName: string;
@@ -14,7 +14,6 @@ export interface IGenericForm {
     submitBtnName: string;
     fields: IFormField[];
     submittCallback: (fields: {}) => Promise<void>;
-    clearErrorCallback: (fieldName: string) => Promise<void>;
 }
 
 export type GenericFormProps = {
@@ -24,19 +23,24 @@ export type GenericFormProps = {
 const GenericForm: React.FC<GenericFormProps> = ({ props }) => {
     const formRef = React.useRef<FormInstance>(null);
 
-    const handleSubmit = async (values: {}) => {
-        await props.submittCallback(values);
-        // await timeout(1000);
-        // await formRef.current?.validateFields();
-    };
-
-    const handleFieldChange = async (item: IFormField) => {
-        if (item.error == "") {
-            return;
+    useEffect(() => {
+        if (formRef.current != null) {
+            const newErrors: {name:string, errors: string[]}[] = []; 
+            props.fields.forEach((val) => {
+                if (val.error) {
+                    newErrors.push( {
+                        name: val.fieldName,
+                        errors: [val.error]
+                    })    
+                }
+            })
+            formRef.current.setFields(newErrors);
         }
 
-        // await props.clearErrorCallback(item.fieldName);
-    }
+    }, [props.fields])
+    const handleSubmit = async (values: {}) => {
+        await props.submittCallback(values);
+    };
 
     return (
         <>
@@ -53,21 +57,14 @@ const GenericForm: React.FC<GenericFormProps> = ({ props }) => {
                             label={item.label}
                             name={item.fieldName}
                             rules={item.rules}
-                            validateTrigger = {false}
-                        // validateStatus={
-                        //     (formRef.current?.isFieldTouched(item.fieldName) && formRef.current?.getFieldError(item.fieldName).length != 0) ||
-                        //         item.error ?
-                        //         "error" : undefined
-                        // }
-
                         >
                             {item.isPassword ? (
                                 <>
-                                    <Input.Password onChange={() => handleFieldChange(item)} />
+                                    <Input.Password />
                                 </>
                             ) : (
                                 <>
-                                    <Input onChange={() => handleFieldChange(item)} />
+                                    <Input />
                                 </>
                             )}
                         </Form.Item>
@@ -82,7 +79,6 @@ const GenericForm: React.FC<GenericFormProps> = ({ props }) => {
                     </Button>
                 </Form.Item>
             </Form>
-            <Button onClick={()=>formRef.current?.validateFields()}>test</Button>
         </>
     );
 };

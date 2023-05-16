@@ -36,14 +36,14 @@ const RegisterForm: React.FC = () => {
             error: "",
             rules: [
                 { required: true, message: 'Please confirm your password!' },
-                // ({ getFieldValue }) => ({
-                //     validator(_, value) {
-                //         if (!value || getFieldValue("password") === value) {
-                //             return Promise.resolve();
-                //         }
-                //         return Promise.reject(new Error("Confirm password doesnt match"));
-                //     },
-                // }),
+                ({ getFieldValue }) => ({
+                    validator(_, value) {
+                        if (!value || getFieldValue("password") === value) {
+                            return Promise.resolve();
+                        }
+                        return Promise.reject(new Error("Confirm password doesnt match"));
+                    },
+                }),
             ],
         },
         {
@@ -83,18 +83,10 @@ const RegisterForm: React.FC = () => {
         }
     }
 
-    const clearErrorCallback = async (fieldName: string) => {
-        const updateFields = registerForm.fields.map((value) => {
-            return value.fieldName == fieldName ? { ...value, error: "" } : value;
-        })
-        setFields(updateFields)
-    }
-
     const registerForm: IGenericForm = {
         fields,
         submitBtnName: "Register",
         submittCallback: registerCallback,
-        clearErrorCallback
     };
 
     return (
