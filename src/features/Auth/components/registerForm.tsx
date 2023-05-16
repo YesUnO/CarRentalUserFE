@@ -34,6 +34,7 @@ const RegisterForm: React.FC = () => {
             label: "Confirm password",
             isPassword: true,
             error: "",
+            dependencies:["password"],
             rules: [
                 { required: true, message: 'Please confirm your password!' },
                 ({ getFieldValue }) => ({

@@ -7,6 +7,7 @@ export interface IFormField {
     label: string;
     isPassword: boolean;
     error: string;
+    dependencies?: string[]|undefined;
     rules: Rule[];
 }
 
@@ -57,6 +58,8 @@ const GenericForm: React.FC<GenericFormProps> = ({ props }) => {
                             label={item.label}
                             name={item.fieldName}
                             rules={item.rules}
+                            dependencies={item.dependencies}
+                            validateTrigger="onBlur"
                         >
                             {item.isPassword ? (
                                 <>
