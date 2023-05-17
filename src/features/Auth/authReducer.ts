@@ -3,8 +3,15 @@ import {
   createAsyncThunk,
   ThunkAction,
   PayloadAction,
+  SerializedError,
 } from "@reduxjs/toolkit";
-import { api, ErrorResponse, ErrorsResponse, UrlEncodedOptions } from "../../infrastructure/utils/System";
+import {
+  api,
+  ErrorResponse,
+  ErrorsResponse,
+  FieldErrorsResponse,
+  UrlEncodedOptions,
+} from "../../infrastructure/utils/System";
 import { getUser } from "../User/userReducer";
 import { RootState } from "../../infrastructure/store";
 import JWT from "jwt-decode";
@@ -100,18 +107,21 @@ export const sendConfirmMail = createAsyncThunk<
 });
 
 export const registerAndLogin =
-  (registration: RegisterRequest): ThunkAction<Promise<ErrorsResponse>, RootState, unknown, any> =>
+  (
+    registration: RegisterRequest
+  ): ThunkAction<Promise<FieldErrorsResponse>, RootState, unknown, any> =>
   (dispatch) => {
     return dispatch(register(registration)).then((result) => {
       if (result.type == "register/rejected") {
-        return{errors:[""]};
+        const payload = result.payload as FieldErrorsResponse;
+        return { errors: payload.errors };
       }
       const credentials: PasswordCredentialsRequest = {
         password: registration.password,
         username: registration.username,
       };
       dispatch(getToken(credentials));
-      return {errors:[]}
+      return { errors: [] };
     });
   };
 

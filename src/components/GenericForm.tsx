@@ -6,7 +6,7 @@ export interface IFormField {
     fieldName: string;
     label: string;
     isPassword: boolean;
-    error: string;
+    errors: string[];
     dependencies?: string[]|undefined;
     rules: Rule[];
 }
@@ -28,13 +28,14 @@ const GenericForm: React.FC<GenericFormProps> = ({ props }) => {
         if (formRef.current != null) {
             const newErrors: {name:string, errors: string[]}[] = []; 
             props.fields.forEach((val) => {
-                if (val.error) {
+                if (val.errors && val.errors.length > 0) {
                     newErrors.push( {
                         name: val.fieldName,
-                        errors: [val.error]
+                        errors: val.errors
                     })    
                 }
             })
+            console.log(newErrors);
             formRef.current.setFields(newErrors);
         }
 

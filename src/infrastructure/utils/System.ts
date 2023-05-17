@@ -11,6 +11,10 @@ export type ErrorsResponse = {
   errors: string[] | undefined;
 };
 
+export type FieldErrorsResponse = {
+  errors: {field: string; description: string}[] | undefined;
+}
+
 const apiUrl = process.env.API_URL;
 
 
