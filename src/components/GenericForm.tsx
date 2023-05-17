@@ -14,6 +14,7 @@ export interface IFormField {
 export interface IGenericForm {
     submitBtnName: string;
     fields: IFormField[];
+    btnLoading: boolean;
     submittCallback: (fields: {}) => Promise<void>;
 }
 
@@ -35,7 +36,6 @@ const GenericForm: React.FC<GenericFormProps> = ({ props }) => {
                     })    
                 }
             })
-            console.log(newErrors);
             formRef.current.setFields(newErrors);
         }
 
@@ -78,7 +78,7 @@ const GenericForm: React.FC<GenericFormProps> = ({ props }) => {
                     key={`${props.submitBtnName}btn`}
                     wrapperCol={{ offset: 8, span: 16 }}
                 >
-                    <Button type="primary" htmlType="submit">
+                    <Button type="primary" loading={props.btnLoading} htmlType="submit">
                         {props.submitBtnName}
                     </Button>
                 </Form.Item>

@@ -1,4 +1,4 @@
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import GenericForm, {
   IFormField,
   IGenericForm,
@@ -38,6 +38,8 @@ const [fields,setFields] = useState<IFormField[]>(initialFields);
   //TODO: dunno
   const dispatch = useDispatch();
 
+  const loginBtnLoading = useSelector((state:RootState)=> state.authService.loading.getToken || state.authService.loading.getUser);
+
   const switchToRegister = () => {
     dispatch(setRegisterOrLogin(true));
   }
@@ -45,8 +47,8 @@ const [fields,setFields] = useState<IFormField[]>(initialFields);
   const loginCallback = async (fields: {}) => {
     const res = await (dispatch as ThunkDispatch<RootState, unknown, AnyAction>)(loginAndGetUser(fields as PasswordCredentialsRequest));
     if (res.error) {
-      const updateFields = loginForm.fields.map((value)=>{
-        return value.fieldName == "password"? {...value, error: res.error as string} : value;
+      const updateFields: IFormField[] = loginForm.fields.map((value)=>{
+        return value.fieldName == "password"? {...value, errors: [res.error as string]} : value;
       })
       setFields(updateFields)
     }
@@ -58,6 +60,7 @@ const [fields,setFields] = useState<IFormField[]>(initialFields);
   const loginForm: IGenericForm = {
     fields,
     submitBtnName: "Login",
+    btnLoading: loginBtnLoading,
     submittCallback: loginCallback,
   };
 

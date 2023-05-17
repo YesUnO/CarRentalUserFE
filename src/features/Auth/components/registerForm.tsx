@@ -3,7 +3,8 @@ import GenericForm, {
   IFormField,
   IGenericForm,
 } from "../../../components/GenericForm";
-import {
+import authReducer, {
+  RegisterErrorsResponse,
   RegisterRequest,
   registerAndLogin,
   setLoginModal,
@@ -78,18 +79,21 @@ const RegisterForm: React.FC = () => {
       label: "Phone number",
       isPassword: false,
       errors: [],
-      rules: [],
+      rules: [ {type: "string"}],
     },
   ];
 
   const [fields, setFields] = useState<IFormField[]>(initialFields);
+
+  const registerBtnLoading = useSelector((state:RootState)=> state.authService.loading.register || state.authService.loading.getToken)
+
   const registerCallback = async (fields: {}) => {
     const res = await (
       dispatch as ThunkDispatch<RootState, unknown, AnyAction>
     )(registerAndLogin(fields as RegisterRequest));
-    if (res.errors && res.errors.length > 0) {
+    if (res.errors) {
       const updateFields: IFormField[] = registerForm.fields.map((val) => {
-        return { ...val, errors: res.errors?.filter((error) => error.field === val.fieldName).map((error) => error.description) ?? [] };
+        return { ...val, errors: res.errors[val.fieldName as keyof typeof res.errors] || []};
       });
       setFields(updateFields);
     }
@@ -109,6 +113,7 @@ const RegisterForm: React.FC = () => {
   const registerForm: IGenericForm = {
     fields,
     submitBtnName: "Register",
+    btnLoading: registerBtnLoading,
     submittCallback: registerCallback,
   };
 

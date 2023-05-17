@@ -8,8 +8,6 @@ import {
 import {
   api,
   ErrorResponse,
-  ErrorsResponse,
-  FieldErrorsResponse,
   UrlEncodedOptions,
 } from "../../infrastructure/utils/System";
 import { getUser } from "../User/userReducer";
@@ -19,7 +17,11 @@ import JWT from "jwt-decode";
 interface IAuthState {
   token: undefined | string;
   role: TokenRoleClaim;
-  loading: boolean;
+  loading: {
+    getUser: boolean;
+    register: boolean;
+    getToken: boolean;
+  };
   loginModalIsOpened: boolean;
   registerOrLogin: boolean;
   loginModalMessage: string;
@@ -34,7 +36,11 @@ type Token = {
 const initialState: IAuthState = {
   token: undefined,
   role: undefined,
-  loading: false,
+  loading: {
+    getUser: false,
+    register: false,
+    getToken: false,
+  },
   loginModalIsOpened: false,
   registerOrLogin: false,
   loginModalMessage: "",
@@ -58,6 +64,15 @@ export type RegisterRequest = {
   email: string;
   confimrPassword: string;
   phonenumber: string;
+};
+
+export type RegisterErrorsResponse = {
+  errors: {
+    password?: string[] | undefined;
+    username?: string[] | undefined;
+    email?: string[] | undefined;
+    phoneNumber?: string[] | undefined;
+  };
 };
 
 //TODO: figure out types, figure out how to create request obj
@@ -109,19 +124,29 @@ export const sendConfirmMail = createAsyncThunk<
 export const registerAndLogin =
   (
     registration: RegisterRequest
-  ): ThunkAction<Promise<FieldErrorsResponse>, RootState, unknown, any> =>
+  ): ThunkAction<Promise<RegisterErrorsResponse>, RootState, unknown, any> =>
   (dispatch) => {
     return dispatch(register(registration)).then((result) => {
+      console.log(result);
       if (result.type == "register/rejected") {
-        const payload = result.payload as FieldErrorsResponse;
-        return { errors: payload.errors };
+        let payload = {
+          errors: { password: ["?"], username: ["?"], email: ["/"], phoneNumber: ["/"] },
+        } as RegisterErrorsResponse;
+        if ((result.payload as { errors:{PhoneNumber: string[] | undefined }}).errors.PhoneNumber) {
+          console.log("yo", payload);
+          payload = {errors: {phoneNumber: (result.payload as { errors:{PhoneNumber: string[] | undefined }}).errors.PhoneNumber, },};
+          console.log(payload);
+        } else {
+          payload = result.payload as RegisterErrorsResponse;
+        }
+        return payload;
       }
       const credentials: PasswordCredentialsRequest = {
         password: registration.password,
         username: registration.username,
       };
       dispatch(getToken(credentials));
-      return { errors: [] };
+      return { errors: {} };
     });
   };
 
@@ -177,37 +202,31 @@ const authSLice = createSlice({
   },
   extraReducers(builder) {
     builder.addCase(getToken.pending, (state) => {
-      state.loading = true;
+      state.loading.getToken = true;
     });
     builder.addCase(getToken.fulfilled, (state, { payload }) => {
-      state.loading = false;
+      state.loading.getToken = false;
       if (payload) {
         state.token = payload.token_type + " " + payload.access_token;
       }
     });
     builder.addCase(getToken.rejected, (state, action) => {
-      state.loading = false;
+      state.loading.getToken = false;
     });
 
     builder.addCase(register.pending, (state) => {
-      state.loading = true;
+      state.loading.register = true;
     });
     builder.addCase(register.fulfilled, (state, { payload }) => {
-      state.loading = false;
+      state.loading.register = false;
     });
     builder.addCase(register.rejected, (state, action) => {
-      state.loading = false;
+      state.loading.register = false;
     });
 
-    builder.addCase(sendConfirmMail.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(sendConfirmMail.fulfilled, (state, { payload }) => {
-      state.loading = false;
-    });
-    builder.addCase(sendConfirmMail.rejected, (state, action) => {
-      state.loading = false;
-    });
+    builder.addCase(sendConfirmMail.pending, (state) => {});
+    builder.addCase(sendConfirmMail.fulfilled, (state, { payload }) => {});
+    builder.addCase(sendConfirmMail.rejected, (state, action) => {});
   },
 });
 
