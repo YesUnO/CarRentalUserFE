@@ -6,7 +6,7 @@ import EnvironmentPlugin from 'vite-plugin-environment'
 export default defineConfig({
   plugins: [
     react(),
-    EnvironmentPlugin(['API_URL','STRIPE_PRODUCT_ID']),
+    EnvironmentPlugin(['API_URL','STRIPE_PRODUCT_ID','GOOGLE_CLIENT_ID']),
   ],
   
 })

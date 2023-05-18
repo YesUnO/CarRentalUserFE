@@ -105,6 +105,19 @@ export const register = createAsyncThunk<TokenResponse, RegisterRequest>(
   }
 );
 
+export const signInGoogle = createAsyncThunk(
+  "signInGoogle",
+  async (credentials: string, thunkApi) => {
+    const [error, response] = await api.post("/signin-google", { credentials });
+    if (error) {
+      console.log("yo", error);
+      return thunkApi.rejectWithValue(error);
+    }
+    console.log("ho", response);
+    return response;
+  }
+);
+
 export const sendConfirmMail = createAsyncThunk<
   void,
   void,
@@ -130,8 +143,19 @@ export const registerAndLogin =
       console.log(result);
       if (result.type == "register/rejected") {
         let payload = result.payload as RegisterErrorsResponse;
-        if ((result.payload as { errors:{PhoneNumber: string[] | undefined }}).errors.PhoneNumber) {
-          payload = {errors: {phoneNumber: (result.payload as { errors:{PhoneNumber: string[] | undefined }}).errors.PhoneNumber, },};
+        if (
+          (result.payload as { errors: { PhoneNumber: string[] | undefined } })
+            .errors.PhoneNumber
+        ) {
+          payload = {
+            errors: {
+              phoneNumber: (
+                result.payload as {
+                  errors: { PhoneNumber: string[] | undefined };
+                }
+              ).errors.PhoneNumber,
+            },
+          };
         }
         return payload;
       }

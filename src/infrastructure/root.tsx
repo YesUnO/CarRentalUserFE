@@ -8,10 +8,13 @@ import UserPage from "../features/User/Pages/UserPage";
 import EmailConfirmationPage from "../features/User/Pages/EmailConfirmationPage";
 import AdminCarPage from "../features/Admin/Car/AdminCarPage";
 import AdminUserManagmentPage from "../features/Admin/User/AdminUserManagmentPage/AdminUserManagmentPage";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const Root: React.FC = () => {
     const isAdmin = useSelector((state: RootState) => state.authService.role == "Admin");
+  const googleClientId = process.env.GOOGLE_CLIENT_ID;
     return (
+      <GoogleOAuthProvider clientId={googleClientId as string}>
         <BrowserRouter>
           <AppShell>
             <Routes>
@@ -24,7 +27,7 @@ const Root: React.FC = () => {
             </Routes>
           </AppShell>
         </BrowserRouter>
-  
+        </GoogleOAuthProvider>
     );
   };
 
