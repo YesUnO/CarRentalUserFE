@@ -4,7 +4,7 @@ import GenericForm, {
   IGenericForm,
 } from "../../../components/GenericForm";
 import { PasswordCredentialsRequest, loginAndGetUser, setLoginModal, setRegisterOrLogin } from "../authReducer";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { RootState } from "../../../infrastructure/store";
 import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
@@ -50,10 +50,12 @@ const [fields,setFields] = useState<IFormField[]>(initialFields);
       const updateFields: IFormField[] = loginForm.fields.map((value)=>{
         return value.fieldName == "password"? {...value, errors: [res.error as string]} : value;
       })
-      setFields(updateFields)
+      setFields(updateFields);
+      message.error("Couldnt log in.");
     }
     else {
       dispatch(setLoginModal(false));
+      message.success("succesfully logged in.");
     }
   };
 

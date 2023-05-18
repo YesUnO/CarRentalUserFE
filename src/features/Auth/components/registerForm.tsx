@@ -96,6 +96,7 @@ const RegisterForm: React.FC = () => {
         return { ...val, errors: res.errors[val.fieldName as keyof typeof res.errors] || []};
       });
       setFields(updateFields);
+      message.error("Couldnt creeate an account.");
     }
     else {
       dispatch(setLoginModal(false));

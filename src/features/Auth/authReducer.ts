@@ -129,15 +129,9 @@ export const registerAndLogin =
     return dispatch(register(registration)).then((result) => {
       console.log(result);
       if (result.type == "register/rejected") {
-        let payload = {
-          errors: { password: ["?"], username: ["?"], email: ["/"], phoneNumber: ["/"] },
-        } as RegisterErrorsResponse;
+        let payload = result.payload as RegisterErrorsResponse;
         if ((result.payload as { errors:{PhoneNumber: string[] | undefined }}).errors.PhoneNumber) {
-          console.log("yo", payload);
           payload = {errors: {phoneNumber: (result.payload as { errors:{PhoneNumber: string[] | undefined }}).errors.PhoneNumber, },};
-          console.log(payload);
-        } else {
-          payload = result.payload as RegisterErrorsResponse;
         }
         return payload;
       }
