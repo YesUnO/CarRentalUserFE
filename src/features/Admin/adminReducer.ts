@@ -54,7 +54,7 @@ export const deleteUser = createAsyncThunk<void, string, { state: RootState }>(
   "deleteUser",
   async (email: string, thunkApi) => {
     const token = thunkApi.getState().authService.token;
-    const [error, response] = await api.delete(`/api/user/${email}`, token);
+    const [error, response] = await api.delete(`/api/user/?email=${email}`, token);
     if (error) {
       return thunkApi.rejectWithValue(error);
     }
