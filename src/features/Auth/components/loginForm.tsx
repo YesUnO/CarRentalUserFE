@@ -56,11 +56,11 @@ const LoginForm: React.FC = () => {
     }
     else {
       dispatch(setLoginModal(false));
-      message.success("succesfully logged in.");
+      message.success("Succesfully logged in.");
     }
   };
 
-  const googleLoginCallback = async (credentials: string) =>{
+  const googleLogin = async (credentials: string) => {
     //@ts-expect-error
     (dispatch)(signInGoogle(credentials));
   }
@@ -72,17 +72,30 @@ const LoginForm: React.FC = () => {
     submittCallback: loginCallback,
   };
 
+
+const apiUrl = process.env.API_URL;
+
   return (
     <>
       <GenericForm props={loginForm} />
-      <GoogleLogin
+      {/* <GoogleLogin
         onSuccess={credentialResponse => {
           googleLoginCallback(credentialResponse.credential as string);
         }}
         onError={() => {
           console.log('Login Failed');
         }}
-      />
+      /> */}
+      <form method='GET' action={`${apiUrl}/api/auth/externalLogin`} >
+        <button
+          type="submit"
+          name='provider'
+          value='Google'
+          title={`Login using Google`}>
+          Gooogle
+        </button>
+      </form>
+      {/* <Button onClick={() => googleLogin("")}>Google</Button> */}
       <Button type="link" onClick={switchToRegister}>Register</Button>
     </>
   );

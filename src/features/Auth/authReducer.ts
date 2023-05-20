@@ -108,12 +108,11 @@ export const register = createAsyncThunk<TokenResponse, RegisterRequest>(
 export const signInGoogle = createAsyncThunk(
   "signInGoogle",
   async (credentials: string, thunkApi) => {
-    const [error, response] = await api.post("/api/auth/externalLogin", { credentials });
+    console.log("yo");
+    const [error, response] = await api.get("/api/auth/externalLogin");
     if (error) {
-      console.log("yo", error);
       return thunkApi.rejectWithValue(error);
     }
-    console.log("ho", response);
     return response;
   }
 );
