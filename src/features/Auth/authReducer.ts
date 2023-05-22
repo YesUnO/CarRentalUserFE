@@ -3,7 +3,6 @@ import {
   createAsyncThunk,
   ThunkAction,
   PayloadAction,
-  SerializedError,
 } from "@reduxjs/toolkit";
 import {
   api,
@@ -21,6 +20,7 @@ interface IAuthState {
     getUser: boolean;
     register: boolean;
     getToken: boolean;
+    externalLogin: boolean;
   };
   loginModalIsOpened: boolean;
   registerOrLogin: boolean;
@@ -40,6 +40,7 @@ const initialState: IAuthState = {
     getUser: false,
     register: false,
     getToken: false,
+    externalLogin: false,
   },
   loginModalIsOpened: false,
   registerOrLogin: false,
@@ -105,11 +106,22 @@ export const register = createAsyncThunk<TokenResponse, RegisterRequest>(
   }
 );
 
+
 export const signInGoogle = createAsyncThunk(
   "signInGoogle",
-  async (credentials: string, thunkApi) => {
-    console.log("yo");
+  async (_, thunkApi) => {
     const [error, response] = await api.get("/api/auth/externalLogin");
+    if (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+    return response;
+  }
+);
+
+export const externalLoginCallback = createAsyncThunk<TokenResponse,void>(
+  "externalLoginCallback",
+  async (_,thunkApi) => {
+    const [error, response] = await api.get("/api/auth/externalLoginCallback");
     if (error) {
       return thunkApi.rejectWithValue(error);
     }
@@ -190,6 +202,27 @@ export const loginAndGetUser =
     }
   };
 
+  export const externalLoginCallbackAndParseToken =
+  (): ThunkAction<Promise<ErrorResponse>, RootState, unknown, any> =>
+  async (dispatch, getState) => {
+    try {
+      const result = await dispatch(externalLoginCallback());
+      if (result.type === "externalLoginCallback/rejected") {
+        return { error: "Incorrect password or username." };
+      }
+      dispatch(parseToken());
+      if (getState().authService.role === "Customer") {
+        const finalResult = await dispatch(getUser());
+        if (finalResult.type === "userRequest/rejected") {
+          return { error: "Incorrect password or username." };
+        }
+      }
+      return { error: undefined };
+    } catch (error) {
+      return { error: "An error occurred." };
+    }
+  };
+
 const authSLice = createSlice({
   initialState,
   name: "authentification",
@@ -229,6 +262,20 @@ const authSLice = createSlice({
     });
     builder.addCase(getToken.rejected, (state, action) => {
       state.loading.getToken = false;
+    });
+
+    builder.addCase(externalLoginCallback.pending, (state) => {
+      state.loading.externalLogin = true;
+    });
+    builder.addCase(externalLoginCallback.fulfilled, (state, { payload }) => {
+      state.loading.getToken = false;
+      console.log(payload);
+      if (payload) {
+        state.token = payload.token_type + " " + payload.access_token;
+      }
+    });
+    builder.addCase(externalLoginCallback.rejected, (state, action) => {
+      state.loading.externalLogin = false;
     });
 
     builder.addCase(register.pending, (state) => {

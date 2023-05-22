@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../infrastructure/store";
-import RegisterForm from "./components/registerForm";
+import { RootState } from "../../../infrastructure/store";
+import RegisterForm from "../components/registerForm";
 
 const RegisterPage: React.FC = () => {
     const dispatch = useDispatch();
