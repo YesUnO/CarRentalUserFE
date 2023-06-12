@@ -75,14 +75,6 @@ export const api = {
     respond(endpoint, {
       method: "DELETE",
     }, token),
-  postUrlEncoded: (endpoint: string, options: UrlEncodedOptions) =>
-    respond(endpoint, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams(
-        typeof options === "string" ? options : options
-      ).toString(),
-    }),
 };
 
 export const timeout = (delay: number) => {
