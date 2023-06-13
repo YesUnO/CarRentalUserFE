@@ -15,15 +15,15 @@ export default defineConfig({
     strictPort:true,
     proxy: {
       "/bff": {
-        target: "https://localhost:5001",
+        target: "https://localhost:7125",
         secure: false,
       },
       "/signin-oidc": {
-        target: "https://localhost:5001",
+        target: "https://localhost:7125",
         secure: false,
       },
       "/signout-callback-oidc": {
-        target: "https://localhost:5001",
+        target: "https://localhost:7125",
         secure: false,
       },
     },

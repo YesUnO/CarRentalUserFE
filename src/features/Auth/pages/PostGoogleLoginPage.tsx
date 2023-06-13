@@ -1,8 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
 import { RootState } from "../../../infrastructure/store";
-import { externalLoginCallbackAndParseToken } from "../authReducer";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 
@@ -18,8 +16,8 @@ const PostGoogleLoginPage: React.FC = () => {
         if (externalLoginPending) {
             return;
         }
-        const res = await (dispatch as ThunkDispatch<RootState, unknown, AnyAction>)(externalLoginCallbackAndParseToken());
-        if(res.error) {
+        //TODO: login
+        if(true) {
             message.error("Google login failed.");
         }
         else {
