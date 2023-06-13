@@ -40,8 +40,8 @@ async function respond(endpoint: string, options: RequestInit, token?: string) {
 
 export const api = {
   baseURL: apiUrl,
-  get: (endpoint: string, token?: string) => respond(endpoint, {}, token),
-  post: (endpoint: string, options?: Options, token?: string) =>
+  get: (endpoint: string) => respond(endpoint, {}),
+  post: (endpoint: string, options?: Options) =>
     respond(
       endpoint,
       {
@@ -49,9 +49,8 @@ export const api = {
         headers: { "Content-Type": "application/json" },
         body: options && JSON.stringify(options),
       },
-      token
     ),
-  put: (endpoint: string, options: Options, token?: string) =>
+  put: (endpoint: string, options: Options) =>
     respond(
       endpoint,
       {
@@ -59,9 +58,8 @@ export const api = {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(options),
       },
-      token
     ),
-  patch: (endpoint: string, options: Options, token?: string) =>
+  patch: (endpoint: string, options: Options) =>
     respond(
       endpoint,
       {
@@ -69,12 +67,11 @@ export const api = {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(options),
       },
-      token
     ),
-  delete: (endpoint: string, token?: string) =>
+  delete: (endpoint: string) =>
     respond(endpoint, {
       method: "DELETE",
-    }, token),
+    }),
 };
 
 export const timeout = (delay: number) => {

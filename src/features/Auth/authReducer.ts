@@ -9,18 +9,16 @@ import {
   ErrorResponse,
   UrlEncodedOptions,
 } from "../../infrastructure/utils/System";
-import { getUser } from "../User/userReducer";
+import { getCustomer } from "../User/userReducer";
 import { RootState } from "../../infrastructure/store";
 import JWT from "jwt-decode";
 
 interface IAuthState {
-  token: undefined | string;
   role: TokenRoleClaim;
   loading: {
     getUser: boolean;
     register: boolean;
     getToken: boolean;
-    externalLogin: boolean;
   };
   loginModalIsOpened: boolean;
   registerOrLogin: boolean;
@@ -34,13 +32,11 @@ type Token = {
 };
 
 const initialState: IAuthState = {
-  token: undefined,
   role: undefined,
   loading: {
     getUser: false,
     register: false,
     getToken: false,
-    externalLogin: false,
   },
   loginModalIsOpened: false,
   registerOrLogin: false,
@@ -92,10 +88,8 @@ export const sendConfirmMail = createAsyncThunk<
   void,
   { state: RootState }
 >("sendConfirmMail", async (_, thunkApi) => {
-  const token = thunkApi.getState().authService.token;
   const [error, response] = await api.get(
     `/api/auth/ResendConfirmationEmail`,
-    token
   );
   if (error) {
     return thunkApi.rejectWithValue(error);
@@ -138,13 +132,6 @@ const authSLice = createSlice({
     logout() {
       return initialState;
     },
-    parseToken(state) {
-      const decoded: Token = JWT(state.token as string);
-      return {
-        ...state,
-        role: decoded.role,
-      };
-    },
     setLoginModal(state, action: PayloadAction<boolean>) {
       if (!action.payload) {
         state.loginModalMessage = "";
@@ -179,7 +166,6 @@ export default authSLice.reducer;
 export const {
   setRegisterOrLogin,
   logout,
-  parseToken,
   setLoginModal,
   setLoginModalMsg,
 } = authSLice.actions;

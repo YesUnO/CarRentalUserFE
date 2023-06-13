@@ -4,7 +4,7 @@ import RegisterForm from "../components/registerForm";
 
 const RegisterPage: React.FC = () => {
     const dispatch = useDispatch();
-    const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
+    const isAuthenticated = useSelector((state: RootState) => state.authService != null);
 
     return (
         <>

@@ -2,7 +2,7 @@ import { useDispatch } from "react-redux";
 import UploadPhoto, {
   UploadComponentProps,
 } from "../../File/components/uploadPhoto";
-import { getUser } from "../userReducer";
+import { getCustomer } from "../userReducer";
 
 type UploadDocumentPropsWrapper = {
   props: UploadDocumentProps;
@@ -24,7 +24,7 @@ const UploadDocumentPhoto: React.FC<UploadDocumentPropsWrapper> = ({
   const dispatch = useDispatch();
   const handleGetUser = () => {
     // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
-    dispatch(getUser());
+    dispatch(getCustomer());
   };
   const uploadComponentProps = props.uploadComponentProps;
   const uploadPropsBack: UploadComponentProps = {

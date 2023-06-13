@@ -4,18 +4,16 @@ import { RootState } from "../../../infrastructure/store";
 import { message } from "antd";
 import { useNavigate } from "react-router-dom";
 
-const PostGoogleLoginPage: React.FC = () => {
+const PostLoginPage: React.FC = () => {
     useEffect(()=>{
-        handleExternalLogingCallback();
+        handleAfterLogin();
     },[])
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const externalLoginPending = useSelector((state:RootState)=>  state.authService.loading.externalLogin);
+    const externalLoginPending = useSelector((state:RootState)=>  state.authService.loading);
 
-    const handleExternalLogingCallback = async () => {
-        if (externalLoginPending) {
-            return;
-        }
+    const handleAfterLogin = async () => {
+        
         //TODO: login
         if(true) {
             message.error("Google login failed.");
@@ -32,4 +30,4 @@ const PostGoogleLoginPage: React.FC = () => {
     );
 };
 
-export default PostGoogleLoginPage; 
+export default PostLoginPage; 

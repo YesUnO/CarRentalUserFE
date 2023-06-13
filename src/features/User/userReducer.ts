@@ -38,11 +38,10 @@ export type User = {
   isApprooved: boolean;
 };
 
-export const getUser = createAsyncThunk<User, void, { state: RootState }>(
+export const getCustomer = createAsyncThunk<User, void, { state: RootState }>(
   "userRequest",
   async (_, thunkApi) => {
-    const token = thunkApi.getState().authService.token;
-    const [error, response] = await api.get("/api/user", token);
+    const [error, response] = await api.get("/api/user");
     if (error) {
       return thunkApi.rejectWithValue(error);
     }
@@ -59,7 +58,7 @@ export const userSlice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(getUser.fulfilled, (state, { payload }) => {
+    builder.addCase(getCustomer.fulfilled, (state, { payload }) => {
       state.user = payload;
     });
   },

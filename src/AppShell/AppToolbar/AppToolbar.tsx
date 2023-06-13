@@ -8,7 +8,8 @@ import { setActiveTab } from "../../infrastructure/navigation/navigationReducer"
 import LoginOrRegisterModal from "../../features/Auth/components/loginOrRegisterModal";
 
 const AppToolbar: React.FC = () => {
-  const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
+  //TODO: authenticated?
+  const isAuthenticated = useSelector((state: RootState) => state.authService != null);
   const activeTab = useSelector((state: RootState) => state.navigationService.activeTab);
   const role = useSelector((state: RootState) => state.authService.role);
 
@@ -126,7 +127,8 @@ const AppToolbar: React.FC = () => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/");
+    //TODO: logouturl
+    window.location.href = "";
   };
 
   return (
