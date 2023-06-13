@@ -118,7 +118,7 @@ const AppToolbar: React.FC = () => {
               {
                 label: "Sign in",
                 key: "signin",
-                onClick: () => dispatch(setLoginModal(true)),
+                onClick: () => {window.location.href = "/bff/login?returnUrl=/"},
               },
             ],
         },
