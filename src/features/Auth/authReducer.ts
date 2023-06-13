@@ -76,52 +76,10 @@ export type RegisterErrorsResponse = {
   };
 };
 
-//TODO: figure out types, figure out how to create request obj
-export const getToken = createAsyncThunk<
-  TokenResponse,
-  PasswordCredentialsRequest
->("loginPw", async (credentials: PasswordCredentialsRequest, thunkApi) => {
-  const { username, password } = credentials;
-  const payload: UrlEncodedOptions = {
-    client_Id: "local-dev",
-    grant_type: "password",
-    username: username,
-    password: password,
-  };
-  const [error, response] = await api.postUrlEncoded("/connect/token", payload);
-  if (error) {
-    return thunkApi.rejectWithValue(error);
-  }
-  return response;
-});
-
 export const register = createAsyncThunk<TokenResponse, RegisterRequest>(
   "register",
   async (registration: RegisterRequest, thunkApi) => {
     const [error, response] = await api.post("/api/auth", registration);
-    if (error) {
-      return thunkApi.rejectWithValue(error);
-    }
-    return response;
-  }
-);
-
-
-export const signInGoogle = createAsyncThunk(
-  "signInGoogle",
-  async (_, thunkApi) => {
-    const [error, response] = await api.get("/api/auth/externalLogin");
-    if (error) {
-      return thunkApi.rejectWithValue(error);
-    }
-    return response;
-  }
-);
-
-export const externalLoginCallback = createAsyncThunk<TokenResponse,void>(
-  "externalLoginCallback",
-  async (_,thunkApi) => {
-    const [error, response] = await api.get("/api/auth/externalLoginCallback");
     if (error) {
       return thunkApi.rejectWithValue(error);
     }
@@ -145,83 +103,6 @@ export const sendConfirmMail = createAsyncThunk<
   return response;
 });
 
-export const registerAndLogin =
-  (
-    registration: RegisterRequest
-  ): ThunkAction<Promise<RegisterErrorsResponse>, RootState, unknown, any> =>
-  (dispatch) => {
-    return dispatch(register(registration)).then((result) => {
-      console.log(result);
-      if (result.type == "register/rejected") {
-        let payload = result.payload as RegisterErrorsResponse;
-        if (
-          (result.payload as { errors: { PhoneNumber: string[] | undefined } })
-            .errors.PhoneNumber
-        ) {
-          payload = {
-            errors: {
-              phoneNumber: (
-                result.payload as {
-                  errors: { PhoneNumber: string[] | undefined };
-                }
-              ).errors.PhoneNumber,
-            },
-          };
-        }
-        return payload;
-      }
-      const credentials: PasswordCredentialsRequest = {
-        password: registration.password,
-        username: registration.username,
-      };
-      dispatch(getToken(credentials));
-      return { errors: {} };
-    });
-  };
-
-export const loginAndGetUser =
-  (
-    credentials: PasswordCredentialsRequest
-  ): ThunkAction<Promise<ErrorResponse>, RootState, unknown, any> =>
-  async (dispatch, getState) => {
-    try {
-      const result = await dispatch(getToken(credentials));
-      if (result.type === "loginPw/rejected") {
-        return { error: "Incorrect password or username." };
-      }
-      dispatch(parseToken());
-      if (getState().authService.role === "Customer") {
-        const finalResult = await dispatch(getUser());
-        if (finalResult.type === "userRequest/rejected") {
-          return { error: "Incorrect password or username." };
-        }
-      }
-      return { error: undefined };
-    } catch (error) {
-      return { error: "An error occurred." };
-    }
-  };
-
-  export const externalLoginCallbackAndParseToken =
-  (): ThunkAction<Promise<ErrorResponse>, RootState, unknown, any> =>
-  async (dispatch, getState) => {
-    try {
-      const result = await dispatch(externalLoginCallback());
-      if (result.type === "externalLoginCallback/rejected") {
-        return { error: "Incorrect password or username." };
-      }
-      dispatch(parseToken());
-      if (getState().authService.role === "Customer") {
-        const finalResult = await dispatch(getUser());
-        if (finalResult.type === "userRequest/rejected") {
-          return { error: "Incorrect password or username." };
-        }
-      }
-      return { error: undefined };
-    } catch (error) {
-      return { error: "An error occurred." };
-    }
-  };
 
 const authSLice = createSlice({
   initialState,
@@ -251,33 +132,6 @@ const authSLice = createSlice({
     },
   },
   extraReducers(builder) {
-    builder.addCase(getToken.pending, (state) => {
-      state.loading.getToken = true;
-    });
-    builder.addCase(getToken.fulfilled, (state, { payload }) => {
-      state.loading.getToken = false;
-      if (payload) {
-        state.token = payload.token_type + " " + payload.access_token;
-      }
-    });
-    builder.addCase(getToken.rejected, (state, action) => {
-      state.loading.getToken = false;
-    });
-
-    builder.addCase(externalLoginCallback.pending, (state) => {
-      state.loading.externalLogin = true;
-    });
-    builder.addCase(externalLoginCallback.fulfilled, (state, { payload }) => {
-      state.loading.getToken = false;
-      console.log(payload);
-      if (payload) {
-        state.token = payload.token_type + " " + payload.access_token;
-      }
-    });
-    builder.addCase(externalLoginCallback.rejected, (state, action) => {
-      state.loading.externalLogin = false;
-    });
-
     builder.addCase(register.pending, (state) => {
       state.loading.register = true;
     });
