@@ -6,7 +6,7 @@ import GenericForm, {
 import authReducer, {
   RegisterErrorsResponse,
   RegisterRequest,
-  registerAndLogin,
+  registerCall,
   setLoginModal,
   setRegisterOrLogin,
 } from "../authReducer";
@@ -90,7 +90,7 @@ const RegisterForm: React.FC = () => {
   const registerCallback = async (fields: {}) => {
     const res = await (
       dispatch as ThunkDispatch<RootState, unknown, AnyAction>
-    )(registerAndLogin(fields as RegisterRequest));
+    )(registerCall(fields as RegisterRequest));
     if (res.errors) {
       const updateFields: IFormField[] = registerForm.fields.map((val) => {
         return { ...val, errors: res.errors[val.fieldName as keyof typeof res.errors] || []};

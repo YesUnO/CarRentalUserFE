@@ -103,6 +103,33 @@ export const sendConfirmMail = createAsyncThunk<
   return response;
 });
 
+export const registerCall =
+  (
+    registration: RegisterRequest
+  ): ThunkAction<Promise<RegisterErrorsResponse>, RootState, unknown, any> =>
+  (dispatch) => {
+    return dispatch(register(registration)).then((result) => {
+      if (result.type == "register/rejected") {
+        let payload = result.payload as RegisterErrorsResponse;
+        if (
+          (result.payload as { errors: { PhoneNumber: string[] | undefined } })
+            .errors.PhoneNumber
+        ) {
+          payload = {
+            errors: {
+              phoneNumber: (
+                result.payload as {
+                  errors: { PhoneNumber: string[] | undefined };
+                }
+              ).errors.PhoneNumber,
+            },
+          };
+        }
+        return payload;
+      }
+      return { errors: {} };
+    });
+  };
 
 const authSLice = createSlice({
   initialState,
