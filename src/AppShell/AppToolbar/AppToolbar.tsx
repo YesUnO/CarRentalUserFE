@@ -11,7 +11,7 @@ const AppToolbar: React.FC = () => {
   //TODO: authenticated?
   const isAuthenticated = useSelector((state: RootState) => state.authService != null);
   const activeTab = useSelector((state: RootState) => state.navigationService.activeTab);
-  const role = useSelector((state: RootState) => state.authService.role);
+  const role = useSelector((state: RootState) => state.authService.claims.role);
 
   const navigate = useNavigate();
   const location = useLocation();

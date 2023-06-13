@@ -5,11 +5,10 @@ import { getCars, pickCar } from "../carReducer";
 import OrderPicker from "../../Order/components/orderPicker";
 import CarThumb from "../components/CarThumb/CarThumb";
 import "./pickCarPage.css"
-import { api } from "../../../infrastructure/utils/System";
 
 const PickCarPage: React.FC = () => {
     const dispatch = useDispatch();
-    const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
+    const isAuthenticated = useSelector((state: RootState) => state.authService != null);
     const cars = useSelector((state: RootState) => state.carsService.cars);
 
     useEffect(() => {
@@ -21,15 +20,9 @@ const PickCarPage: React.FC = () => {
         dispatch(pickCar(index));
     };
 
-    const handleTest = async () => {
-        console.log("yo");
-        const yo = await api.get("/api/order/test");
-    }
-
     return (
         <>
             <h3>Cars</h3>
-            <button onClick={handleTest}>Test</button>
             <OrderPicker />
             <div className="grid-container">
                 {cars.map((item, index) => (

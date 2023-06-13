@@ -72,8 +72,13 @@ export const api = {
     respond(endpoint, {
       method: "DELETE",
     }),
+  bffGet: (endpoint:string) =>
+    respond(endpoint, {
+      method: "GET",
+      headers: { "X-CSRF": "1" }, 
+    })
 };
 
 export const timeout = (delay: number) => {
-  return new Promise(res => setTimeout(res,delay));
+  return new Promise(res => setTimeout(res, delay));
 }

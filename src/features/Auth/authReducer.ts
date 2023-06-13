@@ -10,7 +10,11 @@ import {
 import { RootState } from "../../infrastructure/store";
 
 interface IAuthState {
-  role: RoleClaim;
+  claims: {
+    role: RoleClaim;
+    email: string;
+    name: string;
+  }
   loading: {
     getUser: boolean;
     register: boolean;
@@ -23,7 +27,11 @@ interface IAuthState {
 type RoleClaim = "Admin" | "Customer" | undefined;
 
 const initialState: IAuthState = {
-  role: undefined,
+  claims: {
+    role: undefined,
+    email: "",
+    name: ""
+  },
   loading: {
     getUser: false,
     register: false,
@@ -66,6 +74,17 @@ export const register = createAsyncThunk<TokenResponse, RegisterRequest>(
   "register",
   async (registration: RegisterRequest, thunkApi) => {
     const [error, response] = await api.post("/api/auth", registration);
+    if (error) {
+      return thunkApi.rejectWithValue(error);
+    }
+    return response;
+  }
+);
+
+export const getUserClaims = createAsyncThunk<TokenResponse, RegisterRequest>(
+  "getUserClaims",
+  async (registration: RegisterRequest, thunkApi) => {
+    const [error, response] = await api.bffGet("bff/user");
     if (error) {
       return thunkApi.rejectWithValue(error);
     }
@@ -146,6 +165,10 @@ const authSLice = createSlice({
       state.loading.register = false;
     });
 
+    builder.addCase(sendConfirmMail.pending, (state) => {});
+    builder.addCase(sendConfirmMail.fulfilled, (state, { payload }) => {});
+    builder.addCase(sendConfirmMail.rejected, (state, action) => {});
+    
     builder.addCase(sendConfirmMail.pending, (state) => {});
     builder.addCase(sendConfirmMail.fulfilled, (state, { payload }) => {});
     builder.addCase(sendConfirmMail.rejected, (state, action) => {});
