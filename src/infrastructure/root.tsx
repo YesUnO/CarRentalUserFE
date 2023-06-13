@@ -12,13 +12,13 @@ import PostLoginPage from "../features/Auth/pages/PostLoginPage";
 
 const Root: React.FC = () => {
   const isAdmin = useSelector(
-    (state: RootState) => state.authService.role == "Admin"
+    (state: RootState) => state.authService.claims.role == "Admin"
   );
   return (
     <BrowserRouter>
       <AppShell>
         <Routes>
-          <Route path="/externalAuth" element={<PostLoginPage />} />
+          <Route path="/postLogin" element={<PostLoginPage />} />
           <Route path="/" element={<PickCarPage />} />
           <Route path="/orderDetail" element={<OrderDetailPage />} />
           <Route path="/user" element={<UserPage />} />

@@ -9,7 +9,7 @@ import LoginOrRegisterModal from "../../features/Auth/components/loginOrRegister
 
 const AppToolbar: React.FC = () => {
   //TODO: authenticated?
-  const isAuthenticated = useSelector((state: RootState) => state.authService != null);
+  const isAuthenticated = useSelector((state: RootState) => state.authService.isAuthenticated);
   const activeTab = useSelector((state: RootState) => state.navigationService.activeTab);
   const role = useSelector((state: RootState) => state.authService.claims.role);
 
@@ -19,14 +19,14 @@ const AppToolbar: React.FC = () => {
 
   const currentRoute = location.pathname;
 
-  useEffect(() => {
-    if (role == "Admin") {
-      navigate("/admin/user");
-    }
-    else if (role == "Customer") {
-      navigate("/");
-    }
-  }, [role]);
+  // useEffect(() => {
+  //   if (role == "Admin") {
+  //     navigate("/admin/user");
+  //   }
+  //   else if (role == "Customer") {
+  //     navigate("/");
+  //   }
+  // }, [role]);
 
   useEffect(() => {
     let currentTab = "";
@@ -119,7 +119,7 @@ const AppToolbar: React.FC = () => {
               {
                 label: "Sign in",
                 key: "signin",
-                onClick: () => {window.location.href = "/bff/login?returnUrl=/"},
+                onClick: () => {window.location.href = "/bff/login?returnUrl=/postLogin"},
               },
             ],
         },

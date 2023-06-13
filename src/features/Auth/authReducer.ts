@@ -4,9 +4,7 @@ import {
   ThunkAction,
   PayloadAction,
 } from "@reduxjs/toolkit";
-import {
-  api,
-} from "../../infrastructure/utils/System";
+import { api } from "../../infrastructure/utils/System";
 import { RootState } from "../../infrastructure/store";
 
 interface IAuthState {
@@ -14,7 +12,7 @@ interface IAuthState {
     role: RoleClaim;
     email: string;
     name: string;
-  }
+  };
   loading: {
     getUser: boolean;
     register: boolean;
@@ -22,6 +20,8 @@ interface IAuthState {
   loginModalIsOpened: boolean;
   registerOrLogin: boolean;
   loginModalMessage: string;
+  logoutUrl: string;
+  isAuthenticated: boolean;
 }
 
 type RoleClaim = "Admin" | "Customer" | undefined;
@@ -30,7 +30,7 @@ const initialState: IAuthState = {
   claims: {
     role: undefined,
     email: "",
-    name: ""
+    name: "",
   },
   loading: {
     getUser: false,
@@ -39,6 +39,8 @@ const initialState: IAuthState = {
   loginModalIsOpened: false,
   registerOrLogin: false,
   loginModalMessage: "",
+  logoutUrl: "",
+  isAuthenticated: false,
 };
 
 interface TokenResponse {
@@ -81,13 +83,15 @@ export const register = createAsyncThunk<TokenResponse, RegisterRequest>(
   }
 );
 
-export const getUserClaims = createAsyncThunk<TokenResponse, RegisterRequest>(
+export const getUserClaims = createAsyncThunk(
   "getUserClaims",
-  async (registration: RegisterRequest, thunkApi) => {
-    const [error, response] = await api.bffGet("bff/user");
+  async (_, thunkApi) => {
+    const [error, response] = await api.bffGet("/bff/user");
     if (error) {
+      console.log(error);
       return thunkApi.rejectWithValue(error);
     }
+    console.log("yo");
     return response;
   }
 );
@@ -97,9 +101,7 @@ export const sendConfirmMail = createAsyncThunk<
   void,
   { state: RootState }
 >("sendConfirmMail", async (_, thunkApi) => {
-  const [error, response] = await api.get(
-    `/api/auth/ResendConfirmationEmail`,
-  );
+  const [error, response] = await api.get(`/api/auth/ResendConfirmationEmail`);
   if (error) {
     return thunkApi.rejectWithValue(error);
   }
@@ -168,17 +170,42 @@ const authSLice = createSlice({
     builder.addCase(sendConfirmMail.pending, (state) => {});
     builder.addCase(sendConfirmMail.fulfilled, (state, { payload }) => {});
     builder.addCase(sendConfirmMail.rejected, (state, action) => {});
-    
-    builder.addCase(sendConfirmMail.pending, (state) => {});
-    builder.addCase(sendConfirmMail.fulfilled, (state, { payload }) => {});
-    builder.addCase(sendConfirmMail.rejected, (state, action) => {});
+
+    builder.addCase(getUserClaims.pending, (state) => {});
+    builder.addCase(
+      getUserClaims.fulfilled,
+      (state, payload: PayloadAction<any>) => {
+        console.log(payload);
+        const data = payload.payload;
+        const nameClaim = data.find((claim: any) => claim.type == "name");
+        const name = nameClaim && nameClaim.value;
+
+        const roleClaim = data.find((claim: any) => claim.type == "role");
+        const role = roleClaim && roleClaim.value;
+
+        const emailClaim = data.find((claim: any) => claim.type == "email");
+        const email = emailClaim && emailClaim.value;
+
+        const logoutUrlClaim = data.find(
+          (claim: any) => claim.type == "bff:logout_url"
+        );
+        const logoutUrl = logoutUrlClaim && logoutUrlClaim.value;
+
+        state.claims = {
+          role: role as RoleClaim,
+          name: name as string,
+          email: email as string,
+        };
+
+        state.logoutUrl = logoutUrl as string;
+
+        state.isAuthenticated = !!logoutUrl && !!role && !!email;
+      }
+    );
+    builder.addCase(getUserClaims.rejected, (state, action) => {});
   },
 });
 
 export default authSLice.reducer;
-export const {
-  setRegisterOrLogin,
-  logout,
-  setLoginModal,
-  setLoginModalMsg,
-} = authSLice.actions;
+export const { setRegisterOrLogin, logout, setLoginModal, setLoginModalMsg } =
+  authSLice.actions;
