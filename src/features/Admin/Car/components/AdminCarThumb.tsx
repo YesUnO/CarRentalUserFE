@@ -2,7 +2,6 @@ import { useDispatch, useSelector } from "react-redux";
 import classNames from "classnames";
 import { useState } from "react";
 import { RootState } from "../../../../infrastructure/store";
-import Title from "antd/es/typography/Title";
 import { Card, Image } from "antd";
 import Meta from "antd/es/card/Meta";
 import { Car, getCars } from "../../../Car/carReducer";
@@ -16,7 +15,7 @@ export type CarComponentProps = {
 const AdminCarThumb: React.FC<CarComponentProps> = ({ props: car }) => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(
-    (state: RootState) => state.authService.token != null
+    (state: RootState) => state.authService
   );
 
   const renderDeleteOrUploadImgEl = () => {

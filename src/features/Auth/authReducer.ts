@@ -6,37 +6,27 @@ import {
 } from "@reduxjs/toolkit";
 import {
   api,
-  ErrorResponse,
-  UrlEncodedOptions,
 } from "../../infrastructure/utils/System";
-import { getCustomer } from "../User/userReducer";
 import { RootState } from "../../infrastructure/store";
-import JWT from "jwt-decode";
 
 interface IAuthState {
-  role: TokenRoleClaim;
+  role: RoleClaim;
   loading: {
     getUser: boolean;
     register: boolean;
-    getToken: boolean;
   };
   loginModalIsOpened: boolean;
   registerOrLogin: boolean;
   loginModalMessage: string;
 }
 
-type TokenRoleClaim = "Admin" | "Customer" | undefined;
-
-type Token = {
-  role: TokenRoleClaim;
-};
+type RoleClaim = "Admin" | "Customer" | undefined;
 
 const initialState: IAuthState = {
   role: undefined,
   loading: {
     getUser: false,
     register: false,
-    getToken: false,
   },
   loginModalIsOpened: false,
   registerOrLogin: false,

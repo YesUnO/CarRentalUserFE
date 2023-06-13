@@ -42,8 +42,7 @@ export const getCustomerList = createAsyncThunk<
   void,
   { state: RootState }
 >("getCustomerList", async (_, thunkApi) => {
-  const token = thunkApi.getState().authService.token;
-  const [error, response] = await api.get("/api/user/list", token);
+  const [error, response] = await api.get("/api/user/list");
   if (error) {
     return thunkApi.rejectWithValue(error);
   }
@@ -53,8 +52,7 @@ export const getCustomerList = createAsyncThunk<
 export const deleteUser = createAsyncThunk<void, string, { state: RootState }>(
   "deleteUser",
   async (email: string, thunkApi) => {
-    const token = thunkApi.getState().authService.token;
-    const [error, response] = await api.delete(`/api/user/?email=${email}`, token);
+    const [error, response] = await api.delete(`/api/user/?email=${email}`);
     if (error) {
       return thunkApi.rejectWithValue(error);
     }
@@ -65,8 +63,7 @@ export const deleteUser = createAsyncThunk<void, string, { state: RootState }>(
 export const deleteCarPic = createAsyncThunk<void, number, { state: RootState }>(
   "deleteCarPic",
   async (carId: number, thunkApi) => {
-    const token = thunkApi.getState().authService.token;
-    const [error, response] = await api.delete(`/api/car/${carId}`, token);
+    const [error, response] = await api.delete(`/api/car/${carId}`);
     if (error) {
       return thunkApi.rejectWithValue(error);
     }
@@ -79,11 +76,9 @@ export const verifyDocument = createAsyncThunk<
   VerifyDocumentRequest,
   { state: RootState }
 >("verifyDocument", async (request: VerifyDocumentRequest, thunkApi) => {
-  const token = thunkApi.getState().authService.token;
   const [error, response] = await api.post(
     "/api/user/VerifyDocument",
     request,
-    token
   );
   if (error) {
     return thunkApi.rejectWithValue(error);
@@ -96,11 +91,9 @@ export const approveCustomer = createAsyncThunk<
   string,
   { state: RootState }
 >("approveCustomer", async (email: string, thunkApi) => {
-  const token = thunkApi.getState().authService.token;
   const [error, response] = await api.post(
     "/api/user/Approve",
     { email },
-    token
   );
   if (error) {
     return thunkApi.rejectWithValue(error);

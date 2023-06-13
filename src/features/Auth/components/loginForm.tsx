@@ -3,12 +3,11 @@ import GenericForm, {
   IFormField,
   IGenericForm,
 } from "../../../components/GenericForm";
-import { PasswordCredentialsRequest, loginAndGetUser, setLoginModal, setRegisterOrLogin, signInGoogle } from "../authReducer";
+import { setLoginModal, setRegisterOrLogin } from "../authReducer";
 import { Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { RootState } from "../../../infrastructure/store";
 import { AnyAction, AsyncThunkAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { GoogleLogin } from "@react-oauth/google";
 
 const LoginForm: React.FC = () => {
   useEffect(() => {
@@ -39,17 +38,16 @@ const LoginForm: React.FC = () => {
   //TODO: dunno
   const dispatch = useDispatch();
 
-  const loginBtnLoading = useSelector((state: RootState) => state.authService.loading.getToken || state.authService.loading.getUser);
+  const loginBtnLoading = useSelector((state: RootState) => state.authService.loading.getUser);
 
   const switchToRegister = () => {
     dispatch(setRegisterOrLogin(true));
   }
 
   const loginCallback = async (fields: {}) => {
-    const res = await (dispatch as ThunkDispatch<RootState, unknown, AnyAction>)(loginAndGetUser(fields as PasswordCredentialsRequest));
-    if (res.error) {
+    if (true) {
       const updateFields: IFormField[] = loginForm.fields.map((value) => {
-        return value.fieldName == "password" ? { ...value, errors: [res.error as string] } : value;
+        return value.fieldName == "password" ? { ...value, errors: [""] } : value;
       })
       setFields(updateFields);
       message.error("Couldnt log in.");
@@ -59,11 +57,6 @@ const LoginForm: React.FC = () => {
       message.success("Succesfully logged in.");
     }
   };
-
-  const googleLogin = async (credentials: string) => {
-    //@ts-expect-error
-    (dispatch)(signInGoogle(credentials));
-  }
 
   const loginForm: IGenericForm = {
     fields,
@@ -78,14 +71,6 @@ const apiUrl = process.env.API_URL;
   return (
     <>
       <GenericForm props={loginForm} />
-      {/* <GoogleLogin
-        onSuccess={credentialResponse => {
-          googleLoginCallback(credentialResponse.credential as string);
-        }}
-        onError={() => {
-          console.log('Login Failed');
-        }}
-      /> */}
       <form method='GET' action={`${apiUrl}/api/auth/externalLogin`} >
         <button
           type="submit"

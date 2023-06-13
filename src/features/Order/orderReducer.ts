@@ -48,11 +48,9 @@ export type NewOrder = {
 export const payOrder = createAsyncThunk<any, number, { state: RootState }>(
   "payOrder",
   async (orderId: number, thunkApi) => {
-    const token = thunkApi.getState().authService.token;
     const [error, response] = await api.post(
       `/api/order/${orderId}`,
       null,
-      token
     );
     if (error) {
       return thunkApi.rejectWithValue(error);
@@ -64,10 +62,8 @@ export const payOrder = createAsyncThunk<any, number, { state: RootState }>(
 export const getOrders = createAsyncThunk<Order[], void, { state: RootState }>(
   "getOrders",
   async (_, thunkApi) => {
-    const token = thunkApi.getState().authService.token;
     const [error, response] = await api.get(
       `/api/order`,
-      token
     );
     if (error) {
       return thunkApi.rejectWithValue(error);
@@ -81,8 +77,7 @@ export const createOrder = createAsyncThunk<
   CreateOrderRequest,
   { state: RootState }
 >("createOrder", async (order: CreateOrderRequest, thunkApi) => {
-  const token = thunkApi.getState().authService.token;
-  const [error, response] = await api.post(`/api/order`, order, token);
+  const [error, response] = await api.post(`/api/order`, order);
   if (error) {
     return thunkApi.rejectWithValue(error);
   }

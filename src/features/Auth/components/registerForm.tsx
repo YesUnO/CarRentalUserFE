@@ -85,7 +85,7 @@ const RegisterForm: React.FC = () => {
 
   const [fields, setFields] = useState<IFormField[]>(initialFields);
 
-  const registerBtnLoading = useSelector((state:RootState)=> state.authService.loading.register || state.authService.loading.getToken)
+  const registerBtnLoading = useSelector((state:RootState)=> state.authService.loading.register)
 
   const registerCallback = async (fields: {}) => {
     const res = await (

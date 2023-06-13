@@ -29,8 +29,7 @@ export const createCar = createAsyncThunk<
   CreateCarRequest,
   { state: RootState }
 >("createCar", async (createCarRequest: CreateCarRequest, thunkApi) => {
-  const token = thunkApi.getState().authService.token;
-  const [error, response] = await api.post(`/api/car`, createCarRequest, token);
+  const [error, response] = await api.post(`/api/car`, createCarRequest);
   if (error) {
     return thunkApi.rejectWithValue(error);
   }
