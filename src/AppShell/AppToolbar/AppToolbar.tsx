@@ -5,7 +5,6 @@ import { logout } from "../../features/Auth/authReducer";
 import { Menu, MenuProps } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setActiveTab } from "../../infrastructure/navigation/navigationReducer";
-import LoginOrRegisterModal from "../../features/Auth/components/loginOrRegisterModal";
 
 const AppToolbar: React.FC = () => {
   const isAuthenticated = useSelector((state: RootState) => state.authService.isAuthenticated);
@@ -138,7 +137,6 @@ const AppToolbar: React.FC = () => {
         items={customerItems}
         selectedKeys={[activeTab]}
       />
-      <LoginOrRegisterModal/>
     </>
   );
 };

@@ -8,7 +8,7 @@ const EmailConfirmationPage: React.FC = () => {
 
 
     const handleLogin = () => {
-        navigate("/user")
+        navigate("/user");
     };
 
     return(
