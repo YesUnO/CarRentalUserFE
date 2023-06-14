@@ -5,8 +5,8 @@ import { sendConfirmMail } from "../../Auth/authReducer";
 
 const ConfirmMail: React.FC = () => {
     const dispatch = useDispatch();
-    const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
-    const emailConfirmed = useSelector((state: RootState) => state.userService.user.hasEmailVerified);
+    const isAuthenticated = useSelector((state: RootState) => state.authService.isAuthenticated);
+    const emailConfirmed = useSelector((state: RootState) => state.authService.claims.emailVerified);
 
     const handleResend = () => {
 

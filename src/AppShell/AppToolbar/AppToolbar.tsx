@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../infrastructure/store";
-import { logout } from "../../features/Auth/authReducer";
+import { getUserClaims, logout } from "../../features/Auth/authReducer";
 import { Menu, MenuProps } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setActiveTab } from "../../infrastructure/navigation/navigationReducer";
+import { useCookies } from "react-cookie";
 
 const AppToolbar: React.FC = () => {
   const isAuthenticated = useSelector((state: RootState) => state.authService.isAuthenticated);
@@ -16,16 +17,24 @@ const AppToolbar: React.FC = () => {
   const location = useLocation();
   const dispatch = useDispatch();
 
+  const [identityCookie, setCookie] = useCookies(['idsrv.session']);
+
   const currentRoute = location.pathname;
 
-  // useEffect(() => {
-  //   if (role == "Admin") {
-  //     navigate("/admin/user");
-  //   }
-  //   else if (role == "Customer") {
-  //     navigate("/");
-  //   }
-  // }, [role]);
+  useEffect(()=>{
+    if (!!identityCookie && !isAuthenticated) {
+    // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
+    dispatch(getUserClaims());
+    }
+  },[identityCookie])
+  useEffect(() => {
+    if (role == "Admin") {
+      navigate("/admin/user");
+    }
+    else if (role == "Customer") {
+      navigate("/");
+    }
+  }, [role]);
 
   useEffect(() => {
     let currentTab = "";

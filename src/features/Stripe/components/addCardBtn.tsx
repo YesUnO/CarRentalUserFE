@@ -5,7 +5,7 @@ import { clearOnLeavingPage, createCheckoutSession } from "../stripeReducer";
 
 const AddCardBtn: React.FC = () => {
     const dispatch = useDispatch();
-    const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
+    const isAuthenticated = useSelector((state: RootState) => state.authService.isAuthenticated);
     const checkoutSessionUrl = useSelector((state: RootState) => state.stripeService.checkoutSessionUrl);
 
   useEffect(() => {

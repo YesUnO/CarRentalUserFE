@@ -173,7 +173,7 @@ const authSLice = createSlice({
           role: role,
           name: name,
           email: email,
-          emailVerified: emailVerified,
+          emailVerified: emailVerified == "True",
         };
 
         state.logoutUrl = logoutUrl as string;

@@ -3,7 +3,7 @@ import { RootState } from "../infrastructure/store";
 
 const newComp: React.FC = () => {
     const dispatch = useDispatch();
-    const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
+    const isAuthenticated = useSelector((state: RootState) => state.authService.isAuthenticated);
 
     const yo = false;
 
