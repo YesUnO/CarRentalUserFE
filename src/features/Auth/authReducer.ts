@@ -11,6 +11,7 @@ interface IAuthState {
   claims: {
     role: RoleClaim;
     email: string;
+    emailVerified: boolean;
     name: string;
   };
   loading: {
@@ -29,6 +30,7 @@ type RoleClaim = "Admin" | "Customer" | undefined;
 const initialState: IAuthState = {
   claims: {
     role: undefined,
+    emailVerified: false,
     email: "",
     name: "",
   },
@@ -36,19 +38,12 @@ const initialState: IAuthState = {
     getUser: false,
     register: false,
   },
-  loginModalIsOpened: false,
-  registerOrLogin: false,
+  loginModalIsOpened: true,
+  registerOrLogin: true,
   loginModalMessage: "",
   logoutUrl: "",
   isAuthenticated: false,
 };
-
-interface TokenResponse {
-  access_token: string;
-  expires_in: number;
-  scope: string;
-  token_type: string;
-}
 
 export type PasswordCredentialsRequest = {
   username: string;
@@ -72,7 +67,7 @@ export type RegisterErrorsResponse = {
   };
 };
 
-export const register = createAsyncThunk<TokenResponse, RegisterRequest>(
+export const register = createAsyncThunk<void, RegisterRequest>(
   "register",
   async (registration: RegisterRequest, thunkApi) => {
     const [error, response] = await api.post("/api/auth", registration);
@@ -86,12 +81,10 @@ export const register = createAsyncThunk<TokenResponse, RegisterRequest>(
 export const getUserClaims = createAsyncThunk(
   "getUserClaims",
   async (_, thunkApi) => {
-    const [error, response] = await api.bffGet("/bff/user");
+    const [error, response] = await api.get("/bff/user");
     if (error) {
-      console.log(error);
       return thunkApi.rejectWithValue(error);
     }
-    console.log("yo");
     return response;
   }
 );
@@ -172,10 +165,7 @@ const authSLice = createSlice({
     builder.addCase(sendConfirmMail.rejected, (state, action) => {});
 
     builder.addCase(getUserClaims.pending, (state) => {});
-    builder.addCase(
-      getUserClaims.fulfilled,
-      (state, payload: PayloadAction<any>) => {
-        console.log(payload);
+    builder.addCase(getUserClaims.fulfilled, (state, payload: PayloadAction<any>) => {
         const data = payload.payload;
         const nameClaim = data.find((claim: any) => claim.type == "name");
         const name = nameClaim && nameClaim.value;
@@ -186,15 +176,17 @@ const authSLice = createSlice({
         const emailClaim = data.find((claim: any) => claim.type == "email");
         const email = emailClaim && emailClaim.value;
 
-        const logoutUrlClaim = data.find(
-          (claim: any) => claim.type == "bff:logout_url"
-        );
+        const emailVerifiedClaim = data.find((claim: any) => claim.type == "email_verified");
+        const emailVerified = emailVerifiedClaim && emailVerifiedClaim.value;
+
+        const logoutUrlClaim = data.find((claim: any) => claim.type == "bff:logout_url");
         const logoutUrl = logoutUrlClaim && logoutUrlClaim.value;
 
         state.claims = {
-          role: role as RoleClaim,
-          name: name as string,
-          email: email as string,
+          role: role,
+          name: name,
+          email: email,
+          emailVerified: emailVerified,
         };
 
         state.logoutUrl = logoutUrl as string;

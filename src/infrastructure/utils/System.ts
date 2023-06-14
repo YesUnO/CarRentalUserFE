@@ -1,4 +1,3 @@
-
 type Options = Record<
   string,
   string | number | boolean | Object | any[]
@@ -12,11 +11,10 @@ export type ErrorsResponse = {
 };
 
 export type FieldErrorsResponse = {
-  errors: {field: string; description: string}[] | undefined;
-}
+  errors: { field: string; description: string }[] | undefined;
+};
 
 const apiUrl = process.env.API_URL;
-
 
 async function respond(endpoint: string, options: RequestInit, token?: string) {
   if (!!token) {
@@ -40,45 +38,36 @@ async function respond(endpoint: string, options: RequestInit, token?: string) {
 
 export const api = {
   baseURL: apiUrl,
-  get: (endpoint: string) => respond(endpoint, {}),
+  get: (endpoint: string) =>
+    respond(endpoint, {
+      method: "GET",
+      headers: { "X-CSRF": "1" },
+    }),
   post: (endpoint: string, options?: Options) =>
-    respond(
-      endpoint,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: options && JSON.stringify(options),
-      },
-    ),
+    respond(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-CSRF": "1" },
+      body: options && JSON.stringify(options),
+    }),
   put: (endpoint: string, options: Options) =>
-    respond(
-      endpoint,
-      {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(options),
-      },
-    ),
+    respond(endpoint, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", "X-CSRF": "1" },
+      body: JSON.stringify(options),
+    }),
   patch: (endpoint: string, options: Options) =>
-    respond(
-      endpoint,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(options),
-      },
-    ),
+    respond(endpoint, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json", "X-CSRF": "1" },
+      body: JSON.stringify(options),
+    }),
   delete: (endpoint: string) =>
     respond(endpoint, {
       method: "DELETE",
+      headers: { "X-CSRF": "1" },
     }),
-  bffGet: (endpoint:string) =>
-    respond(endpoint, {
-      method: "GET",
-      headers: { "X-CSRF": "1" }, 
-    })
 };
 
 export const timeout = (delay: number) => {
-  return new Promise(res => setTimeout(res, delay));
-}
+  return new Promise((res) => setTimeout(res, delay));
+};
