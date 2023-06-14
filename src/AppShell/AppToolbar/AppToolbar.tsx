@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../infrastructure/store";
-import { logout, setLoginModal } from "../../features/Auth/authReducer";
+import { logout } from "../../features/Auth/authReducer";
 import { Menu, MenuProps } from "antd";
 import { useLocation, useNavigate } from "react-router-dom";
 import { setActiveTab } from "../../infrastructure/navigation/navigationReducer";
@@ -119,7 +119,7 @@ const AppToolbar: React.FC = () => {
               {
                 label: "Sign in",
                 key: "signin",
-                onClick: () => {window.location.href = "/bff/login?returnUrl=/postLogin"},
+                onClick: () => navigate("/user"),
               },
             ],
         },

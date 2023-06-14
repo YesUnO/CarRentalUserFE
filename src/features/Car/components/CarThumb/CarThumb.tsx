@@ -15,7 +15,7 @@ export type CarComponentProps = {
 const CarThumb: React.FC<CarComponentProps> = ({ props: car }) => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(
-    (state: RootState) => state.authService.token != null
+    (state: RootState) => state.authService.isAuthenticated
   );
 
   const newOrder = useSelector(

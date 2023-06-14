@@ -7,8 +7,6 @@ import authReducer, {
   RegisterErrorsResponse,
   RegisterRequest,
   registerCall,
-  setLoginModal,
-  setRegisterOrLogin,
 } from "../authReducer";
 import { Button, message } from "antd";
 import { RootState } from "../../../infrastructure/store";
@@ -21,9 +19,6 @@ const RegisterForm: React.FC = () => {
   }, []);
   const dispatch = useDispatch();
 
-  const loginModalIsOpened = useSelector(
-    (state: RootState) => state.authService.loginModalIsOpened
-  );
 
   const initialFields: IFormField[] = [
     {
@@ -99,16 +94,12 @@ const RegisterForm: React.FC = () => {
       message.error("Couldnt creeate an account.");
     }
     else {
-      dispatch(setLoginModal(false));
       message.success("Succesfully created an account.");
     }
   };
 
   const switchToLogin = () => {
-    dispatch(setRegisterOrLogin(false));
-    if (!loginModalIsOpened) {
-      dispatch(setLoginModal(true));
-    }
+    window.location.href = "/bff/login?returnUrl=/"
   };
 
   const registerForm: IGenericForm = {

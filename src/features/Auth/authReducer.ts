@@ -18,8 +18,6 @@ interface IAuthState {
     getUser: boolean;
     register: boolean;
   };
-  loginModalIsOpened: boolean;
-  registerOrLogin: boolean;
   loginModalMessage: string;
   logoutUrl: string;
   isAuthenticated: boolean;
@@ -38,8 +36,6 @@ const initialState: IAuthState = {
     getUser: false,
     register: false,
   },
-  loginModalIsOpened: true,
-  registerOrLogin: true,
   loginModalMessage: "",
   logoutUrl: "",
   isAuthenticated: false,
@@ -136,17 +132,8 @@ const authSLice = createSlice({
     logout() {
       return initialState;
     },
-    setLoginModal(state, action: PayloadAction<boolean>) {
-      if (!action.payload) {
-        state.loginModalMessage = "";
-      }
-      state.loginModalIsOpened = action.payload;
-    },
     setLoginModalMsg(state, payload: PayloadAction<string>) {
       state.loginModalMessage = payload.payload;
-    },
-    setRegisterOrLogin(state, payload: PayloadAction<boolean>) {
-      state.registerOrLogin = payload.payload;
     },
   },
   extraReducers(builder) {
@@ -199,5 +186,5 @@ const authSLice = createSlice({
 });
 
 export default authSLice.reducer;
-export const { setRegisterOrLogin, logout, setLoginModal, setLoginModalMsg } =
+export const { logout, setLoginModalMsg } =
   authSLice.actions;

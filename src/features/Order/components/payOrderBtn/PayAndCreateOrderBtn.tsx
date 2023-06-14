@@ -3,15 +3,14 @@ import { RootState } from "../../../../infrastructure/store";
 import { CreateOrderRequest } from "../../orderReducer";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
-import { setLoginModal, setLoginModalMsg } from "../../../Auth/authReducer";
+import { setLoginModalMsg } from "../../../Auth/authReducer";
 
 const PayAndCreateOrderBtn: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const newOrder = useSelector((state: RootState) => state.ordersService.newOrder);
   const user = useSelector((state: RootState) => state.userService.user);
-  const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
-  const isOpened = useSelector((state: RootState) => state.authService.loginModalIsOpened);
+  const isAuthenticated = useSelector((state: RootState) => state.authService.isAuthenticated);
 
   const missingRegistrationSteps = !user.hasActivePaymentCard
     || !user.hasDrivingLicense
@@ -24,7 +23,7 @@ const PayAndCreateOrderBtn: React.FC = () => {
   const handleCreateOrder = () => {
     if (!isAuthenticated) {
       dispatch(setLoginModalMsg("Login or create a new account to make and order"));
-      dispatch(setLoginModal(true));
+      navigate("/user");
       return;
     }
     else if (missingRegistrationSteps) {

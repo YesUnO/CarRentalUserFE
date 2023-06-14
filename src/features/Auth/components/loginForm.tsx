@@ -3,7 +3,6 @@ import GenericForm, {
   IFormField,
   IGenericForm,
 } from "../../../components/GenericForm";
-import { setLoginModal, setRegisterOrLogin } from "../authReducer";
 import { Button, message } from "antd";
 import { useEffect, useState } from "react";
 import { RootState } from "../../../infrastructure/store";
@@ -41,7 +40,6 @@ const LoginForm: React.FC = () => {
   const loginBtnLoading = useSelector((state: RootState) => state.authService.loading.getUser);
 
   const switchToRegister = () => {
-    dispatch(setRegisterOrLogin(true));
   }
 
   const loginCallback = async (fields: {}) => {
@@ -53,7 +51,6 @@ const LoginForm: React.FC = () => {
       message.error("Couldnt log in.");
     }
     else {
-      dispatch(setLoginModal(false));
       message.success("Succesfully logged in.");
     }
   };

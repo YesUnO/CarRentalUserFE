@@ -14,7 +14,7 @@ type StepsItemStatus = "wait" | "process" | "finish" | "error" | undefined;
 const UserPage: React.FC = () => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(
-    (state: RootState) => state.authService.token != null
+    (state: RootState) => state.authService.isAuthenticated
   );
 
   const user = useSelector((state: RootState) => state.userService.user);
@@ -41,18 +41,22 @@ const UserPage: React.FC = () => {
     {
       title: "Confirm email",
       status: setStatus(1, !user.hasEmailVerified),
+      disabled: !isAuthenticated
     },
     {
       title: "Upload Id",
       status: setStatus(2, !user.hasIdCard),
+      disabled: !isAuthenticated
     },
     {
       title: "Upload driverse license",
       status: setStatus(3, !user.hasDrivingLicense),
+      disabled: !isAuthenticated
     },
     {
       title: "Save payment card",
       status: setStatus(4, !user.hasActivePaymentCard),
+      disabled: !isAuthenticated
     },
   ];
 

@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
-import { setLoginModal } from "../../Auth/authReducer";
 
 const EmailConfirmationPage: React.FC = () => {
     const dispatch = useDispatch();
@@ -9,8 +8,7 @@ const EmailConfirmationPage: React.FC = () => {
 
 
     const handleLogin = () => {
-        navigate("/")
-        dispatch(setLoginModal(true));
+        navigate("/user")
     };
 
     return(
