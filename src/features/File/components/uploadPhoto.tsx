@@ -17,7 +17,6 @@ export type UploadComponentProps = {
 
 const UploadPhoto: React.FC<UploadComponentPropsWrapper> = ({componentProps}) => {
   const dispatch = useDispatch();
-  const token = useSelector((state: RootState) => state.authService.token);
 
   const apiUrl = process.env.API_URL;
 
@@ -26,7 +25,7 @@ const UploadPhoto: React.FC<UploadComponentPropsWrapper> = ({componentProps}) =>
     action: `${apiUrl}/${componentProps.endpoint}/${componentProps.queryId}`,
     data: componentProps.additionalRequestParam,
     headers: {
-      authorization: token as string,
+      "X-CSRF": "1"
     },
     onChange(info) {
       if (info.file.status !== "uploading") {
