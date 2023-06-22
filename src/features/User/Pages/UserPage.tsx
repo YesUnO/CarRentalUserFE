@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../infrastructure/store";
 import { StepProps, Steps } from "antd";
-import RegisterPage from "../../Auth/pages/RegisterPage";
 import { useState } from "react";
 import UploadDocumentPhoto, {
   UploadDocumentProps,
@@ -34,28 +33,28 @@ const UserPage: React.FC = () => {
   };
 
   let items: StepProps[] = [
-    {
-      title: "Sign in",
-      status: setStatus(0, !isAuthenticated),
-    },
+    // {
+    //   title: "Sign in",
+    //   status: setStatus(0, !isAuthenticated),
+    // },
     {
       title: "Confirm email",
-      status: setStatus(1, !user.hasEmailVerified),
+      status: setStatus(0, !user.hasEmailVerified),
       disabled: !isAuthenticated
     },
     {
       title: "Upload Id",
-      status: setStatus(2, !user.hasIdCard),
+      status: setStatus(1, !user.hasIdCard),
       disabled: !isAuthenticated
     },
     {
       title: "Upload driverse license",
-      status: setStatus(3, !user.hasDrivingLicense),
+      status: setStatus(2, !user.hasDrivingLicense),
       disabled: !isAuthenticated
     },
     {
       title: "Save payment card",
-      status: setStatus(4, !user.hasActivePaymentCard),
+      status: setStatus(3, !user.hasActivePaymentCard),
       disabled: !isAuthenticated
     },
   ];
@@ -63,7 +62,7 @@ const UserPage: React.FC = () => {
   const uploadDriverseLicenseProps: UploadDocumentProps = {
     uploadComponentProps: {
       hasFrontPhoto: user.hasDrivingLicenseFrontImg,
-      baseRequestParam: "DriverseLicense" ,
+      baseRequestParam: "DriverseLicense",
       hasBackPhoto: user.hasDrivingLicenseBackImg,
     },
   };
@@ -71,7 +70,7 @@ const UserPage: React.FC = () => {
   const uploadIdProps: UploadDocumentProps = {
     uploadComponentProps: {
       hasFrontPhoto: user.hasIdFrontImg,
-      baseRequestParam: "IdentificationCard" ,
+      baseRequestParam: "IdentificationCard",
       hasBackPhoto: user.hasIdBackImg
     },
   };
@@ -82,14 +81,12 @@ const UserPage: React.FC = () => {
       {(() => {
         switch (current) {
           case 0:
-            return <RegisterPage />;
-          case 1:
             return <ConfirmMail />;
-          case 2:
+          case 1:
             return <UploadDocumentPhoto props={uploadIdProps} />;
-          case 3:
+          case 2:
             return <UploadDocumentPhoto props={uploadDriverseLicenseProps} />;
-          case 4:
+          case 3:
             return <AddCardBtn />;
 
           default:

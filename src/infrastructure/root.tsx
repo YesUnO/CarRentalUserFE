@@ -8,7 +8,6 @@ import UserPage from "../features/User/Pages/UserPage";
 import EmailConfirmationPage from "../features/User/Pages/EmailConfirmationPage";
 import AdminCarPage from "../features/Admin/Car/AdminCarPage";
 import AdminUserManagmentPage from "../features/Admin/User/AdminUserManagmentPage/AdminUserManagmentPage";
-import PostLoginPage from "../features/Auth/pages/PostLoginPage";
 
 const Root: React.FC = () => {
   const isAdmin = useSelector(
@@ -18,7 +17,6 @@ const Root: React.FC = () => {
     <BrowserRouter>
       <AppShell>
         <Routes>
-          <Route path="/postLogin" element={<PostLoginPage />} />
           <Route path="/" element={<PickCarPage />} />
           <Route path="/orderDetail" element={<OrderDetailPage />} />
           <Route path="/user" element={<UserPage />} />

@@ -127,7 +127,7 @@ const AppToolbar: React.FC = () => {
               {
                 label: "Sign in",
                 key: "signin",
-                onClick: () => navigate("/user"),
+                onClick: () => window.location.href = "/bff/login?returnUrl=/",
               },
             ],
         },
