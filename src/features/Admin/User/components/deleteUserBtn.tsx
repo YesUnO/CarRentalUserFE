@@ -6,7 +6,7 @@ import { deleteUser } from "../../adminReducer";
 
 const DeleteUserBtn: React.FC = () => {
     const dispatch = useDispatch();
-    const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
+    const isAuthenticated = useSelector((state: RootState) => state.authService.isAuthenticated);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
 

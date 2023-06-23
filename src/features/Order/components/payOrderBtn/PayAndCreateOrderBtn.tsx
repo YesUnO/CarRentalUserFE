@@ -1,9 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../../../infrastructure/store";
 import { CreateOrderRequest } from "../../orderReducer";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { useNavigate } from "react-router-dom";
-import { setLoginModalMsg } from "../../../Auth/authReducer";
 
 const PayAndCreateOrderBtn: React.FC = () => {
   const dispatch = useDispatch();
@@ -22,7 +21,7 @@ const PayAndCreateOrderBtn: React.FC = () => {
 
   const handleCreateOrder = () => {
     if (!isAuthenticated) {
-      dispatch(setLoginModalMsg("Login or create a new account to make and order"));
+      message.warning("Login or create a new account to make an order.");
       navigate("/user");
       return;
     }
@@ -31,6 +30,7 @@ const PayAndCreateOrderBtn: React.FC = () => {
       return;
     }
     else if (hasnBeenVerifiedYet) {
+      message.warning("Your account hasnt been approoved yet. We are working on it, give us some time.");
     }
     else {
       const request: CreateOrderRequest = {

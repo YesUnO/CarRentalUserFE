@@ -12,7 +12,7 @@ const OrderDetailPicker: React.FC = () => {
     dispatch(getOrders());
   }, []);
 
-  const isAuthenticated = useSelector((state: RootState) => state.authService.token != null);
+  const isAuthenticated = useSelector((state: RootState) => state.authService.isAuthenticated);
   const [selectedOrderCategory, setSelectedOrderCategory] = useState('');
   const orderService = useSelector((state: RootState) => state.ordersService);
   const [orderSelect, setOrderSelect] = useState<Order[]>([]);

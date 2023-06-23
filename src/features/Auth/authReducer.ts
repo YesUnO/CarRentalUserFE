@@ -15,9 +15,7 @@ interface IAuthState {
   };
   loading: {
     getUser: boolean;
-    register: boolean;
   };
-  loginModalMessage: string;
   logoutUrl: string;
   isAuthenticated: boolean;
 }
@@ -33,9 +31,7 @@ const initialState: IAuthState = {
   },
   loading: {
     getUser: false,
-    register: false,
   },
-  loginModalMessage: "",
   logoutUrl: "",
   isAuthenticated: false,
 };
@@ -70,9 +66,6 @@ const authSLice = createSlice({
   reducers: {
     logout() {
       return initialState;
-    },
-    setLoginModalMsg(state, payload: PayloadAction<string>) {
-      state.loginModalMessage = payload.payload;
     },
   },
   extraReducers(builder) {
@@ -116,5 +109,5 @@ const authSLice = createSlice({
 });
 
 export default authSLice.reducer;
-export const { logout, setLoginModalMsg } =
+export const { logout } =
   authSLice.actions;
