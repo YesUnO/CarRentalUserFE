@@ -9,9 +9,7 @@ import store from "./infrastructure/store";
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
     <Provider store={store}>
-
       <Root />
     </Provider>
-
   </React.StrictMode>
 );
