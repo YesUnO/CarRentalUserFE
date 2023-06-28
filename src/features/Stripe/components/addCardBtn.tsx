@@ -1,26 +1,12 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../../infrastructure/store";
-import { useEffect } from "react";
-import { clearOnLeavingPage, createCheckoutSession } from "../stripeReducer";
 
 const AddCardBtn: React.FC = () => {
-    const dispatch = useDispatch();
     const isAuthenticated = useSelector((state: RootState) => state.authService.isAuthenticated);
-    const checkoutSessionUrl = useSelector((state: RootState) => state.stripeService.checkoutSessionUrl);
-
-  useEffect(() => {
-    if (checkoutSessionUrl != null) {
-      window.location.href = checkoutSessionUrl;
-    }
-  }, [checkoutSessionUrl]);
-
-  useEffect(() => {
-    dispatch(clearOnLeavingPage());
-  }, []);
+    const apiUrl = process.env.API_URL;
 
   const handleGetCheckoutSession = async () => {
-    // @ts-expect-error Expected 1 arguments, but got 0.ts(2554)
-    await dispatch(createCheckoutSession());
+    window.location.href = `${apiUrl}/api/stripe`;
   };
 
     return(
